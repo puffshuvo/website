@@ -2,7 +2,6 @@
     {
         "id": 1,
         "name": "Swish Chair",
-        "price": 500,
         "currency": "BDT",
         "description": "High-quality cement for durable construction.",
         "category": "Construction",
@@ -17,12 +16,58 @@
             "grade": "OPC 53",
             "weight": "50kg",
             "brand": "Archimart"
-        }
+        },
+        "variants": [
+            {
+                "size": "Small",
+                "color": "Black",
+                "price": 500
+            },
+            {
+                "size": "Small",
+                "color": "White",
+                "price": 520
+            },
+            {
+                "size": "Small",
+                "color": "Brown",
+                "price": 510
+            },
+            {
+                "size": "Medium",
+                "color": "Black",
+                "price": 550
+            },
+            {
+                "size": "Medium",
+                "color": "White",
+                "price": 570
+            },
+            {
+                "size": "Medium",
+                "color": "Brown",
+                "price": 560
+            },
+            {
+                "size": "Large",
+                "color": "Black",
+                "price": 600
+            },
+            {
+                "size": "Large",
+                "color": "White",
+                "price": 620
+            },
+            {
+                "size": "Large",
+                "color": "Brown",
+                "price": 610
+            }
+        ]
     },
-       {
+    {
         "id": 2,
         "name": "Wow chair",
-        "price": 5500,
         "currency": "BDT",
         "description": "High-quality cement for durable construction.",
         "category": "Construction",
@@ -37,12 +82,58 @@
             "grade": "OPC 53",
             "weight": "50kg",
             "brand": "Archimart"
-        }
+        },
+        "variants": [
+            {
+                "size": "Small",
+                "color": "Black",
+                "price": 5500
+            },
+            {
+                "size": "Small",
+                "color": "White",
+                "price": 5520
+            },
+            {
+                "size": "Small",
+                "color": "Brown",
+                "price": 5510
+            },
+            {
+                "size": "Medium",
+                "color": "Black",
+                "price": 5550
+            },
+            {
+                "size": "Medium",
+                "color": "White",
+                "price": 5570
+            },
+            {
+                "size": "Medium",
+                "color": "Brown",
+                "price": 5560
+            },
+            {
+                "size": "Large",
+                "color": "Black",
+                "price": 5600
+            },
+            {
+                "size": "Large",
+                "color": "White",
+                "price": 5620
+            },
+            {
+                "size": "Large",
+                "color": "Brown",
+                "price": 5610
+            }
+        ]
     },
-     {
+    {
         "id": 3,
         "name": "Just chair",
-        "price": 9500,
         "currency": "BDT",
         "description": "High-quality cement for durable construction.",
         "category": "Construction",
@@ -57,12 +148,58 @@
             "grade": "OPC 53",
             "weight": "50kg",
             "brand": "Archimart"
-        }
+        },
+        "variants": [
+            {
+                "size": "Small",
+                "color": "Black",
+                "price": 9500
+            },
+            {
+                "size": "Small",
+                "color": "White",
+                "price": 9520
+            },
+            {
+                "size": "Small",
+                "color": "Brown",
+                "price": 9510
+            },
+            {
+                "size": "Medium",
+                "color": "Black",
+                "price": 9550
+            },
+            {
+                "size": "Medium",
+                "color": "White",
+                "price": 9570
+            },
+            {
+                "size": "Medium",
+                "color": "Brown",
+                "price": 9560
+            },
+            {
+                "size": "Large",
+                "color": "Black",
+                "price": 9600
+            },
+            {
+                "size": "Large",
+                "color": "White",
+                "price": 9620
+            },
+            {
+                "size": "Large",
+                "color": "Brown",
+                "price": 9610
+            }
+        ]
     },
-     {
+    {
         "id": 4,
         "name": "Just chair",
-        "price": 90500,
         "currency": "BDT",
         "description": "High-quality cement for durable construction.",
         "category": "Construction",
@@ -77,12 +214,58 @@
             "grade": "OPC 53",
             "weight": "50kg",
             "brand": "Archimart"
-        }
-    } , 
+        },
+        "variants": [
+            {
+                "size": "Small",
+                "color": "Black",
+                "price": 90500
+            },
+            {
+                "size": "Small",
+                "color": "White",
+                "price": 90520
+            },
+            {
+                "size": "Small",
+                "color": "Brown",
+                "price": 90510
+            },
+            {
+                "size": "Medium",
+                "color": "Black",
+                "price": 90550
+            },
+            {
+                "size": "Medium",
+                "color": "White",
+                "price": 90570
+            },
+            {
+                "size": "Medium",
+                "color": "Brown",
+                "price": 90560
+            },
+            {
+                "size": "Large",
+                "color": "Black",
+                "price": 90600
+            },
+            {
+                "size": "Large",
+                "color": "White",
+                "price": 90620
+            },
+            {
+                "size": "Large",
+                "color": "Brown",
+                "price": 90610
+            }
+        ]
+    },
     {
         "id": 5,
         "name": "Just chair",
-        "price": 9000,
         "currency": "BDT",
         "description": "High-quality cement for durable construction.",
         "category": "Construction",
@@ -97,6 +280,53 @@
             "grade": "OPC 53",
             "weight": "50kg",
             "brand": "Archimart"
-        }
+        },
+        "variants": [
+            {
+                "size": "Small",
+                "color": "Black",
+                "price": 9000
+            },
+            {
+                "size": "Small",
+                "color": "White",
+                "price": 9020
+            },
+            {
+                "size": "Small",
+                "color": "Brown",
+                "price": 9010
+            },
+            {
+                "size": "Medium",
+                "color": "Black",
+                "price": 9050
+            },
+            {
+                "size": "Medium",
+                "color": "White",
+                "price": 9070
+            },
+            {
+                "size": "Medium",
+                "color": "Brown",
+                "price": 9060
+            },
+            {
+                "size": "Large",
+                "color": "Black",
+                "price": 9100
+            },
+            {
+                "size": "Large",
+                "color": "White",
+                "price": 9120
+            },
+            {
+                "size": "Large",
+                "color": "Brown",
+                "price": 9110
+            }
+        ]
     }
 ]
