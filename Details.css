@@ -207,59 +207,6 @@ body {
     word-break: break-all;
 }
 
-.variant-selector {
-    margin-bottom: 30px;
-}
-
-.variant-selector h3 {
-    font-size: 16px;
-    margin-bottom: 10px;
-    color: #333;
-}
-
-.size-options, .color-options {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.size-option {
-    padding: 10px 20px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: #fff;
-    font-size: 14px;
-    transition: all 0.3s;
-}
-
-.size-option.selected {
-    border-color: #8b7355;
-    background-color: #f5f0e8;
-}
-
-.color-option {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid #ccc;
-    transition: all 0.3s;
-}
-
-.color-option.selected {
-    border-color: #8b7355;
-    transform: scale(1.2);
-}
-
-.size-option:hover, .color-option:hover {
-    border-color: #8b7355;
-}
-
-.size-selector, .color-selector {
-    margin-bottom: 20px;
-}
-
 .recommendation-title {
     font-size: 24px;
     font-weight: bold;

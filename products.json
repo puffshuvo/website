@@ -2,111 +2,101 @@
     {
         "id": 1,
         "name": "Swish Chair",
+        "price": 500,
         "currency": "BDT",
-        "description": "High-quality chair for durable and stylish seating.",
-        "category": "Furniture",
-        "subcategory": "Chairs",
-        "subsubcategory": "Dining Chairs",
-        "images": {
-            "Blue": ["Image/chair_blue_1.png", "Image/chair_blue_2.png", "Image/chair_blue_3.png"],
-            "Green": ["Image/chair_green_1.png", "Image/chair_green_2.png", "Image/chair_green_3.png"]
-        },
+        "description": "High-quality cement for durable construction.",
+        "category": "Construction",
+        "subcategory": "Cement",
+        "subsubcategory": "Portland Cement",
+        "images": [
+            "Image/chairrr.png",
+            "Image/chairrr.png",
+            "Image/chairrr.png"
+        ],
         "specifications": {
-            "material": "Wood",
-            "weight": "5kg",
+            "grade": "OPC 53",
+            "weight": "50kg",
             "brand": "Archimart"
-        },
-        "variants": [
-            { "size": "Small", "color": "Blue", "price": 500, "hexColor": "#0000FF" },
-            { "size": "Small", "color": "Green", "price": 520, "hexColor": "#008000" },
-            { "size": "Medium", "color": "Blue", "price": 550, "hexColor": "#0000FF" },
-            { "size": "Medium", "color": "Green", "price": 570, "hexColor": "#008000" },
-            { "size": "Large", "color": "Blue", "price": 600, "hexColor": "#0000FF" },
-            { "size": "Large", "color": "Green", "price": 620, "hexColor": "#008000" }
-        ]
+        }
     },
-    {
+       {
         "id": 2,
-        "name": "Wow Chair",
+        "name": "Wow chair",
+        "price": 5500,
         "currency": "BDT",
-        "description": "Comfortable chair with modern design.",
-        "category": "Furniture",
-        "subcategory": "Chairs",
-        "subsubcategory": "Dining Chairs",
-        "images": {
-            "default": ["Image/chair_default_1.png", "Image/chair_default_2.png", "Image/chair_default_3.png"]
-        },
+        "description": "High-quality cement for durable construction.",
+        "category": "Construction",
+        "subcategory": "Cement",
+        "subsubcategory": "Portland Cement",
+        "images": [
+            "Image/chairrr.png",
+            "Image/chairrr.png",
+            "Image/chairrr.png"
+        ],
         "specifications": {
-            "material": "Plastic",
-            "weight": "4kg",
+            "grade": "OPC 53",
+            "weight": "50kg",
             "brand": "Archimart"
-        },
-        "variants": [
-            { "size": null, "color": null, "price": 450 }
-        ]
+        }
     },
-    {
+     {
         "id": 3,
-        "name": "Just Chair",
+        "name": "Just chair",
+        "price": 9500,
         "currency": "BDT",
-        "description": "Elegant chair with size variants.",
-        "category": "Furniture",
-        "subcategory": "Chairs",
-        "subsubcategory": "Dining Chairs",
-        "images": {
-            "default": ["Image/chair_default_1.png", "Image/chair_default_2.png", "Image/chair_default_3.png"]
-        },
+        "description": "High-quality cement for durable construction.",
+        "category": "Construction",
+        "subcategory": "Cement",
+        "subsubcategory": "Portland Cement",
+        "images": [
+            "Image/chairrr.png",
+            "Image/chairrr.png",
+            "Image/chairrr.png"
+        ],
         "specifications": {
-            "material": "Wood",
-            "weight": "7kg",
+            "grade": "OPC 53",
+            "weight": "50kg",
             "brand": "Archimart"
-        },
-        "variants": [
-            { "size": "Small", "color": null, "price": 9500 },
-            { "size": "Medium", "color": null, "price": 9550 },
-            { "size": "Large", "color": null, "price": 9600 }
-        ]
+        }
     },
-    {
+     {
         "id": 4,
-        "name": "Colorful Chair",
+        "name": "Just chair",
+        "price": 90500,
         "currency": "BDT",
-        "description": "Vibrant chair with color options.",
-        "category": "Furniture",
-        "subcategory": "Chairs",
-        "subsubcategory": "Dining Chairs",
-        "images": {
-            "Red": ["Image/chair_red_1.png", "Image/chair_red_2.png", "Image/chair_red_3.png"],
-            "Yellow": ["Image/chair_yellow_1.png", "Image/chair_yellow_2.png", "Image/chair_yellow_3.png"]
-        },
+        "description": "High-quality cement for durable construction.",
+        "category": "Construction",
+        "subcategory": "Cement",
+        "subsubcategory": "Portland Cement",
+        "images": [
+            "Image/chairrr.png",
+            "Image/chairrr.png",
+            "Image/chairrr.png"
+        ],
         "specifications": {
-            "material": "Metal",
-            "weight": "6kg",
+            "grade": "OPC 53",
+            "weight": "50kg",
             "brand": "Archimart"
-        },
-        "variants": [
-            { "size": null, "color": "Red", "price": 90500, "hexColor": "#FF0000" },
-            { "size": null, "color": "Yellow", "price": 90520, "hexColor": "#FFFF00" }
-        ]
-    },
+        }
+    } , 
     {
         "id": 5,
-        "name": "Basic Table",
+        "name": "Just chair",
+        "price": 9000,
         "currency": "BDT",
-        "description": "Simple table with no variants.",
-        "category": "Furniture",
-        "subcategory": "Tables",
-        "subsubcategory": "Dining Tables",
-        "images": {
-            "default": ["Image/table_default_1.png", "Image/table_default_2.png", "Image/table_default_3.png"]
-        },
+        "description": "High-quality cement for durable construction.",
+        "category": "Construction",
+        "subcategory": "Cement",
+        "subsubcategory": "Portland Cement",
+        "images": [
+            "Image/chairrr.png",
+            "Image/chairrr.png",
+            "Image/chairrr.png"
+        ],
         "specifications": {
-            "material": "Wood",
-            "weight": "20kg",
+            "grade": "OPC 53",
+            "weight": "50kg",
             "brand": "Archimart"
-        },
-        "variants": [
-            { "size": null, "color": null, "price": 15000 }
-        ]
+        }
     }
 ]
