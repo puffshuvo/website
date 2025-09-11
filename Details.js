@@ -1,10 +1,9 @@
 let currentQuantity = 1;
 let currentImageIndex = 0;
 let productData = null;
-let selectedSize = '';
-let selectedColor = '';
+let selectedSizes = [];
+let selectedColors = [];
 let currentPrice = 0;
-let currentVariant = null;
 
 // Fetch product data from products.json
 function loadProductData() {
@@ -40,32 +39,33 @@ function loadProductData() {
                     currentPrice = productData.variants[0].price; // Default to first variant
                     document.getElementById('productPrice').textContent = `৳${currentPrice.toFixed(2)} ${productData.currency || 'BDT'}`;
                     document.getElementById('productDescription').textContent = productData.description || 'No description available.';
-                    document.getElementById('recommendationText').textContent = productData.recommendation || 'This product is recommended for its quality and suitability for construction projects.';
+                    document.getElementById('recommendationText').textContent = productData.recommendation || 'This product is recommended for its quality and suitability.';
 
                     // Populate main image and dots
                     const mainImage = document.getElementById('mainImage');
                     const imageDots = document.getElementById('imageDots');
                     imageDots.innerHTML = '';
-                    if (productData.images && productData.images.length > 0) {
-                        mainImage.src = productData.images[0] || 'Image/placeholder.png';
-                        productData.images.forEach((img, index) => {
+                    const imageKey = productData.variants[0].color || 'default';
+                    if (productData.images && productData.images[imageKey] && productData.images[imageKey].length > 0) {
+                        mainImage.src = productData.images[imageKey][0] || 'Image/placeholder.png';
+                        productData.images[imageKey].forEach((img, index) => {
                             const dot = document.createElement('div');
                             dot.className = `dot ${index === 0 ? 'active' : ''}`;
-                            dot.onclick = () => changeImage(index);
+                            dot.onclick = () => changeImage(index, imageKey);
                             imageDots.appendChild(dot);
                         });
                     } else {
-                        mainImage.src = 'Image/placeholder.png';
+                        mainImage.src = productData.images && productData.images.default ? productData.images.default[0] : 'Image/placeholder.png';
                         const dot = document.createElement('div');
                         dot.className = 'dot active';
-                        dot.onclick = () => changeImage(0);
+                        dot.onclick = () => changeImage(0, 'default');
                         imageDots.appendChild(dot);
                     }
 
                     // Populate variant selectors
                     populateVariants();
 
-                    // Populate specifications (now including size and color as general info, but selections are separate)
+                    // Populate specifications
                     const specsList = document.getElementById('specifications');
                     specsList.innerHTML = '';
                     if (productData.specifications && Object.keys(productData.specifications).length > 0) {
@@ -74,15 +74,18 @@ function loadProductData() {
                             li.textContent = `${key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}: ${value}`;
                             specsList.appendChild(li);
                         }
-                        // Add available sizes and colors to specs for reference
-                        const availableSizes = [...new Set(productData.variants.map(v => v.size))].join(', ');
-                        const availableColors = [...new Set(productData.variants.map(v => v.color))].join(', ');
-                        const sizeLi = document.createElement('li');
-                        sizeLi.textContent = `Available Sizes: ${availableSizes}`;
-                        specsList.appendChild(sizeLi);
-                        const colorLi = document.createElement('li');
-                        colorLi.textContent = `Available Colors: ${availableColors}`;
-                        specsList.appendChild(colorLi);
+                        const sizes = [...new Set(productData.variants.map(v => v.size).filter(s => s))];
+                        const colors = [...new Set(productData.variants.map(v => v.color).filter(c => c))];
+                        if (sizes.length > 1) {
+                            const sizeLi = document.createElement('li');
+                            sizeLi.textContent = `Available Sizes: ${sizes.join(', ')}`;
+                            specsList.appendChild(sizeLi);
+                        }
+                        if (colors.length > 1) {
+                            const colorLi = document.createElement('li');
+                            colorLi.textContent = `Available Colors: ${colors.join(', ')}`;
+                            specsList.appendChild(colorLi);
+                        }
                     } else {
                         specsList.innerHTML = '<li>No specifications available</li>';
                     }
@@ -137,70 +140,129 @@ function populateVariants() {
     const sizes = [...new Set(productData.variants.map(v => v.size).filter(s => s))];
     const colors = [...new Set(productData.variants.map(v => v.color).filter(c => c))];
 
-    const sizeSelect = document.getElementById('sizeSelect');
-    sizes.forEach(size => {
-        const option = document.createElement('option');
-        option.value = size;
-        option.textContent = size;
-        sizeSelect.appendChild(option);
-    });
+    const sizeSelector = document.getElementById('sizeSelector');
+    const colorSelector = document.getElementById('colorSelector');
+    const sizeOptions = document.getElementById('sizeOptions');
+    const colorOptions = document.getElementById('colorOptions');
 
-    const colorSelect = document.getElementById('colorSelect');
-    colors.forEach(color => {
-        const option = document.createElement('option');
-        option.value = color;
-        option.textContent = color;
-        colorSelect.appendChild(option);
-    });
-
-    // Event listeners for dynamic updates
-    sizeSelect.addEventListener('change', updateVariant);
-    colorSelect.addEventListener('change', updateVariant);
-
-    // Default selection (first available)
-    if (sizes.length > 0) {
-        sizeSelect.value = sizes[0];
-        selectedSize = sizes[0];
-    }
-    if (colors.length > 0) {
-        colorSelect.value = colors[0];
-        selectedColor = colors[0];
-    }
-    updateVariant();
-}
-
-function updateVariant() {
-    selectedSize = document.getElementById('sizeSelect').value;
-    selectedColor = document.getElementById('colorSelect').value;
-
-    if (!selectedSize || !selectedColor) {
-        return; // Wait for both selections
-    }
-
-    currentVariant = productData.variants.find(v => v.size === selectedSize && v.color === selectedColor);
-
-    if (currentVariant) {
-        currentPrice = currentVariant.price;
-        document.getElementById('productPrice').textContent = `৳${currentPrice.toFixed(2)} ${productData.currency || 'BDT'}`;
+    // Show/hide size selector
+    if (sizes.length > 1) {
+        sizeSelector.style.display = 'block';
+        sizes.forEach(size => {
+            const div = document.createElement('div');
+            div.className = 'size-option';
+            div.textContent = size;
+            div.onclick = () => toggleSizeSelection(size, div);
+            sizeOptions.appendChild(div);
+        });
+        selectedSizes.push(sizes[0]);
+        sizeOptions.children[0].classList.add('selected');
     } else {
-        alert('Selected combination is unavailable.');
-        document.getElementById('productPrice').textContent = 'Unavailable';
-        currentPrice = 0;
-        currentVariant = null;
+        selectedSizes.push(sizes[0] || null);
+    }
+
+    // Show/hide color selector
+    if (colors.length > 1) {
+        colorSelector.style.display = 'block';
+        colors.forEach(color => {
+            const div = document.createElement('div');
+            div.className = 'color-option';
+            // Use color from variant if provided, else default
+            const variant = productData.variants.find(v => v.color === color);
+            div.style.backgroundColor = variant.hexColor || '#000000';
+            div.onclick = () => toggleColorSelection(color, div);
+            colorOptions.appendChild(div);
+        });
+        selectedColors.push(colors[0]);
+        colorOptions.children[0].classList.add('selected');
+        updateImage(colors[0]);
+    } else {
+        selectedColors.push(colors[0] || null);
+        updateImage(colors[0] || 'default');
+    }
+
+    updatePrice();
+}
+
+function toggleSizeSelection(size, element) {
+    if (selectedSizes.includes(size)) {
+        selectedSizes = selectedSizes.filter(s => s !== size);
+        element.classList.remove('selected');
+    } else {
+        selectedSizes.push(size);
+        element.classList.add('selected');
+    }
+    updatePrice();
+}
+
+function toggleColorSelection(color, element) {
+    if (selectedColors.includes(color)) {
+        selectedColors = selectedColors.filter(c => c !== color);
+        element.classList.remove('selected');
+    } else {
+        selectedColors.push(color);
+        element.classList.add('selected');
+        updateImage(color);
+    }
+    updatePrice();
+}
+
+function updateImage(color) {
+    const mainImage = document.getElementById('mainImage');
+    const imageDots = document.getElementById('imageDots');
+    imageDots.innerHTML = '';
+    const imageKey = color || 'default';
+    if (productData.images && productData.images[imageKey] && productData.images[imageKey].length > 0) {
+        mainImage.src = productData.images[imageKey][0] || 'Image/placeholder.png';
+        productData.images[imageKey].forEach((img, index) => {
+            const dot = document.createElement('div');
+            dot.className = `dot ${index === 0 ? 'active' : ''}`;
+            dot.onclick = () => changeImage(index, imageKey);
+            imageDots.appendChild(dot);
+        });
+    } else {
+        mainImage.src = productData.images && productData.images.default ? productData.images.default[0] : 'Image/placeholder.png';
+        const dot = document.createElement('div');
+        dot.className = 'dot active';
+        dot.onclick = () => changeImage(0, 'default');
+        imageDots.appendChild(dot);
     }
 }
 
-function changeImage(index) {
+function changeImage(index, imageKey) {
     currentImageIndex = index;
     const mainImage = document.getElementById('mainImage');
-    if (mainImage && productData && productData.images && productData.images[index]) {
-        mainImage.src = productData.images[index] || 'Image/placeholder.png';
+    if (mainImage && productData && productData.images && productData.images[imageKey] && productData.images[imageKey][index]) {
+        mainImage.src = productData.images[imageKey][index] || 'Image/placeholder.png';
+    } else {
+        mainImage.src = productData.images && productData.images.default ? productData.images.default[index] || 'Image/placeholder.png' : 'Image/placeholder.png';
     }
     
     const dots = document.querySelectorAll('.dot');
     dots.forEach((dot, i) => {
         dot.classList.toggle('active', i === index);
     });
+}
+
+function updatePrice() {
+    const variants = productData.variants.filter(v => 
+        (!selectedSizes.length || selectedSizes.includes(v.size)) && 
+        (!selectedColors.length || selectedColors.includes(v.color))
+    );
+
+    if (variants.length === 0) {
+        document.getElementById('productPrice').textContent = 'Select variant';
+        currentPrice = 0;
+        return;
+    }
+
+    const prices = variants.map(v => v.price);
+    const minPrice = Math.min(...prices);
+    const maxPrice = Math.max(...prices);
+    currentPrice = minPrice; // For display purposes
+    document.getElementById('productPrice').textContent = minPrice === maxPrice 
+        ? `৳${minPrice.toFixed(2)} ${productData.currency || 'BDT'}`
+        : `৳${minPrice.toFixed(2)} - ৳${maxPrice.toFixed(2)} ${productData.currency || 'BDT'}`;
 }
 
 function increaseQuantity() {
@@ -221,23 +283,15 @@ function addToCart() {
         return;
     }
 
-    if (!selectedSize || !selectedColor || !currentVariant) {
-        alert('Please select size and color.');
+    const variants = productData.variants.filter(v => 
+        (!selectedSizes.length || selectedSizes.includes(v.size)) && 
+        (!selectedColors.length || selectedColors.includes(v.color))
+    );
+
+    if (variants.length === 0) {
+        alert('Please select at least one valid variant.');
         return;
     }
-
-    const cartItem = {
-        id: productData.id,
-        name: productData.name,
-        price: currentPrice,
-        quantity: currentQuantity,
-        size: selectedSize,
-        color: selectedColor,
-        image: productData.images && productData.images[0] ? productData.images[0] : 'Image/placeholder.png',
-        category: productData.category,
-        subcategory: productData.subcategory,
-        subsubcategory: productData.subsubcategory
-    };
 
     let cart = [];
     try {
@@ -249,18 +303,45 @@ function addToCart() {
         console.error('Error loading cart from localStorage:', e);
     }
 
-    // Check for existing item with same variant
-    const existingItem = cart.find(item => item.id === productData.id && item.size === selectedSize && item.color === selectedColor);
-    if (existingItem) {
-        alert('This product variant is already in your cart!');
+    let addedItems = [];
+    variants.forEach(variant => {
+        const cartItem = {
+            id: productData.id,
+            name: productData.name,
+            price: variant.price,
+            quantity: currentQuantity,
+            size: variant.size || null,
+            color: variant.color || null,
+            image: productData.images && productData.images[variant.color || 'default'] && productData.images[variant.color || 'default'][0] 
+                ? productData.images[variant.color || 'default'][0] 
+                : 'Image/placeholder.png',
+            category: productData.category,
+            subcategory: productData.subcategory,
+            subsubcategory: productData.subsubcategory
+        };
+
+        const existingItem = cart.find(item => 
+            item.id === productData.id && 
+            item.size === variant.size && 
+            item.color === variant.color
+        );
+        if (existingItem) {
+            alert(`This product variant (${variant.size || 'No size'}, ${variant.color || 'No color'}) is already in your cart!`);
+            return;
+        }
+
+        cart.push(cartItem);
+        addedItems.push(`${currentQuantity} ${productData.name} (${variant.size || 'No size'}, ${variant.color || 'No color'}) at ৳${variant.price.toFixed(2)} ${productData.currency || 'BDT'}`);
+    });
+
+    if (addedItems.length === 0) {
+        alert('No valid variants selected.');
         return;
     }
 
-    cart.push(cartItem);
-
     try {
         localStorage.setItem('cartState', JSON.stringify(cart));
-        alert(`Added ${currentQuantity} ${productData.name}(s) [${selectedSize}, ${selectedColor}] to cart at ৳${currentPrice.toFixed(2)} ${productData.currency || 'BDT'} each!`);
+        alert(`Added to cart:\n${addedItems.join('\n')}`);
     } catch (e) {
         console.error('Error saving cart to localStorage:', e);
         alert('Failed to add to cart. Please try again.');
@@ -280,17 +361,17 @@ function addToCartSimilar(productId) {
                     return;
                 }
 
-                // For similar products, add default variant (first one)
                 const defaultVariant = product.variants[0];
-
                 const cartItem = {
                     id: product.id,
                     name: product.name,
                     price: defaultVariant.price,
                     quantity: 1,
-                    size: defaultVariant.size,
-                    color: defaultVariant.color,
-                    image: product.images && product.images[0] ? product.images[0] : 'Image/placeholder.png',
+                    size: defaultVariant.size || null,
+                    color: defaultVariant.color || null,
+                    image: product.images && product.images[defaultVariant.color || 'default'] && product.images[defaultVariant.color || 'default'][0] 
+                        ? product.images[defaultVariant.color || 'default'][0] 
+                        : 'Image/placeholder.png',
                     category: product.category,
                     subcategory: product.subcategory,
                     subsubcategory: product.subsubcategory
@@ -306,7 +387,6 @@ function addToCartSimilar(productId) {
                     console.error('Error loading cart from localStorage:', e);
                 }
 
-                // Check for existing with default variant
                 if (cart.find(item => item.id == productId && item.size === defaultVariant.size && item.color === defaultVariant.color)) {
                     alert('This product variant is already in your cart!');
                     return;
@@ -316,7 +396,7 @@ function addToCartSimilar(productId) {
 
                 try {
                     localStorage.setItem('cartState', JSON.stringify(cart));
-                    alert(`Added ${cartItem.name} [${defaultVariant.size}, ${defaultVariant.color}] to cart at ৳${cartItem.price.toFixed(2)} ${product.currency || 'BDT'}!`);
+                    alert(`Added ${cartItem.name} [${defaultVariant.size || 'No size'}, ${defaultVariant.color || 'No color'}] to cart at ৳${cartItem.price.toFixed(2)} ${product.currency || 'BDT'}!`);
                 } catch (e) {
                     console.error('Error saving cart to localStorage:', e);
                     alert('Failed to add to cart. Please try again.');
