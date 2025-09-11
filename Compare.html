@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Products - Archimart BD</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.4;
+            position: relative;
+            padding: 20px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='400' height='300' viewBox='0 0 400 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cg stroke='%23ddd' stroke-width='0.5' fill='none' opacity='0.3'%3E%3Crect x='50' y='50' width='300' height='200'/%3E%3Crect x='80' y='80' width='100' height='80'/%3E%3Crect x='220' y='80' width='100' height='80'/%3E%3Crect x='80' y='180' width='240' height='50'/%3E%3Cline x1='180' y1='80' x2='180' y2='160'/%3E%3Cline x1='80' y1='120' x2='320' y2='120'/%3E%3Cline x1='150' y1='180' x2='150' y2='230'/%3E%3Cline x1='250' y1='180' x2='250' y2='230'/%3E%3Cpath d='M120 80 Q130 70 140 80'/%3E%3Cpath d='M260 80 Q270 70 280 80'/%3E%3Cline x1='100' y1='50' x2='160' y2='50' stroke-width='2'/%3E%3Cline x1='240' y1='50' x2='300' y2='50' stroke-width='2'/%3E%3Cline x1='30' y1='50' x2='30' y2='250' stroke-dasharray='2,2'/%3E%3Cline x1='50' y1='30' x2='350' y2='30' stroke-dasharray='2,2'/%3E%3Cpath d='M0 0 L400 0 M0 50 L400 50 M0 100 L400 100 M0 150 L400 150 M0 200 L400 200 M0 250 L400 250 M0 300 L400 300' stroke='%23eee' stroke-width='0.3'/%3E%3Cpath d='M0 0 L0 300 M50 0 L50 300 M100 0 L100 300 M150 0 L150 300 M200 0 L200 300 M250 0 L250 300 M300 0 L300 300 M350 0 L350 300 M400 0 L400 300' stroke='%23eee' stroke-width='0.3'/%3E%3Ctext x='200' y='20' font-size='8' text-anchor='middle' fill='%23bbb'%3E30.0m%3C/text%3E%3Ctext x='15' y='150' font-size='8' text-anchor='middle' fill='%23bbb' transform='rotate(-90 15 150)'%3E20.0m%3C/text%3E%3C/g%3E%3C/svg%3E");
+            background-size: 800px 600px;
+            background-position: 0 0;
+            background-repeat: repeat;
+            opacity: 0.4;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #f4f0e8;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            background: #e6d7c3;
+            padding: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 600;
+            color: #8B4513;
+            border-bottom: 2px solid #d4a574;
+        }
+
+        .comparison-container {
+            display: flex;
+            min-height: 500px;
+        }
+
+        .product-section {
+            flex: 1;
+            padding: 30px;
+            background: #f4f0e8;
+        }
+
+        .product-section:first-child {
+            border-right: 2px solid #d4a574;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 25px;
+            text-align: center;
+            color: #8B4513;
+        }
+
+        .product-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .table-header {
+            background: #d4a574;
+            color: white;
+        }
+
+        .table-header th {
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .product-row {
+            transition: background-color 0.3s ease;
+        }
+
+        .product-row:hover {
+            background: #f9f9f9;
+        }
+
+        .product-row.selected {
+            background: #fff3e3;
+            border-left: 4px solid #d4a574;
+        }
+
+        .product-row td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .select-checkbox {
+            width: 18px;
+            height: 18px;
+            accent-color: #d4a574;
+            cursor: pointer;
+        }
+
+        .total-section {
+            margin-top: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 10px 0;
+            border-top: 2px solid #d4a574;
+        }
+
+        .choice-button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: #d4a574;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .choice-button:hover {
+            background: #c19660;
+        }
+
+        .choice-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .combined-section {
+            background: #fff3e3;
+            padding: 30px;
+            border-top: 2px solid #d4a574;
+        }
+
+        .combined-button {
+            width: 100%;
+            padding: 15px;
+            background: #8B4513;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .combined-button:hover {
+            background: #a0522d;
+        }
+
+        .combined-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .instructions {
+            background: #fff3e3;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #8B4513;
+            border-left: 4px solid #d4a574;
+        }
+
+        .instructions ul {
+            margin-left: 20px;
+        }
+
+        .instructions li {
+            margin: 5px 0;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px 20px;
+            background: #f0f0f0;
+            color: #333;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-container {
+                flex-direction: column;
+            }
+            
+            .product-section:first-child {
+                border-right: none;
+                border-bottom: 2px solid #d4a574;
+            }
+            
+            .container {
+                margin: 10px;
+            }
+            
+            .back-button {
+                position: relative;
+                margin-bottom: 20px;
+            }
+        }
+
+
+        .qty-btn {
+  width: 22px;
+  height: 22px;
+  border: 1px solid #d4a574;
+  background: #f9f9f9;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  color: #8B4513;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+}
+
+.qty-btn:hover:not(:disabled) {
+  background: #e6d7c3;
+}
+
+.qty-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* Update the existing product-row.selected rule */
+.product-row.selected {
+  background: #fff3e3;
+  border-left: 4px solid #d4a574;
+}
+
+/* Additional table cell styling for quantity column */
+.product-table td {
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  vertical-align: middle;
+}
+    </style>
+</head>
+<body>
+    <a href="cart.html" class="back-button">← Back to Cart</a>
+    
+    <div class="container">
+        <div class="header">
+            Alternate option with higher price
+        </div>
+        
+        <div class="comparison-container">
+            <!-- Your Products Section -->
+            <div class="product-section">
+                <div class="section-title">Your Products</div>
+                
+                <table class="product-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Items</th>
+                            <th>Brand</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Select</th>
+                        </tr>
+                    </thead>
+                    <tbody id="your-products-table">
+                        <tr class="product-row" data-price="550">
+                            <td>1. Item 1</td>
+                            <td>Wow</td>
+                            <td>550/-</td>
+                            <td><input type="checkbox" class="select-checkbox your-products" data-price="550"></td>
+                        </tr>
+                        <tr class="product-row" data-price="550">
+                            <td>2. Item 1</td>
+                            <td>Wow</td>
+                            <td>550/-</td>
+                            <td><input type="checkbox" class="select-checkbox your-products" data-price="550"></td>
+                        </tr>
+                        <tr class="product-row" data-price="550">
+                            <td>3. Item 1</td>
+                            <td>Wow</td>
+                            <td>550/-</td>
+                            <td><input type="checkbox" class="select-checkbox your-products" data-price="550"></td>
+                        </tr>
+                        <tr class="product-row" data-price="550">
+                            <td>4. Item 1</td>
+                            <td>Wow</td>
+                            <td>550/-</td>
+                            <td><input type="checkbox" class="select-checkbox your-products" data-price="550"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="total-section">
+                    <div class="total-row">
+                        <span>Total Amount</span>
+                        <span id="your-total">0/-</span>
+                    </div>
+                    <button class="choice-button" id="select-your-choice" disabled>Select Your Choice</button>
+                </div>
+            </div>
+
+            <!-- Alternate Products Section -->
+            <div class="product-section">
+                <div class="section-title">Alternate Products</div>
+                
+                <table class="product-table">
+                    <thead class="table-header">
+                        <tr>
+                            <th>Items</th>
+                            <th>Brand</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Select</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alternate-products-table">
+                        <tr class="product-row" data-price="750">
+                            <td>1. Premium Item</td>
+                            <td>Wow</td>
+                            <td>750/-</td>
+                            <td><input type="checkbox" class="select-checkbox alternate-products" data-price="750"></td>
+                        </tr>
+                        <tr class="product-row" data-price="750">
+                            <td>2. Premium Item</td>
+                            <td>Wow</td>
+                            <td>750/-</td>
+                            <td><input type="checkbox" class="select-checkbox alternate-products" data-price="750"></td>
+                        </tr>
+                        <tr class="product-row" data-price="750">
+                            <td>3. Premium Item</td>
+                            <td>Wow</td>
+                            <td>750/-</td>
+                            <td><input type="checkbox" class="select-checkbox alternate-products" data-price="750"></td>
+                        </tr>
+                        <tr class="product-row" data-price="750">
+                            <td>4. Premium Item</td>
+                            <td>Wow</td>
+                            <td>750/-</td>
+                            <td><input type="checkbox" class="select-checkbox alternate-products" data-price="750"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="total-section">
+                    <div class="total-row">
+                        <span>Total Amount</span>
+                        <span id="alternate-total">0/-</span>
+                    </div>
+                    <button class="choice-button" id="archimart-choice" disabled>Archimart Choice</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="combined-section">
+            <div class="section-title">Combined Selection</div>
+            <p style="text-align: center; margin-bottom: 20px; color: #666;">
+                Select items from either section above to create a combined selection.
+            </p>
+            <div class="total-row">
+                <span>Combined Total Amount</span>
+                <span id="combined-total">0/-</span>
+            </div>
+            <button class="combined-button" id="combined-selection" disabled>Create Combined Selection</button>
+        </div>
+    </div>
+
+    <div class="instructions">
+        <strong>Instructions:</strong>
+        <ul>
+            <li>Select items from "Your Products" (left side) or "Alternate Products" (right side)</li>
+            <li>Click "Select Your Choice" or "Archimart Choice" to confirm your selection from each side</li>
+            <li>Once you've made selections from both sides, you can create a "Combined Selection"</li>
+            <li>The combined selection will include your chosen items from both sections</li>
+        </ul>
+    </div>
+
+    <script>
+      // State management with quantities
+let yourProductsData = [
+    { name: "Item 1", brand: "Wow", price: 550, quantity: 1 },
+    { name: "Item 1", brand: "Wow", price: 550, quantity: 1 },
+    { name: "Item 1", brand: "Wow", price: 550, quantity: 1 },
+    { name: "Item 1", brand: "Wow", price: 550, quantity: 1 }
+];
+
+let alternateProductsData = [
+    { name: "Premium Item", brand: "Wow", price: 750, quantity: 1 },
+    { name: "Premium Item", brand: "Wow", price: 750, quantity: 1 },
+    { name: "Premium Item", brand: "Wow", price: 750, quantity: 1 },
+    { name: "Premium Item", brand: "Wow", price: 750, quantity: 1 }
+];
+
+let selectedYourProducts = [];
+let selectedAlternateProducts = [];
+let yourChoiceConfirmed = false;
+let archimartChoiceConfirmed = false;
+
+// Initialize event listeners
+document.addEventListener('DOMContentLoaded', function() {
+    loadCartDataForCompare();
+    initializeQuantityControls();
+    initializeCheckboxListeners();
+    initializeButtonListeners();
+    updateAllTables();
+});
+
+function loadCartDataForCompare() {
+    try {
+        const cartData = localStorage.getItem('cartStateForCompare');
+        if (cartData) {
+            const cartItems = JSON.parse(cartData);
+            // Update your products data based on cart
+            if (cartItems.length >= 4) {
+                yourProductsData = cartItems.slice(0, 4).map((item, index) => ({
+                    name: item.name,
+                    brand: "Wow",
+                    price: item.price,
+                    quantity: item.quantity || 1
+                }));
+            }
+        }
+    } catch (e) {
+        console.error('Error loading cart data for compare:', e);
+    }
+}
+
+function initializeQuantityControls() {
+    // Add quantity change listeners for your products
+    document.querySelectorAll('.qty-btn-your').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            const change = parseInt(this.dataset.change);
+            changeProductQuantity('your', index, change);
+        });
+    });
+
+    // Add quantity change listeners for alternate products
+    document.querySelectorAll('.qty-btn-alt').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            const change = parseInt(this.dataset.change);
+            changeProductQuantity('alternate', index, change);
+        });
+    });
+}
+
+function changeProductQuantity(type, index, change) {
+    if (type === 'your' && index >= 0 && index < yourProductsData.length) {
+        yourProductsData[index].quantity = Math.max(1, yourProductsData[index].quantity + change);
+    } else if (type === 'alternate' && index >= 0 && index < alternateProductsData.length) {
+        alternateProductsData[index].quantity = Math.max(1, alternateProductsData[index].quantity + change);
+    }
+    
+    updateAllTables();
+    updateSelection('your-products');
+    updateSelection('alternate-products');
+}
+
+function updateAllTables() {
+    // Update your products table
+    const yourTable = document.getElementById('your-products-table');
+    yourTable.innerHTML = '';
+    yourProductsData.forEach((item, index) => {
+        const totalPrice = item.price * item.quantity;
+        yourTable.innerHTML += `
+            <tr class="product-row" data-price="${totalPrice}">
+                <td>${index + 1}. ${item.name}</td>
+                <td>${item.brand}</td>
+                <td>${item.price}/- × ${item.quantity} = ${totalPrice}/-</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 5px; justify-content: center;">
+                        <button class="qty-btn qty-btn-your" data-index="${index}" data-change="-1">−</button>
+                        <span style="min-width: 25px; text-align: center;">${item.quantity}</span>
+                        <button class="qty-btn qty-btn-your" data-index="${index}" data-change="1">+</button>
+                    </div>
+                </td>
+                <td><input type="checkbox" class="select-checkbox your-products" data-index="${index}" data-price="${totalPrice}"></td>
+            </tr>
+        `;
+    });
+
+    // Update alternate products table
+    const altTable = document.getElementById('alternate-products-table');
+    altTable.innerHTML = '';
+    alternateProductsData.forEach((item, index) => {
+        const totalPrice = item.price * item.quantity;
+        altTable.innerHTML += `
+            <tr class="product-row" data-price="${totalPrice}">
+                <td>${index + 1}. ${item.name}</td>
+                <td>${item.brand}</td>
+                <td>${item.price}/- × ${item.quantity} = ${totalPrice}/-</td>
+                <td>
+                    <div style="display: flex; align-items: center; gap: 5px; justify-content: center;">
+                        <button class="qty-btn qty-btn-alt" data-index="${index}" data-change="-1">−</button>
+                        <span style="min-width: 25px; text-align: center;">${item.quantity}</span>
+                        <button class="qty-btn qty-btn-alt" data-index="${index}" data-change="1">+</button>
+                    </div>
+                </td>
+                <td><input type="checkbox" class="select-checkbox alternate-products" data-index="${index}" data-price="${totalPrice}"></td>
+            </tr>
+        `;
+    });
+
+    // Re-initialize quantity controls after table update
+    initializeQuantityControls();
+}
+
+function initializeCheckboxListeners() {
+    // Use event delegation for dynamic checkboxes
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('your-products')) {
+            updateSelection('your-products');
+            updateRowHighlight(e.target);
+        } else if (e.target.classList.contains('alternate-products')) {
+            updateSelection('alternate-products');
+            updateRowHighlight(e.target);
+        }
+    });
+}
+
+function initializeButtonListeners() {
+    document.getElementById('select-your-choice').addEventListener('click', function() {
+        confirmYourChoice();
+    });
+
+    document.getElementById('archimart-choice').addEventListener('click', function() {
+        confirmArchimartChoice();
+    });
+
+    document.getElementById('combined-selection').addEventListener('click', function() {
+        createCombinedSelection();
+    });
+}
+
+function updateRowHighlight(checkbox) {
+    const row = checkbox.closest('.product-row');
+    if (checkbox.checked) {
+        row.classList.add('selected');
+    } else {
+        row.classList.remove('selected');
+    }
+}
+
+function updateSelection(type) {
+    const checkboxes = document.querySelectorAll(`.${type}`);
+    let total = 0;
+    let selectedItems = [];
+
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            const price = parseInt(checkbox.dataset.price);
+            const index = parseInt(checkbox.dataset.index);
+            total += price;
+            
+            if (type === 'your-products') {
+                const item = yourProductsData[index];
+                selectedItems.push({
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    totalPrice: item.price * item.quantity
+                });
+            } else {
+                const item = alternateProductsData[index];
+                selectedItems.push({
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity,
+                    totalPrice: item.price * item.quantity
+                });
+            }
+        }
+    });
+
+    if (type === 'your-products') {
+        selectedYourProducts = selectedItems;
+        document.getElementById('your-total').textContent = `${total}/-`;
+        document.getElementById('select-your-choice').disabled = selectedItems.length === 0;
+    } else {
+        selectedAlternateProducts = selectedItems;
+        document.getElementById('alternate-total').textContent = `${total}/-`;
+        document.getElementById('archimart-choice').disabled = selectedItems.length === 0;
+    }
+
+    updateCombinedSection();
+}
+
+function confirmYourChoice() {
+    if (selectedYourProducts.length === 0) return;
+    
+    yourChoiceConfirmed = true;
+    const button = document.getElementById('select-your-choice');
+    const totalItems = selectedYourProducts.reduce((sum, item) => sum + item.quantity, 0);
+    button.textContent = `✓ Your Choice Confirmed (${totalItems} items)`;
+    button.style.background = '#28a745';
+    
+    document.querySelectorAll('.your-products').forEach(checkbox => {
+        if (!checkbox.checked) {
+            checkbox.disabled = true;
+            checkbox.closest('.product-row').style.opacity = '0.5';
+        }
+    });
+
+    // Disable quantity controls for unselected items
+    document.querySelectorAll('.qty-btn-your').forEach(btn => {
+        const index = parseInt(btn.dataset.index);
+        const isSelected = selectedYourProducts.some(item => 
+            yourProductsData[index].name === item.name && 
+            yourProductsData[index].price === item.price
+        );
+        if (!isSelected) {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+        }
+    });
+
+    updateCombinedSection();
+    showNotification('Your choice has been confirmed!');
+}
+
+function confirmArchimartChoice() {
+    if (selectedAlternateProducts.length === 0) return;
+    
+    archimartChoiceConfirmed = true;
+    const button = document.getElementById('archimart-choice');
+    const totalItems = selectedAlternateProducts.reduce((sum, item) => sum + item.quantity, 0);
+    button.textContent = `✓ Archimart Choice Confirmed (${totalItems} items)`;
+    button.style.background = '#28a745';
+    
+    document.querySelectorAll('.alternate-products').forEach(checkbox => {
+        if (!checkbox.checked) {
+            checkbox.disabled = true;
+            checkbox.closest('.product-row').style.opacity = '0.5';
+        }
+    });
+
+    // Disable quantity controls for unselected items
+    document.querySelectorAll('.qty-btn-alt').forEach(btn => {
+        const index = parseInt(btn.dataset.index);
+        const isSelected = selectedAlternateProducts.some(item => 
+            alternateProductsData[index].name === item.name && 
+            alternateProductsData[index].price === item.price
+        );
+        if (!isSelected) {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+        }
+    });
+
+    updateCombinedSection();
+    showNotification('Archimart choice has been confirmed!');
+}
+
+function updateCombinedSection() {
+    const yourTotal = selectedYourProducts.reduce((sum, item) => sum + item.totalPrice, 0);
+    const alternateTotal = selectedAlternateProducts.reduce((sum, item) => sum + item.totalPrice, 0);
+    const combinedTotal = yourTotal + alternateTotal;
+
+    document.getElementById('combined-total').textContent = `${combinedTotal}/-`;
+    
+    const combinedButton = document.getElementById('combined-selection');
+    
+    const hasYourSelection = selectedYourProducts.length > 0;
+    const hasAlternateSelection = selectedAlternateProducts.length > 0;
+    const canCreateCombined = hasYourSelection || hasAlternateSelection;
+    
+    combinedButton.disabled = !canCreateCombined;
+    
+    if (canCreateCombined) {
+        const totalItems = selectedYourProducts.reduce((sum, item) => sum + item.quantity, 0) + 
+                          selectedAlternateProducts.reduce((sum, item) => sum + item.quantity, 0);
+        combinedButton.textContent = `Create Combined Selection (${totalItems} items)`;
+        combinedButton.style.background = '#8B4513';
+    } else {
+        combinedButton.textContent = 'Create Combined Selection';
+        combinedButton.style.background = '#ccc';
+    }
+}
+
+function createCombinedSelection() {
+    if (selectedYourProducts.length === 0 && selectedAlternateProducts.length === 0) {
+        showNotification('Please select at least one item from either section!');
+        return;
+    }
+
+    const combinedItems = [...selectedYourProducts, ...selectedAlternateProducts];
+    const totalAmount = combinedItems.reduce((sum, item) => sum + item.totalPrice, 0);
+    
+    const combinedSelection = {
+        items: combinedItems,
+        totalAmount: totalAmount,
+        yourProducts: selectedYourProducts,
+        alternateProducts: selectedAlternateProducts,
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        localStorage.setItem('combinedSelection', JSON.stringify(combinedSelection));
+    } catch (e) {
+        console.error('Failed to save to localStorage:', e);
+        showNotification('Error saving selection. Proceeding to cart...');
+    }
+
+    const combinedButton = document.getElementById('combined-selection');
+    combinedButton.textContent = '✓ Combined Selection Created!';
+    combinedButton.style.background = '#28a745';
+    combinedButton.disabled = true;
+    
+    const totalItems = combinedItems.reduce((sum, item) => sum + item.quantity, 0);
+    showNotification(`Combined selection created successfully! Total: ${totalAmount}/- (${totalItems} items)`);
+    
+    setTimeout(() => {
+        window.location.href = 'cart.html?combined=true';
+    }, 1500);
+}
+
+function showNotification(message) {
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #28a745;
+        color: white;
+        padding: 15px 20px;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 1000;
+        font-size: 14px;
+        font-weight: 500;
+        max-width: 300px;
+        animation: slideIn 0.3s ease;
+    `;
+    
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            if (document.body.contains(notification)) {
+                document.body.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Add CSS for quantity buttons
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOut {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+    .qty-btn {
+        width: 22px;
+        height: 22px;
+        border: 1px solid #d4a574;
+        background: #f9f9f9;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: bold;
+        color: #8B4513;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 3px;
+    }
+    .qty-btn:hover:not(:disabled) {
+        background: #e6d7c3;
+    }
+    .qty-btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+    }
+    .product-row.selected {
+        background: #fff3e3;
+        border-left: 4px solid #d4a574;
+    }
+`;
+document.head.appendChild(style);
+    </script>
+</body>
+</html>

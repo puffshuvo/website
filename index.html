@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Archimart BD</title>
+  <link rel="preload" href="Image/logo.png" as="image">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="Toggle.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+  <link rel="stylesheet" href="styile.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar-content">
+      <div class="logo">
+        <img src="Image/logo.png" alt="Archimart BD Logo" class="logo-img" />
+      </div>
+      <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products">
+        <button class="search-btn" aria-label="Search">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+      <div class="hamburger">
+        <i class="fas fa-bars"></i>
+      </div>
+      <nav class="nav-links-wrapper">
+        <ul class="nav-links">
+          <li><a href="Construction.html">Construction</a></li>
+          <li><a href="HomeAppliances.html">Home Appliances</a></li>
+          <li><a href="Furnitures.html">Furnitures</a></li>
+          <li><a href="Others.html">Others</a></li>
+          <li><a href="cart.html" class="cart-icon"><i class="fas fa-shopping-cart"></i> </a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Section -->
+  <section class="main-content">
+    <div class="portrait-image">
+      <img src="Image/po.png" alt="Portrait Background" class="portrait-img" />
+    </div>
+    
+    <div class="card-container">
+      <div class="card">
+        <img src="Image/Screenshot__249_-removebg-preview.png" alt="Product 1" class="card-img" />
+        <h3>Construction Materials</h3>
+        <p>High-quality bricks, cement, and steel for your building needs.</p>
+        <a href="Construction.html?category=Construction" class="card-button">Shop Now</a>
+      </div>
+      <div class="card">
+        <img src="Image/Screenshot__249_-removebg-preview.png" alt="Product 2" class="card-img" />
+        <h3>Home Appliances</h3>
+        <p>Modern appliances to enhance your home's functionality.</p>
+        <a href="HomeAppliances.html" class="card-button">Shop Now</a>
+      </div>
+      <div class="card">
+        <img src="Image/Screenshot__249_-removebg-preview.png" alt="Product 3" class="card-img" />
+        <h3>Furniture</h3>
+        <p>Stylish and durable furniture for every room.</p>
+        <a href="Furnitures.html" class="card-button">Shop Now</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Menu Section -->
+  <section class="menu-section">
+    <div class="menu-panel">
+      <div class="menu-category" data-image="construction">
+        <div class="category-title" role="button" aria-expanded="false">
+          <a href="Construction.html?category=Construction">Construction Materials</a>
+        </div>
+        <ul class="dropdown-list">
+          <li class="subcategory">
+            <a href="Construction.html?category=civil-work">Civil Work</a>
+            <ul class="subcategory-list">
+              <li><a href="Construction.html?category=cement">Cement</a></li>
+              <li><a href="Construction.html?category=Sand">Sand</a></li>
+              <li><a href="Construction.html?category=Brick">Brick</a></li>
+              <li><a href="Construction.html?category=Reinforcement">Reinforcement</a></li>
+            </ul>
+          </li>
+          <li class="subcategory">
+            <a href="Construction.html?category=interior">Interior</a>
+            <ul class="subcategory-list">
+              <li><a href="Construction.html?category=Tiles">Tiles</a></li>
+              <li><a href="Construction.html?category=Wood">Wood</a></li>
+              <li><a href="Construction.html?category=Lock">Lock</a></li>
+              <li><a href="Construction.html?category=Mirror">Mirror</a></li>
+            </ul>
+          </li>
+          <li class="subcategory">
+            <a href="Construction.html?category=Paint">Paint</a>
+            <ul class="subcategory-list">
+              <li><a href="Construction.html?category=Waterproofing">Waterproofing</a></li>
+              <li><a href="Construction.html?category=Interior">Interior</a></li>
+              <li><a href="Construction.html?category=Exterior">Exterior</a></li>
+            </ul>
+          </li>
+          <li class="subcategory">
+            <a href="Construction.html?category=electronics">Electrical</a>
+            <ul class="subcategory-list">
+              <li><a href="Construction.html?category=Cable">Cable</a></li>
+              <li><a href="Construction.html?category=Holder">Holder</a></li>
+              <li><a href="Construction.html?category=PVCConduit">PVC Conduit</a></li>
+            </ul>
+          </li>
+          <li class="subcategory">
+            <a href="Construction.html?category=Sanitary">Sanitary</a>
+            <ul class="subcategory-list">
+              <li><a href="Construction.html?category=Fittings">Fittings</a></li>
+              <li><a href="Construction.html?category=Fixture">Fixture</a></li>
+              <li><a href="Construction.html?category=Pump">Pump</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="menu-category" data-image="tools">
+        <div class="category-title" role="button" aria-expanded="false">
+          <a href="HomeAppliances.html">Home Appliances</a>
+        </div>
+        <ul class="dropdown-list">
+          <li><a href="HomeAppliances.html?category=Hammer">Hammer</a></li> 
+          <li><a href="HomeAppliances.html?category=Drill">Drill</a></li>
+          <li><a href="HomeAppliances.html?category=Saw">Saw</a></li>
+        </ul>
+      </div>
+      <div class="menu-category" data-image="safety">
+        <div class="category-title" role="button" aria-expanded="false">
+          <a href="Furnitures.html">Furniture</a>
+        </div>
+        <ul class="dropdown-list">
+          <li><a href="Furnitures.html?category=Helmet">Helmet</a></li>
+          <li><a href="Furnitures.html?category=Gloves">Gloves</a></li>
+          <li><a href="Furnitures.html?category=Boots">Boots</a></li>
+        </ul>
+      </div>
+      <div class="menu-category" data-image="finishing">
+        <div class="category-title" role="button" aria-expanded="false">
+          <a href="Others.html">Others</a>
+        </div>
+        <ul class="dropdown-list">
+          <li><a href="Others.html?category=Paint">Paint</a></li>
+          <li><a href="Others.html?category=Tiles">Tiles</a></li>
+          <li><a href="Others.html?category=Wallpaper">Wallpaper</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="image-panel">
+      <img src="Image/Def.jpg" alt="Default cover image" class="active" data-image="default" />
+      <img src="Image/constuction.jpg" alt="Construction materials" data-image="construction" />
+      <img src="Image/homeapp.jpg" alt="Home Appliances" data-image="tools" />
+      <img src="Image/Furniture.jpg" alt="Furniture" data-image="safety" />
+      <img src="Image/Furniture.jpg" alt="Finishing materials" data-image="finishing" />
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-left">
+      <ul class="footer-menu">
+        <li><a href="index.html">Home</a></li>
+        <li class="dropdown">
+          Materials <span class="arrow">▾</span>
+          <ul class="dropdown-menu">
+            <li><a href="Construction.html?category=Construction">Construction</a></li>
+            <li><a href="HomeAppliances.html">Home Appliances</a></li>
+            <li><a href="Furnitures.html">Furnitures</a></li>
+            <li><a href="Others.html">Others</a></li>
+          </ul>
+        </li>
+      </ul>
+      <div class="footer-contact-row">
+        <div class="footer-icons">
+          <a href="mailto:your@email.com" class="icon email" target="_blank" aria-label="Email">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+              <path d="M12 13.5L2 6.75V18h20V6.75L12 13.5zm0-2.5L22 4H2l10 7z"/>
+            </svg>
+          </a>
+          <a href="https://facebook.com" class="icon facebook" target="_blank" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+              <path d="M22 12a10 10 0 1 0-11.6 9.8v-6.9H8v-2.9h2.4V9.6c0-2.4 1.4-3.7 3.5-3.7 1 0 2 .2 2 .2v2.2h-1.1c-1.1 0-1.4.7-1.4 1.4v1.6h2.6l-.4 2.9H13.4v6.9A10 10 0 0 0 22 12"/>
+            </svg>
+          </a>
+          <a href="https://instagram.com" class="icon instagram" target="_blank" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+              <path d="M12 2.2c3.2 0 3.6 0 4.9.1 1.2.1 2 .2 2.5.4a5 5 0 0 1 1.8 1.1c.5.5.9 1.1 1.1 1.8.2.5.3 1.3.4 2.5.1 1.3.1 1.7.1 4.9s0 3.6-.1 4.9c-.1 1.2-.2 2-.4 2.5a5 5 0 0 1-1.1 1.8c-.5.5-1.1.9-1.8 1.1-.5.2-1.3.3-2.5.4-1.3.1-1.7.1-4.9.1s-3.6 0-4.9-.1c-1.2-.1-2-.2-2.5-.4a5 5 0 0 1-1.8-1.1 5 5 0 0 1-1.1-1.8c-.2-.5-.3-1.3-.4-2.5-.1-1.3-.1-1.7-.1-4.9s0-3.6.1-4.9c.1-1.2.2-2 .4-2.5a5 5 0 0 1 1.1-1.8 5 5 0 0 1 1.8-1.1c.5-.2 1.3-.3 2.5-.4 1.3-.1 1.7-.1 4.9-.1Zm0 1.8c-3.1 0-3.5 0-4.8.1-1 .1-1.6.2-2 .3a3 3 0 0 0-1.1.6c-.3.3-.5.6-.6 1.1-.1.4-.2 1-.3 2-.1 1.3-.1 1.7-.1 4.8s0 3.5.1 4.8c.1 1 .2 1.6.3 2 .1.4.3.8.6 1.1.3.3.6.5 1.1.6.4.1 1 .2 2 .3 1.3.1 1.7.1 4.8.1s3.5 0 4.8-.1c1-.1 1.6-.2 2-.3.4-.1.8-.3 1.1-.6.3-.3.5-.6.6-1.1.1-.4.2-1 .3-2 .1-1.3.1-1.7.1-4.8s0-3.5-.1-4.8c-.1-1-.2-1.6-.3-2a2 2 0 0 0-.6-1.1 2 2 0 0 0-1.1-.6c-.4-.1-1-.2-2-.3-1.3-.1-1.7-.1-4.8-.1Zm0 3.8a5.2 5.2 0 1 1 0 10.4 5.2 5.2 0 0 1 0-10.4Zm0 8.6a3.4 3.4 0 1 0 0-6.8 3.4 3.4 0 0 0 0 6.8Zm5.5-8.8a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4Z"/>
+            </svg>
+          </a>
+        </div>
+        <div class="footer-contact">
+          <div class="contact-block">
+            <p class="label">Phone</p>
+            <p>01533 138 112</p>
+          </div>
+          <div class="contact-block">
+            <p class="label">Phone</p>
+            <p>ajakljgk@gmail.com</p>
+          </div>
+          <div class="contact-block">
+            <p class="label">Address</p>
+            <p>Panthapath , Dhaka</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-right">
+      <h3>Book Appointment With Expert Architects To Find Your Home Solutions</h3>
+      <form>
+        <input type="text" placeholder="Your Name" />
+        <input type="text" placeholder="Phone" />
+        <input type="text" placeholder="How can we assist you?" />
+        <button type="submit">SUBMIT</button>
+      </form>
+    </div>
+  </footer>
+</body>
+</html>

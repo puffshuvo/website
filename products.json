@@ -1,0 +1,102 @@
+[
+    {
+        "id": 1,
+        "name": "Swish Chair",
+        "price": 500,
+        "currency": "BDT",
+        "description": "High-quality cement for durable construction.",
+        "category": "Construction",
+        "subcategory": "Cement",
+        "subsubcategory": "Portland Cement",
+        "images": [
+            "Image/chairrr.png",
+            "Image/chairrr.png",
+            "Image/chairrr.png"
+        ],
+        "specifications": {
+            "grade": "OPC 53",
+            "weight": "50kg",
+            "brand": "Archimart"
+        }
+    },
+       {
+        "id": 2,
+        "name": "Wow chair",
+        "price": 5500,
+        "currency": "BDT",
+        "description": "High-quality cement for durable construction.",
+        "category": "Construction",
+        "subcategory": "Cement",
+        "subsubcategory": "Portland Cement",
+        "images": [
+            "Image/chairrr.png",
+            "Image/chairrr.png",
+            "Image/chairrr.png"
+        ],
+        "specifications": {
+            "grade": "OPC 53",
+            "weight": "50kg",
+            "brand": "Archimart"
+        }
+    },
+     {
+        "id": 3,
+        "name": "Just chair",
+        "price": 9500,
+        "currency": "BDT",
+        "description": "High-quality cement for durable construction.",
+        "category": "Construction",
+        "subcategory": "Cement",
+        "subsubcategory": "Portland Cement",
+        "images": [
+            "Image/chairrr.png",
+            "Image/chairrr.png",
+            "Image/chairrr.png"
+        ],
+        "specifications": {
+            "grade": "OPC 53",
+            "weight": "50kg",
+            "brand": "Archimart"
+        }
+    },
+     {
+        "id": 4,
+        "name": "Just chair",
+        "price": 90500,
+        "currency": "BDT",
+        "description": "High-quality cement for durable construction.",
+        "category": "Construction",
+        "subcategory": "Cement",
+        "subsubcategory": "Portland Cement",
+        "images": [
+            "Image/chairrr.png",
+            "Image/chairrr.png",
+            "Image/chairrr.png"
+        ],
+        "specifications": {
+            "grade": "OPC 53",
+            "weight": "50kg",
+            "brand": "Archimart"
+        }
+    } , 
+    {
+        "id": 5,
+        "name": "Just chair",
+        "price": 9000,
+        "currency": "BDT",
+        "description": "High-quality cement for durable construction.",
+        "category": "Construction",
+        "subcategory": "Cement",
+        "subsubcategory": "Portland Cement",
+        "images": [
+            "Image/chairrr.png",
+            "Image/chairrr.png",
+            "Image/chairrr.png"
+        ],
+        "specifications": {
+            "grade": "OPC 53",
+            "weight": "50kg",
+            "brand": "Archimart"
+        }
+    }
+]

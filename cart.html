@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart Page - Archimart BD</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <link rel="stylesheet" href="cart.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Receipt Section -->
+    <div class="receipt" id="receipt">
+      <h2 class="receipt-title">Receipt</h2>
+      <div class="shop-name">Archimart BD</div>
+      <div class="receipt-header">
+        <span>am00012525</span>
+        <span id="receipt-date">Date - 2/5/2025</span>
+      </div>
+      <div class="items-header">
+        <div class="header-row">
+          <span class="header-item">Items</span>
+          <span class="header-quantity">Quantity</span>
+          <span class="header-price">Price</span>
+        </div>
+      </div>
+      <ul class="items" id="receipt-items">
+        <!-- Dynamic items populated by JS -->
+      </ul>
+      <div class="total" id="receipt-total">
+        <span>Total Amount</span>
+        <span>0 Tk</span>
+      </div>
+      <div class="payable-to" id="payable-to">
+        <h3>Payable To</h3>
+        <p><strong>Name:</strong> <span id="payable-name">Not provided</span></p>
+        <p><strong>Phone:</strong> <span id="payable-phone">Not provided</span></p>
+        <p><strong>Delivery Address:</strong> <span id="payable-address">Not provided</span></p>
+      </div>
+      <button class="download-btn" onclick="downloadPDF()">Download Receipt</button>
+    </div>
+    <!-- Order Form -->
+    <div class="order-form">
+      <div class="form-row">
+        <input type="text" id="input-name" placeholder="Name" required>
+        <input type="text" id="input-phone" placeholder="Phone" required>
+      </div>
+      <div class="form-row">
+        <input type="text" id="input-address" placeholder="Delivery Address" required>
+        <input type="email" id="input-email" placeholder="Mail" required>
+      </div>
+      <div class="payment-section">
+        <div class="payment-option">
+          <input type="radio" name="payment" id="cod" value="cod">
+          <label for="cod">Cash on delivery</label>
+        </div>
+        <div class="payment-option">
+          <input type="radio" name="payment" id="bkash" value="bkash">
+          <label for="bkash">Pay with Bkash</label>
+        </div>
+      </div>
+      <div class="form-buttons">
+        <button class="btn confirm-btn">Confirm order</button>
+        <button class="btn continue-btn" onclick="continueShopping()">Continue Shopping</button>
+        <button class="btn alt-btnl high" onclick="changeAlt('high')">Alternate option with higher price</button>
+        <a href="#" class="btn compare-btn high" onclick="goToCompare()">Compare with my product with Premium option</a>
+        <button class="btn alt-btn low" onclick="changeAlt('low')">Alternate option with lower price</button>
+        <a href="#" class="btn compare-btn low" onclick="goToCompare()">Compare with my product with Basic option</a>
+      </div>
+    </div>
+  </div>
+  <script src="cart.js"></script>
+</body>
+</html>
