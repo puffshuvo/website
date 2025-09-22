@@ -16,7 +16,10 @@
         "specifications": {
             "grade": "OPC 53",
             "weight": "50kg",
-            "brand": "Archimart"
+            "brand": "Archimart",
+            "Material": "Cotton"
+
+
         }
     },
        {
@@ -36,7 +39,8 @@
         "specifications": {
             "grade": "OPC 53",
             "weight": "50kg",
-            "brand": "Archimart"
+            "brand": "Archimart",
+            "Material": "Cotton"
         }
     },
      {
@@ -56,7 +60,8 @@
         "specifications": {
             "grade": "OPC 53",
             "weight": "50kg",
-            "brand": "Archimart"
+            "brand": "Archimart",
+            "Material": "Cotton"
         }
     },
      {
@@ -76,7 +81,8 @@
         "specifications": {
             "grade": "OPC 53",
             "weight": "50kg",
-            "brand": "Archimart"
+            "brand": "Archimart",
+            "Material": "Cotton"
         }
     } , 
     {
@@ -96,7 +102,9 @@
         "specifications": {
             "grade": "OPC 53",
             "weight": "50kg",
-            "brand": "Archimart"
+            "brand": "Archimart",
+            "Material": "Cotton"
         }
     }
 ]
+

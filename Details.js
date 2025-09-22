@@ -16,12 +16,16 @@ function loadProductData() {
     }
 
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'products.json', true);
+    xhr.open('GET', 'https://archimartbd.com/product.json', true);
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 try {
-                    const products = JSON.parse(xhr.responseText);
+                //     let response = JSON.parse(xhr.responseText);
+                // let data = response.results || [];
+                    let data = JSON.parse(xhr.responseText);
+                    let products = data.results || [];
+
                     productData = products.find(p => p.id == productId);
                     if (!productData) {
                         console.error(`Product with ID ${productId} not found`);

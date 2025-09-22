@@ -1,11 +1,5 @@
-// Updated Product.js
-// Changes:
-// - In addToCart: Instead of increasing quantity for existing items, check if product exists by ID and alert "This product is already in your cart!" if it does.
-// - Prevent adding duplicates; quantity can still be adjusted in the cart page.
-// - Ensured cart starts empty if no localStorage data (already handled).
-// - Minor cleanup and comments for professionalism.
-
 document.addEventListener('DOMContentLoaded', () => {
+    console.info('DOM fully loaded, initializing navigation scripts...');
     const navbar = document.querySelector('.navbar');
     const logo = document.querySelector('.logo');
     const navLinksWrapper = document.querySelector('.nav-links-wrapper');
@@ -17,10 +11,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const classToggleThreshold = 50;
     let isScrolled = false;
 
+    console.log('Navigation elements selected:', {
+        navbar: !!navbar,
+        logo: !!logo,
+        navLinksWrapper: !!navLinksWrapper,
+        hamburger: !!hamburger,
+        navLinksCount: navLinks.length
+    });
+
     function debounce(func, wait) {
+        console.log(`Creating debounced function with wait time: ${wait}ms`);
         let timeout;
         return function executedFunction(...args) {
             const later = () => {
+                console.log('Debounced function executed');
                 clearTimeout(timeout);
                 func(...args);
             };
@@ -31,45 +35,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateScrollAnimation() {
         const scrollY = window.scrollY;
+        console.log(`Scroll position: ${scrollY}px`);
         const progress = Math.min(scrollY / scrollThreshold, 1);
+        console.log(`Scroll progress: ${progress}`);
         logo.style.transform = `translateX(${progress * maxTranslate}px)`;
         navLinksWrapper.style.transform = `translateX(${progress * maxLinkTranslate}px)`;
         if (scrollY > classToggleThreshold + 10 && !isScrolled) {
+            console.log('Adding scrolled class to navbar');
             navbar.classList.add('scrolled');
             isScrolled = true;
         } else if (scrollY < classToggleThreshold - 10 && isScrolled) {
+            console.log('Removing scrolled class from navbar');
             navbar.classList.remove('scrolled');
             isScrolled = false;
         }
     }
 
     const debouncedScroll = debounce(() => {
+        console.log('Triggering scroll animation update');
         requestAnimationFrame(updateScrollAnimation);
     }, 10);
 
     window.addEventListener('scroll', debouncedScroll);
+    console.log('Scroll event listener added');
 
     if (hamburger) {
         hamburger.addEventListener('click', () => {
+            console.log('Hamburger menu clicked, toggling nav links');
             navLinksWrapper.classList.toggle('active');
         });
+        console.log('Hamburger menu event listener added');
+    } else {
+        console.warn('Hamburger menu element not found');
     }
 
-    navLinks.forEach(link => {
+    navLinks.forEach((link, index) => {
         link.addEventListener('click', () => {
+            console.log(`Navigation link ${index + 1} clicked: ${link.textContent}`);
             navLinksWrapper.classList.remove('active');
         });
     });
+    console.log(`Added click listeners to ${navLinks.length} navigation links`);
 
     document.addEventListener('click', (e) => {
         if (!navbar.contains(e.target)) {
+            console.log('Clicked outside navbar, closing nav links');
             navLinksWrapper.classList.remove('active');
         }
     });
+    console.log('Document click listener added for closing nav links');
 });
 
 class ProductGallery {
     constructor() {
+        console.info('Initializing ProductGallery...');
         this.products = [];
         this.filteredProducts = [];
         this.currentFilters = {
@@ -80,6 +99,9 @@ class ProductGallery {
         };
         this.currentSort = 'name';
         this.currentSubSubCategory = null;
+
+        console.log('Initial filter state:', this.currentFilters);
+        console.log('Initial sort state:', this.currentSort);
 
         // Specification definitions for different sub-subcategories
         this.specificationDefinitions = {
@@ -132,97 +154,173 @@ class ProductGallery {
                 'Edge': ['Polished', 'Beveled', 'Straight']
             }
         };
+        console.log('Specification definitions loaded:', Object.keys(this.specificationDefinitions));
 
-        // Category hierarchy mapping for breadcrumbs
+        // Category hierarchy for sidebar and breadcrumbs
         this.categoryHierarchy = {
             'Construction': {
-                'civil-work': ['cement', 'Sand', 'Brick', 'Reinforcement'],
+                'Civil Work': ['cement', 'Sand', 'Brick', 'Reinforcement'],
                 'interior': ['Tiles', 'Wood', 'FAccessories', 'DAccessories', 'MHardware', 'Lock', 'Mirror'],
                 'Paint': ['Waterproofing', 'Interior', 'Exterior', 'Enamel', 'WoodCoating'],
                 'electronics': ['MK', 'Universal', 'Gang', 'PVCConduit', 'Cable', 'FanBox', 'LightBox', 'PVCBand', 'Holder', 'OtherEssentialItems'],
                 'Sanitary': ['Fittings', 'Fixture', 'Pump']
             }
         };
+        console.log('Category hierarchy initialized:', Object.keys(this.categoryHierarchy.Construction));
+
+        // Category mapping
+        this.categoryMapping = {
+            'Civil Work': { level: 'sub', field: 'subcategory', value: 'Cement' },
+            'cement': { level: 'subsub', field: 'subsubcategory', value: 'Portland' }
+        };
+        console.log('Category mappings loaded:', Object.keys(this.categoryMapping));
 
         this.breadcrumbElement = document.querySelector('.breadcrumb-list');
+        console.log('Breadcrumb element selected:', !!this.breadcrumbElement);
+
         this.init();
     }
 
     init() {
+        console.info('Starting ProductGallery initialization...');
         this.loadProductsFromJSON();
         this.bindEvents();
         this.addKeyboardNavigation();
         this.updateBreadcrumb();
-        // Handle initial search from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
+        const initialCategory = urlParams.get('category');
         const initialSearch = urlParams.get('search');
+        console.log('URL parameters:', { initialCategory, initialSearch });
+
+        if (initialCategory) {
+            console.log(`Setting initial category from URL: ${initialCategory}`);
+            this.currentFilters.category = initialCategory;
+            const isSubSubCategory = this.isSubSubCategory(initialCategory);
+            console.log(`Is ${initialCategory} a sub-subcategory? ${isSubSubCategory}`);
+            if (isSubSubCategory) {
+                console.log(`Showing specification filter for: ${initialCategory}`);
+                this.currentSubSubCategory = initialCategory;
+                this.showSpecificationFilter(initialCategory);
+            }
+            document.querySelectorAll('.category-item').forEach(cat => cat.classList.remove('active'));
+            const targetItem = document.querySelector(`.category-item[data-category="${initialCategory}"]`);
+            if (targetItem) {
+                console.log(`Activating category item: ${initialCategory}`);
+                targetItem.classList.add('active');
+            } else {
+                console.warn(`Category item not found for: ${initialCategory}`);
+            }
+            this.loadProductsFromJSON(initialCategory);
+        }
         if (initialSearch) {
+            console.log(`Setting initial search term: ${initialSearch}`);
             this.currentFilters.search = initialSearch.toLowerCase();
             document.getElementById('searchInput').value = initialSearch;
             this.filterProducts();
         }
+        console.info('ProductGallery initialization complete');
     }
 
-    loadProductsFromJSON(categoryFilter = null) {
-    this.showLoading(true);
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'products.json', true);
-    xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                try {
-                    let data = JSON.parse(xhr.responseText);
-                    
-                    if (categoryFilter && categoryFilter !== 'all') {
-                        data = data.filter(product =>
-                            product.subcategory === categoryFilter ||
-                            product.category === categoryFilter ||
-                            product.subsubcategory === categoryFilter
-                        );
+    isSubSubCategory(category) {
+        const isSubSub = Object.values(this.categoryHierarchy.Construction)
+            .some(subCats => subCats.includes(category));
+        console.log(`Checking if ${category} is a sub-subcategory: ${isSubSub}`);
+        return isSubSub;
+    }
+
+    getCategoryMapping(selectedCategory) {
+        const mapping = this.categoryMapping[selectedCategory] || {
+            level: this.categoryHierarchy[selectedCategory] ? 'main' :
+                   Object.keys(this.categoryHierarchy.Construction).includes(selectedCategory) ? 'sub' :
+                   this.isSubSubCategory(selectedCategory) ? 'subsub' : 'unknown',
+            field: this.categoryHierarchy[selectedCategory] ? 'category' :
+                   Object.keys(this.categoryHierarchy.Construction).includes(selectedCategory) ? 'subcategory' :
+                   'subsubcategory',
+            value: selectedCategory
+        };
+        console.log(`Category mapping for ${selectedCategory}:`, mapping);
+        return mapping;
+    }
+
+    loadProductsFromJSON(selectedCategory = null) {
+        console.info(`Loading products${selectedCategory ? ` for category: ${selectedCategory}` : ''}...`);
+        this.showLoading(true);
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://archimartbd.com/product.json', true);
+        console.log('Initiating XHR request to load products');
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log('XHR request successful, processing response...');
+                    try {
+                        let response = JSON.parse(xhr.responseText);
+                        let data = response.results || [];
+                        console.log(`Received ${data.length} products from JSON`);
+
+                        if (selectedCategory && selectedCategory !== 'all') {
+                            const mapping = this.getCategoryMapping(selectedCategory);
+                            console.log(`Filtering products by ${mapping.field}=${mapping.value}`);
+                            data = data.filter(product => {
+                                const match = product[mapping.field] === mapping.value;
+                                if (!match) {
+                                    console.log(`Product ${product.name} filtered out: ${mapping.field}=${product[mapping.field]} does not match ${mapping.value}`);
+                                }
+                                return match;
+                            });
+                            console.log(`Filtered to ${data.length} products for category: ${selectedCategory}`);
+                        }
+
+                        this.products = data.map(product => ({
+                            id: product.id,
+                            name: product.name,
+                            description: product.description,
+                            category: product.category,
+                            subcategory: product.subcategory,
+                            subsubcategory: product.subsubcategory,
+                            price: product.price,
+                            currency: product.currency,
+                            stock: product.stock,
+                            specifications: product.specifications?.reduce((acc, spec) => {
+                                acc[spec.key] = spec.value;
+                                return acc;
+                            }, {}) || {},
+                            image: product.images && product.images.length > 0 
+                                ? product.images[0]
+                                : this.generateProductImage(product.subcategory || product.category)
+                        }));
+                        console.log(`Mapped ${this.products.length} products`);
+
+                        this.filteredProducts = [...this.products];
+                        console.log(`Initialized filtered products: ${this.filteredProducts.length}`);
+                        this.renderProducts();
+                        this.updateStats();
+                        this.updateBreadcrumb();
+                    } catch (error) {
+                        console.error('Error parsing JSON:', error);
+                        document.getElementById('productCount').textContent = 'Error loading products';
                     }
-                    
-                    this.products = data.map(product => ({
-                        id: product.id,
-                        name: product.name,
-                        description: product.description,
-                        category: product.category,
-                        subcategory: product.subcategory,
-                        subsubcategory: product.subsubcategory,
-                        price: product.price,
-                        currency: product.currency,
-                        stock: product.stock,
-                        specifications: product.specifications || {},
-                        image: product.images && product.images.length > 0 
-                            ? product.images[0] // Use the first image from the images array
-                            : this.generateProductImage(product.subcategory || product.category) // Fallback
-                    }));
-                    
-                    this.filteredProducts = [...this.products];
-                    this.renderProducts();
-                    this.updateStats();
-                    this.updateBreadcrumb();
-                } catch (error) {
-                    console.error('Error parsing JSON:', error);
+                } else {
+                    console.error('XHR request failed:', xhr.statusText);
                     document.getElementById('productCount').textContent = 'Error loading products';
                 }
-            } else {
-                console.error('Error loading JSON:', xhr.statusText);
-                document.getElementById('productCount').textContent = 'Error loading products';
+                this.showLoading(false);
+                console.log('Loading complete, hiding loading indicator');
             }
+        };
+        xhr.onerror = () => {
+            console.error('Network error while loading JSON');
+            document.getElementById('productCount').textContent = 'Error loading products';
             this.showLoading(false);
-        }
-    };
-    xhr.onerror = () => {
-        console.error('Network error while loading JSON');
-        document.getElementById('productCount').textContent = 'Error loading products';
-        this.showLoading(false);
-    };
-    xhr.send();
-}
+        };
+        xhr.send();
+        console.log('XHR request sent');
+    }
+
     generateProductImage(category) {
+        console.log(`Generating placeholder image for category: ${category}`);
         const colors = ['#FFF3E3', '#E6D5B8', '#D8A48F', '#A68A64', '#736B60', '#4A4238'];
         const color = colors[Math.floor(Math.random() * colors.length)];
-
+        console.log(`Selected color for image: ${color}`);
         return `data:image/svg+xml,${encodeURIComponent(`
             <svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
                 <defs>
@@ -243,17 +341,23 @@ class ProductGallery {
     }
 
     bindEvents() {
+        console.info('Binding event listeners...');
         document.querySelectorAll('.category-item').forEach(item => {
             item.addEventListener('click', (e) => {
+                console.log(`Category item clicked: ${e.target.dataset.category}`);
                 document.querySelectorAll('.category-item').forEach(cat => cat.classList.remove('active'));
                 e.target.classList.add('active');
                 const selectedCategory = e.target.dataset.category;
                 this.currentFilters.category = selectedCategory;
+                console.log(`Updated current category: ${selectedCategory}`);
 
-                if (e.target.classList.contains('sub-subcategory')) {
+                const isSubSubCategory = this.isSubSubCategory(selectedCategory);
+                if (isSubSubCategory) {
+                    console.log(`Showing specification filter for sub-subcategory: ${selectedCategory}`);
                     this.currentSubSubCategory = selectedCategory;
                     this.showSpecificationFilter(selectedCategory);
                 } else {
+                    console.log('Hiding specification filter');
                     this.currentSubSubCategory = null;
                     this.hideSpecificationFilter();
                 }
@@ -262,40 +366,51 @@ class ProductGallery {
                 this.updateBreadcrumb();
             });
         });
+        console.log('Category item click listeners bound');
 
         const priceRange = document.getElementById('priceRange');
         priceRange.addEventListener('input', (e) => {
             this.currentFilters.maxPrice = parseInt(e.target.value);
+            console.log(`Price range updated: ${this.currentFilters.maxPrice}`);
             document.getElementById('maxPrice').textContent = `৳${e.target.value}`;
             this.filterProducts();
         });
+        console.log('Price range input listener bound');
 
         const searchInput = document.getElementById('searchInput');
         let searchTimeout;
         searchInput.addEventListener('input', (e) => {
             clearTimeout(searchTimeout);
+            console.log(`Search input changed: ${e.target.value}`);
             searchTimeout = setTimeout(() => {
                 this.currentFilters.search = e.target.value.toLowerCase();
+                console.log(`Applying search filter: ${this.currentFilters.search}`);
                 this.filterProducts();
             }, 300);
         });
+        console.log('Search input listener bound');
 
         document.getElementById('sortBy').addEventListener('change', (e) => {
             this.currentSort = e.target.value;
+            console.log(`Sort option changed: ${this.currentSort}`);
             this.sortProducts();
             this.renderProducts();
         });
+        console.log('Sort select listener bound');
     }
 
     showSpecificationFilter(category) {
+        console.info(`Showing specification filter for category: ${category}`);
         const specFilter = document.getElementById('specificationFilter');
         const specContent = document.getElementById('specificationContent');
         
         if (this.specificationDefinitions[category]) {
+            console.log(`Found specification definitions for ${category}`);
             let html = '';
             const specs = this.specificationDefinitions[category];
             
             for (const [specType, options] of Object.entries(specs)) {
+                console.log(`Generating filter for spec type: ${specType}`);
                 html += `
                     <div class="spec-group">
                         <h4>${specType}</h4>
@@ -319,9 +434,11 @@ class ProductGallery {
             }
             
             specContent.innerHTML = html;
+            console.log('Specification filter HTML generated');
             
             const specHeader = specFilter.querySelector('h3');
             if (!specHeader.querySelector('.spec-close-btn')) {
+                console.log('Adding close button to specification filter');
                 const closeBtn = document.createElement('button');
                 closeBtn.className = 'spec-close-btn';
                 closeBtn.innerHTML = '<i class="fas fa-times"></i>';
@@ -332,37 +449,46 @@ class ProductGallery {
             
             specContent.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 checkbox.addEventListener('change', (e) => {
+                    console.log(`Specification checkbox changed: ${e.target.value} (${e.target.checked ? 'checked' : 'unchecked'})`);
                     this.handleSpecificationChange(e);
                 });
             });
+            console.log('Specification checkbox listeners bound');
             
             specFilter.classList.add('show');
+            console.log('Specification filter shown');
             
             if (window.innerWidth <= 768) {
+                console.log('Mobile view detected, scrolling to specification filter');
                 setTimeout(() => {
                     specFilter.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }, 300);
             }
+        } else {
+            console.warn(`No specification definitions found for category: ${category}`);
         }
     }
 
     hideSpecificationFilter() {
+        console.info('Hiding specification filter');
         const specFilter = document.getElementById('specificationFilter');
         specFilter.classList.remove('show');
         this.currentFilters.specifications = {};
+        console.log('Cleared specification filters:', this.currentFilters.specifications);
         
         if (this.currentSubSubCategory) {
+            console.log(`Resetting sub-subcategory: ${this.currentSubSubCategory}`);
             this.currentSubSubCategory = null;
             
             const activeSubSubCat = document.querySelector('.sub-subcategory.active');
             if (activeSubSubCat) {
+                console.log('Removing active class from sub-subcategory');
                 activeSubSubCat.classList.remove('active');
                 
-                const parentSubcat = activeSubSubCat.closest('.category-list')
-                    .querySelector(`[data-category="${activeSubSubCat.dataset.category}"]`)
-                    .previousElementSibling;
-                
-                if (parentSubcat && parentSubcat.classList.contains('subcategory')) {
+                const parentSubcat = document.querySelector('.subcategory.active') || 
+                    document.querySelector('.category-item[data-category="Civil Work"]');
+                if (parentSubcat) {
+                    console.log(`Activating parent subcategory: ${parentSubcat.dataset.category}`);
                     parentSubcat.classList.add('active');
                     this.currentFilters.category = parentSubcat.dataset.category;
                 }
@@ -374,10 +500,11 @@ class ProductGallery {
     }
 
     addKeyboardNavigation() {
+        console.log('Adding keyboard navigation listener');
         document.addEventListener('keydown', (e) => {
             const specFilter = document.getElementById('specificationFilter');
-            
             if (e.key === 'Escape' && specFilter.classList.contains('show')) {
+                console.log('Escape key pressed, hiding specification filter');
                 this.hideSpecificationFilter();
             }
         });
@@ -387,31 +514,40 @@ class ProductGallery {
         const specType = event.target.dataset.specType;
         const value = event.target.value;
         const isChecked = event.target.checked;
+        console.log(`Handling specification change: ${specType} = ${value} (${isChecked ? 'checked' : 'unchecked'})`);
 
         if (!this.currentFilters.specifications[specType]) {
+            console.log(`Initializing specification filter for ${specType}`);
             this.currentFilters.specifications[specType] = [];
         }
 
         if (isChecked) {
             if (!this.currentFilters.specifications[specType].includes(value)) {
+                console.log(`Adding ${value} to ${specType} specifications`);
                 this.currentFilters.specifications[specType].push(value);
             }
         } else {
+            console.log(`Removing ${value} from ${specType} specifications`);
             this.currentFilters.specifications[specType] = this.currentFilters.specifications[specType].filter(v => v !== value);
             if (this.currentFilters.specifications[specType].length === 0) {
+                console.log(`Removing empty ${specType} specification`);
                 delete this.currentFilters.specifications[specType];
             }
         }
 
+        console.log('Current specifications:', this.currentFilters.specifications);
         this.filterProducts();
     }
 
     clearSpecifications() {
+        console.info('Clearing all specifications');
         this.currentFilters.specifications = {};
         
         const checkboxes = document.querySelectorAll('#specificationContent input[type="checkbox"]');
+        console.log(`Found ${checkboxes.length} specification checkboxes to clear`);
         checkboxes.forEach((checkbox, index) => {
             setTimeout(() => {
+                console.log(`Clearing checkbox ${index + 1}: ${checkbox.value}`);
                 checkbox.checked = false;
                 checkbox.closest('label').style.transform = 'scale(0.95)';
                 setTimeout(() => {
@@ -422,12 +558,14 @@ class ProductGallery {
         
         const clearBtn = document.querySelector('.clear-specs');
         const originalText = clearBtn.innerHTML;
+        console.log('Animating clear specifications button');
         clearBtn.innerHTML = '<i class="fas fa-check"></i> Cleared!';
         clearBtn.style.background = '#28a745';
         clearBtn.style.borderColor = '#28a745';
         clearBtn.style.color = 'white';
         
         setTimeout(() => {
+            console.log('Resetting clear specifications button');
             clearBtn.innerHTML = originalText;
             clearBtn.style.background = '';
             clearBtn.style.borderColor = '';
@@ -438,21 +576,31 @@ class ProductGallery {
     }
 
     filterProducts() {
+        console.info('Filtering products...');
         this.showLoading(true);
 
         setTimeout(() => {
+            const mapping = this.getCategoryMapping(this.currentFilters.category);
+            console.log('Filter criteria:', this.currentFilters);
             this.filteredProducts = this.products.filter(product => {
-                const categoryMatch = this.currentFilters.category === 'all' ||
-                    product.category === this.currentFilters.category ||
-                    product.subcategory === this.currentFilters.category ||
-                    product.subsubcategory === this.currentFilters.category;
+                let categoryMatch = true;
+                if (this.currentFilters.category !== 'all') {
+                    categoryMatch = product[mapping.field] === mapping.value;
+                    if (!categoryMatch) {
+                        console.log(`Product ${product.name} filtered out: ${mapping.field}=${product[mapping.field]} does not match ${mapping.value}`);
+                    }
+                }
 
                 const priceMatch = product.price <= this.currentFilters.maxPrice;
+                console.log(`Product ${product.name} price match: ${priceMatch} (price: ${product.price}, max: ${this.currentFilters.maxPrice})`);
 
                 const searchMatch = !this.currentFilters.search ||
                     product.name.toLowerCase().includes(this.currentFilters.search) ||
                     product.description.toLowerCase().includes(this.currentFilters.search) ||
-                    product.category.toLowerCase().includes(this.currentFilters.search);
+                    product.category.toLowerCase().includes(this.currentFilters.search) ||
+                    product.subcategory.toLowerCase().includes(this.currentFilters.search) ||
+                    product.subsubcategory.toLowerCase().includes(this.currentFilters.search);
+                console.log(`Product ${product.name} search match: ${searchMatch} (search: ${this.currentFilters.search})`);
 
                 let specMatch = true;
                 if (Object.keys(this.currentFilters.specifications).length > 0) {
@@ -461,55 +609,69 @@ class ProductGallery {
                             const productSpecValue = product.specifications && product.specifications[specType];
                             if (!productSpecValue || !selectedValues.includes(productSpecValue)) {
                                 specMatch = false;
+                                console.log(`Product ${product.name} filtered out: ${specType}=${productSpecValue} not in ${selectedValues}`);
                                 break;
                             }
                         }
                     }
                 }
 
-                return categoryMatch && priceMatch && searchMatch && specMatch;
+                const matchesAll = categoryMatch && priceMatch && searchMatch && specMatch;
+                console.log(`Product ${product.name} matches all filters: ${matchesAll}`);
+                return matchesAll;
             });
 
+            console.log(`Filtered ${this.filteredProducts.length} products`);
             this.sortProducts();
             this.renderProducts();
             this.updateStats();
             this.updateBreadcrumb();
             this.showLoading(false);
+            console.log('Filtering complete');
         }, 300);
     }
 
     sortProducts() {
+        console.info(`Sorting products by: ${this.currentSort}`);
         this.filteredProducts.sort((a, b) => {
             switch (this.currentSort) {
                 case 'price-low':
+                    console.log('Sorting by price (low to high)');
                     return a.price - b.price;
                 case 'price-high':
+                    console.log('Sorting by price (high to low)');
                     return b.price - a.price;
                 case 'category':
+                    console.log('Sorting by category');
                     return a.category.localeCompare(b.category);
                 default:
+                    console.log('Sorting by name');
                     return a.name.localeCompare(b.name);
             }
         });
+        console.log('Sorting complete');
     }
 
     renderProducts() {
+        console.info('Rendering products...');
         const grid = document.getElementById('productGrid');
         const noResults = document.querySelector('.no-results');
 
         if (this.filteredProducts.length === 0) {
+            console.log('No products to render, showing no results message');
             grid.innerHTML = '';
             grid.style.display = 'grid';
             noResults.style.display = 'block';
             return;
         }
 
+        console.log(`Rendering ${this.filteredProducts.length} products`);
         grid.style.display = 'grid';
         noResults.style.display = 'none';
 
         grid.innerHTML = this.filteredProducts.map(product => {
             let specsHtml = '';
-            if (product.specifications) {
+            if (product.specifications && Object.keys(product.specifications).length > 0) {
                 specsHtml = `
                     <div class="product-specs">
                         ${Object.entries(product.specifications).map(([key, value]) => 
@@ -545,13 +707,16 @@ class ProductGallery {
         }).join('');
 
         setTimeout(() => {
+            console.log('Applying slide-in animations to product cards');
             document.querySelectorAll('.product-card').forEach((card, index) => {
                 card.style.animation = `slideInUp 0.6s ease forwards ${index * 0.1}s`;
             });
         }, 100);
+        console.log('Product rendering complete');
     }
 
     updateStats() {
+        console.info('Updating product stats...');
         const total = this.products.length;
         const filtered = this.filteredProducts.length;
         const activeFilters = [];
@@ -570,49 +735,54 @@ class ProductGallery {
             activeFilters.push(`Specifications: ${specCount} selected`);
         }
 
+        console.log('Stats:', { total, filtered, activeFilters });
         document.getElementById('productCount').textContent =
             `Showing ${filtered} of ${total} products`;
 
         document.getElementById('activeFilters').textContent =
             activeFilters.length > 0 ? `Filters: ${activeFilters.join(', ')}` : '';
+        console.log('Stats updated');
     }
 
     showLoading(show) {
+        console.log(`Toggling loading indicator: ${show}`);
         const loading = document.querySelector('.loading');
         document.getElementById('productGrid').style.display = show ? 'none' : 'grid';
         loading.style.display = show ? 'block' : 'none';
     }
 
     addToCart(productId) {
+        console.info(`Adding product to cart: ID ${productId}`);
         const product = this.products.find(p => p.id === productId);
         if (!product) {
-            console.error('Product not found');
+            console.error('Product not found:', productId);
             return;
         }
+        console.log('Product found:', product.name);
 
-        // Load existing cart from localStorage
         let cart = [];
         try {
             const savedCart = localStorage.getItem('cartState');
             if (savedCart) {
+                console.log('Loading existing cart from localStorage');
                 cart = JSON.parse(savedCart);
             }
         } catch (e) {
             console.error('Error loading cart from localStorage:', e);
         }
 
-        // Check if the product is already in the cart (by ID)
         const existingItem = cart.find(item => item.id === productId);
         if (existingItem) {
+            console.log('Product already in cart:', product.name);
             alert('This product is already in your cart!');
-            return; // Prevent adding duplicate
+            return;
         }
 
-        // Add new item with quantity 1
+        console.log(`Adding new item to cart: ${product.name}`);
         cart.push({
             id: product.id,
             name: product.name,
-            price: product.price, // Use actual product price from JSON
+            price: product.price,
             quantity: 1,
             image: product.image,
             category: product.category,
@@ -620,18 +790,18 @@ class ProductGallery {
             subsubcategory: product.subsubcategory
         });
 
-        // Save updated cart to localStorage
         try {
+            console.log('Saving cart to localStorage');
             localStorage.setItem('cartState', JSON.stringify(cart));
-            alert(`${product.name} added to cart!`); // Success feedback
+            alert(`${product.name} added to cart!`);
         } catch (e) {
             console.error('Error saving cart to localStorage:', e);
             alert('Failed to add to cart. Please try again.');
         }
 
-        // Optional: Visual feedback on the product card
         const card = document.querySelector(`[data-id="${productId}"]`);
         if (card) {
+            console.log('Animating product card');
             card.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 card.style.transform = '';
@@ -640,19 +810,22 @@ class ProductGallery {
     }
 
     updateBreadcrumb() {
-        if (!this.breadcrumbElement) return;
+        console.info('Updating breadcrumb...');
+        if (!this.breadcrumbElement) {
+            console.warn('Breadcrumb element not found');
+            return;
+        }
 
         const breadcrumb = ['<li><a href="index.html">Home</a></li>'];
         const categoryPath = this.getCategoryPath(this.currentFilters.category);
+        console.log('Category path:', categoryPath);
 
-        // Add category path with proper links
         categoryPath.forEach((cat, index) => {
             const formattedCat = cat.charAt(0).toUpperCase() + cat.slice(1).replace(/([A-Z])/g, ' $1').trim();
             const href = this.getCategoryHref(cat);
             breadcrumb.push(`<li><a href="${href}" data-category="${cat}">${formattedCat}</a></li>`);
         });
 
-        // Add current category or sub-subcategory as the last item (non-clickable)
         if (this.currentSubSubCategory) {
             const formattedSubSubCat = this.currentSubSubCategory.charAt(0).toUpperCase() + 
                 this.currentSubSubCategory.slice(1).replace(/([A-Z])/g, ' $1').trim();
@@ -664,15 +837,17 @@ class ProductGallery {
         }
 
         this.breadcrumbElement.innerHTML = breadcrumb.join('');
+        console.log('Breadcrumb HTML updated:', breadcrumb.join(''));
 
-        // Add click event listeners to breadcrumb links
         this.breadcrumbElement.querySelectorAll('a[data-category]').forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
                 const category = e.target.dataset.category;
+                console.log(`Breadcrumb link clicked: ${category}`);
                 document.querySelectorAll('.category-item').forEach(cat => cat.classList.remove('active'));
                 const targetItem = document.querySelector(`.category-item[data-category="${category}"]`);
                 if (targetItem) {
+                    console.log(`Activating category item: ${category}`);
                     targetItem.classList.add('active');
                     this.currentFilters.category = category;
                     this.currentSubSubCategory = null;
@@ -682,60 +857,49 @@ class ProductGallery {
                 }
             });
         });
+        console.log('Breadcrumb click listeners bound');
     }
 
     getCategoryPath(category) {
+        console.log(`Getting category path for: ${category}`);
         if (category === 'all') return [];
-        
+
         const path = [];
         let currentCategory = category;
 
-        // Check if it's a sub-subcategory
         for (const [mainCat, subCats] of Object.entries(this.categoryHierarchy)) {
             for (const [subCat, subSubCats] of Object.entries(subCats)) {
                 if (subSubCats.includes(currentCategory)) {
-                    path.unshift(currentCategory); // Sub-subcategory
-                    path.unshift(subCat); // Subcategory
-                    path.unshift(mainCat); // Main category
+                    path.unshift(currentCategory);
+                    path.unshift(subCat);
+                    path.unshift(mainCat);
+                    console.log(`Category path found: ${path.join(' > ')}`);
                     return path;
                 }
             }
             if (Object.keys(subCats).includes(currentCategory)) {
-                path.unshift(currentCategory); // Subcategory
-                path.unshift(mainCat); // Main category
+                path.unshift(currentCategory);
+                path.unshift(mainCat);
+                console.log(`Category path found: ${path.join(' > ')}`);
                 return path;
             }
         }
 
-        // If it's a main category
         if (this.categoryHierarchy[currentCategory]) {
             path.unshift(currentCategory);
         }
 
+        console.log(`Category path: ${path.join(' > ') || 'none'}`);
         return path;
     }
 
     getCategoryHref(category) {
-        // Map categories to their respective pages or filter actions
-        const categoryPages = {
-            'Construction': 'Construction.html',
-            'civil-work': 'Construction.html',
-            'interior': 'Construction.html',
-            'Paint': 'Construction.html',
-            'electronics': 'Construction.html',
-            'Sanitary': 'Construction.html'
-        };
-
-        // For sub-subcategories, return the Construction page with a filter
-        if (!categoryPages[category]) {
-            return `Construction.html?category=${encodeURIComponent(category)}`;
-        }
-
-        return categoryPages[category] || 'Construction.html';
+        const href = `Construction.html?category=${encodeURIComponent(category)}`;
+        console.log(`Generated href for category ${category}: ${href}`);
+        return href;
     }
 }
 
-// Add CSS animation
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideInUp {
@@ -750,36 +914,7 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+console.log('Slide-in animation CSS added');
 
-// Initialize the gallery
 const gallery = new ProductGallery();
-
-// Handle URL parameters to set initial category or search
-const urlParams = new URLSearchParams(window.location.search);
-const initialCategory = urlParams.get('category');
-const initialSearch = urlParams.get('search');
-if (initialCategory) {
-    gallery.currentFilters.category = initialCategory;
-    if (gallery.categoryHierarchy.Construction[initialCategory] || 
-        Object.values(gallery.categoryHierarchy.Construction).some(subCats => subCats.includes(initialCategory))) {
-        gallery.currentSubSubCategory = initialCategory;
-        document.querySelectorAll('.category-item').forEach(cat => cat.classList.remove('active'));
-        const targetItem = document.querySelector(`.category-item[data-category="${initialCategory}"]`);
-        if (targetItem) {
-            targetItem.classList.add('active');
-            gallery.showSpecificationFilter(initialCategory);
-        }
-        gallery.loadProductsFromJSON(initialCategory);
-    }
-} else if (initialSearch) {
-    gallery.currentFilters.search = initialSearch.toLowerCase();
-    document.getElementById('searchInput').value = initialSearch;
-    gallery.filterProducts();
-}
-
-
-
-
-
-
-
+console.info('ProductGallery instance created');
