@@ -104,6 +104,49 @@ body {
     gap: 2rem;
 }
 
+.breadcrumb {
+    background: #f5f0e8;
+    padding: 15px 0;
+    margin-bottom: 20px;
+}
+
+.breadcrumb-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: #331f08;
+}
+
+.breadcrumb-list li {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-list li a {
+    color: #725123;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.breadcrumb-list li a:hover {
+    color: #1a1202;
+}
+
+.breadcrumb-list li.current {
+    color: #331f08;
+    font-weight: 500;
+}
+
+.breadcrumb-list li:not(:last-child)::after {
+    content: '>';
+    margin: 0 8px;
+    color: #555;
+}
+
 @media (max-width: 768px) {
     .hamburger {
         display: block;
@@ -126,6 +169,19 @@ body {
     .nav-links {
         flex-direction: column;
         gap: 1rem;
+    }
+
+    .breadcrumb {
+        padding: 10px 0;
+    }
+
+    .breadcrumb-list {
+        font-size: 0.85rem;
+        gap: 8px;
+    }
+
+    .breadcrumb-list li:not(:last-child)::after {
+        margin: 0 6px;
     }
 }
 
@@ -193,10 +249,27 @@ body {
     margin-bottom: 20px;
 }
 
+.price-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
 .product-price {
     font-size: 24px;
     color: #333;
-    margin-bottom: 15px;
+}
+
+.product-price.strikethrough {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.product-discount-price {
+    font-size: 26px;
+    font-weight: bold;
+    color: #d32f2f;
 }
 
 .product-description {
@@ -205,6 +278,83 @@ body {
     line-height: 1.4;
     margin-bottom: 20px;
     word-break: break-all;
+}
+
+.product-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.filter-group label {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.filter-circles {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 9.5px;
+    color: #333;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.filter-circle.color-circle {
+    border: none;
+}
+
+.filter-circle:hover {
+    border-color: #8b7355;
+    transform: scale(1.1);
+}
+
+.filter-circle.active {
+    border-color: #8b7355;
+    box-shadow: 0 0 5px rgba(139, 115, 85, 0.5);
+}
+
+.filter-circle.color-circle.active {
+    border: 2px solid #8b7355;
+}
+
+.filter-circle .price-tooltip {
+    visibility: hidden;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 5px 10px;
+    border-radius: 4px;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 10;
+}
+
+.filter-circle:hover .price-tooltip {
+    visibility: visible;
 }
 
 .recommendation-title {
@@ -226,6 +376,7 @@ body {
     display: flex;
     gap: 15px;
     margin-bottom: 30px;
+    flex-wrap: wrap;
 }
 
 .btn {
@@ -305,10 +456,10 @@ body {
 
 .similar-products {
     margin-top: 40px;
+    text-align: center;
 }
 
 .similar-products h3 {
-    margin-left: 115vh;
     font-size: 18px;
     margin-bottom: 20px;
     color: #333;
@@ -316,13 +467,16 @@ body {
 
 .similar-grid {
     display: flex;
-    justify-content: flex-end;
-    gap: 15px;
-    margin-right: 20px;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 0 10px;
 }
 
 .similar-item {
-    width: 120px;
+    width: 100%;
+    max-width: 180px;
+    min-width: 140px;
     background-color: #d4c5a0;
     border-radius: 8px;
     padding: 15px;
@@ -338,21 +492,19 @@ body {
 }
 
 .similar-image {
-    width: 60px;
-    height: 60px;
-    background-color: #333;
-    border-radius: 50%;
+    width: 80px;
+    height: 80px;
     margin: 0 auto 10px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.chair-icon {
-    width: 30px;
-    height: 30px;
-    background-color: #d4c5a0;
-    border-radius: 4px;
+.similar-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .similar-item h4 {
@@ -367,21 +519,48 @@ body {
     margin-bottom: 10px;
 }
 
+.similar-item .price.strikethrough {
+    text-decoration: line-through;
+    color: #999;
+}
+
+.similar-item .discount-price {
+    font-size: 12px;
+    font-weight: bold;
+    color: #d32f2f;
+}
+
 .similar-item .add-btn {
     background-color: #333;
     color: #d4c5a0;
     border: none;
-    padding: 5px 10px;
+    padding: 8px 12px;
     border-radius: 3px;
-    font-size: 10px;
+    font-size: 12px;
     cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.similar-item .add-btn:hover {
+    background-color: #555;
 }
 
 @media (max-width: 1200px) {
     .item-list {
         position: relative;
         width: 100%;
+        right: auto;
+        top: auto;
         margin-top: 30px;
+    }
+
+    .similar-grid {
+        gap: 15px;
+    }
+
+    .similar-item {
+        max-width: 160px;
+        min-width: 120px;
     }
 }
 
@@ -396,11 +575,51 @@ body {
     
     .similar-grid {
         justify-content: center;
+        gap: 10px;
     }
 
-    .similar-products h3 {
-        margin-left: 0;
-        text-align: center;
+    .similar-item {
+        max-width: 140px;
+        min-width: 100px;
+        padding: 10px;
+    }
+
+    .similar-image {
+        width: 60px;
+        height: 60px;
+    }
+
+    .similar-item h4 {
+        font-size: 12px;
+    }
+
+    .similar-item .price {
+        font-size: 10px;
+    }
+
+    .similar-item .discount-price {
+        font-size: 10px;
+    }
+
+    .similar-item .add-btn {
+        padding: 6px 10px;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .similar-grid {
+        gap: 8px;
+    }
+
+    .similar-item {
+        max-width: 120px;
+        min-width: 90px;
+    }
+
+    .similar-image {
+        width: 50px;
+        height: 50px;
     }
 }
 

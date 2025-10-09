@@ -33,7 +33,7 @@ body::before {
 
 .container {
   display: flex;
-  max-width: 1200px;
+  max-width: 1400px; /* Increased to accommodate wider receipt */
   margin-top: 40px;
   margin-left: 30px;
   gap: 40px;
@@ -42,10 +42,10 @@ body::before {
 
 /* Receipt Section */
 .receipt {
-  width: 700px;
-  height: 989px; /* A4 aspect ratio: 700 / 0.707 ≈ 989 */
+  width: 900px; /* Increased from 700px to 900px for wider receipt */
+  height: 1272px; /* Adjusted to maintain A4 aspect ratio: 900 / 0.707 ≈ 1272 */
   background: #fff3e3;
-  padding: 30px;
+  padding: 40px; /* Increased padding for better spacing */
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   overflow: hidden; /* Ensure content fits within fixed dimensions */
@@ -297,19 +297,19 @@ body::before {
   }
 }
 
-
-
 .item-details {
   display: flex;
   align-items: center;
   flex: 1;
+  min-width: 0; /* Prevent overflow */
 }
 
 .quantity-controls {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-left: 18.5rem;
+  margin-left: auto; /* Adjusted to push controls to the right */
+  flex-shrink: 0; /* Prevent shrinking */
 }
 
 .qty-btn {
@@ -342,7 +342,7 @@ body::before {
 }
 
 .item-price {
-  min-width: 80px;
+  min-width: 100px; /* Increased to ensure price alignment */
   text-align: right;
 }
 
@@ -376,17 +376,17 @@ body::before {
 }
 
 .header-item {
-  flex: 1;
+  flex: 2; /* Increased flex to give more space for item names */
   text-align: left;
 }
 
 .header-quantity {
-  min-width: 120px;
+  min-width: 150px; /* Increased for better quantity column alignment */
   margin-left: 20px;
 }
 
 .header-price {
-  min-width: 80px;
+  min-width: 100px; /* Increased to match item-price */
   text-align: right;
 }
 
@@ -396,7 +396,7 @@ body::before {
   }
   
   .header-quantity {
-    min-width: 100px;
+    min-width: 120px;
     margin-left: 10px;
   }
 }

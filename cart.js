@@ -1,10 +1,3 @@
-// Updated cart.js
-// Changes:
-// - Added strict price validation to prevent fallback to 500 Tk.
-// - Enhanced logging to trace price values.
-// - Ensured UI displays exact prices from localStorage.
-// - Removed any potential hardcoded price references.
-
 const { jsPDF } = window.jspdf;
 
 // Initialize cartItems from localStorage
@@ -36,6 +29,15 @@ function loadInitialCart() {
 }
 
 let currentItemType = 'default'; // Track current item type (not affecting price)
+
+// Generate dynamic receipt number in format ARCHM/MMYYYY/NNNN
+function generateReceiptNumber() {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, '0'); // Get month (1-12, padded)
+  const year = now.getFullYear(); // Get full year
+  const receiptNo = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
+  return `ARCHM/${month}${year}/${receiptNo}`;
+}
 
 function changeQuantity(index, change) {
   if (index >= 0 && index < cartItems.length) {
@@ -192,9 +194,12 @@ function populateReceipt(items, total) {
   const itemsList = document.getElementById("receipt-items");
   const totalElement = document.getElementById("receipt-total")?.querySelector("span:last-child");
   const dateElement = document.getElementById("receipt-date");
+  const receiptHeader = document.querySelector(".receipt-header span:first-child");
   const confirmBtn = document.querySelector(".confirm-btn");
   const downloadBtn = document.querySelector(".download-btn");
 
+  // Update receipt header with dynamic number
+  receiptHeader.textContent = generateReceiptNumber();
   dateElement.textContent = `Date - ${new Date().toLocaleDateString()}`;
 
   if (items.length === 0) {

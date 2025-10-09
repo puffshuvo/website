@@ -1,0 +1,141 @@
+{
+    "id": 1,
+    "name": "Swish Chair",
+    "price": 500,
+    "discount": 50,
+    "currency": "BDT",
+    "description": "High-quality chair for comfortable seating.",
+    "recomended_title": "Swish Chair",
+    "recomended_text": "This chair is recommended for its durability and ergonomic design.",
+    "category": "Construction",
+    "subcategory": "Civil Work",
+    "subsubcategory": "Cement",
+    "color_images": [
+        {
+            "color": "Red",
+            "images": [
+                "red chair.png",
+                "image/chairrr.png",
+                "red chair.png"
+            ]
+        },
+        {
+            "color": "Blue",
+            "images": [
+                "blue chair.png",
+                "blue chair.png",
+                "blue chair.png"
+            ]
+        }
+    ],
+    "specifications": [
+        {
+            "key": "Color",
+            "value": "Red",
+            "colorCode": "#FF0000",
+            "price": 0
+        },
+        {
+            "key": "Color",
+            "value": "Blue",
+            "colorCode": "#0000FF",
+            "price": -20
+        },
+        {
+            "key": "Size",
+            "value": "5 feet",
+            "price": 0
+        },
+        {
+            "key": "Size",
+            "value": "50 sqft",
+            "price": 100
+        },
+        {
+            "key": "Thickness",
+            "value": "2 inch",
+            "price": 0
+        },
+        {
+            "key": "Thickness",
+            "value": "5 inch",
+            "price": -10
+        },
+        {
+            "key": "Material",
+            "value": "Cotton",
+            "price": 0
+        },
+        {
+            "key": "Dimension",
+            "value": "Cotton",
+            "price": 0
+        }
+    ],
+    "stock_combinations": [
+        {
+            "color": "Red",
+            "size": "5 feet",
+            "thickness": "2 inch",
+            "stock": 10
+        },
+        {
+            "color": "Red",
+            "size": "5 feet",
+            "thickness": "5 inch",
+            "stock": 5
+        },
+        {
+            "color": "Red",
+            "size": "50 sqft",
+            "thickness": "2 inch",
+            "stock": 3
+        },
+        {
+            "color": "Red",
+            "size": "50 sqft",
+            "thickness": "5 inch",
+            "stock": 0
+        },
+        {
+            "color": "Blue",
+            "size": "5 feet",
+            "thickness": "2 inch",
+            "stock": 8
+        },
+        {
+            "color": "Blue",
+            "size": "5 feet",
+            "thickness": "5 inch",
+            "stock": 2
+        },
+        {
+            "color": "Blue",
+            "size": "50 sqft",
+            "thickness": "2 inch",
+            "stock": 4
+        },
+        {
+            "color": "Blue",
+            "size": "50 sqft",
+            "thickness": "5 inch",
+            "stock": 1
+        }
+    ],
+    "similar_products": [
+        {
+            "id": 2,
+            "name": "Comfy Chair",
+            "price": 450,
+            "discount": 45,
+            "image": "Image/chairrr.png"
+        },
+        {
+            "id": 3,
+            "name": "Ergo Chair",
+            "price": 600,
+            "discount": 60,
+            "image": "Image/chairrr.png"
+        }
+    ]
+}

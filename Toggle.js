@@ -2,13 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const navbar = document.querySelector('.navbar');
   const logo = document.querySelector('.logo');
   const navLinksWrapper = document.querySelector('.nav-links-wrapper');
+  const searchBar = document.querySelector('.search-bar');
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelectorAll('.nav-links a');
   const scrollThreshold = 100;
-  const maxTranslate = -10;
-  const maxLinkTranslate = 10;
   const classToggleThreshold = 50;
   let isScrolled = false;
+  let isTransitioning = false;
 
   // Debounce function to limit scroll event frequency
   function debounce(func, wait) {
@@ -26,15 +26,26 @@ document.addEventListener('DOMContentLoaded', () => {
   // Smooth scroll animation
   function updateScrollAnimation() {
     const scrollY = window.scrollY;
-    const progress = Math.min(scrollY / scrollThreshold, 1);
-    logo.style.transform = `translateX(${progress * maxTranslate}px)`;
-    navLinksWrapper.style.transform = `translateX(${progress * maxLinkTranslate}px)`;
-    if (scrollY > classToggleThreshold + 10 && !isScrolled) {
-      navbar.classList.add('scrolled');
-      isScrolled = true;
-    } else if (scrollY < classToggleThreshold - 10 && isScrolled) {
-      navbar.classList.remove('scrolled');
-      isScrolled = false;
+
+    // Handle transitioning state
+    if (scrollY > classToggleThreshold && !isScrolled) {
+      isTransitioning = true;
+      navbar.classList.add('transitioning');
+      setTimeout(() => {
+        navbar.classList.remove('transitioning');
+        navbar.classList.add('scrolled');
+        isScrolled = true;
+        isTransitioning = false;
+      }, 300); // Match CSS opacity transition duration
+    } else if (scrollY <= classToggleThreshold && isScrolled) {
+      isTransitioning = true;
+      navbar.classList.add('transitioning');
+      setTimeout(() => {
+        navbar.classList.remove('transitioning');
+        navbar.classList.remove('scrolled');
+        isScrolled = false;
+        isTransitioning = false;
+      }, 300); // Match CSS opacity transition duration
     }
   }
 

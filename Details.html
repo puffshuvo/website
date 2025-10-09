@@ -30,6 +30,10 @@
     </header>
 
     <div class="container">
+        <nav class="breadcrumb">
+            <ol class="breadcrumb-list" id="breadcrumbList"></ol>
+        </nav>
+
         <div class="product-section">
             <div class="product-image-container">
                 <img src="Image/placeholder.png" alt="Product Image" class="product-image" id="mainImage">
@@ -38,9 +42,27 @@
 
             <div class="product-details">
                 <h1 class="product-title" id="productTitle">Loading...</h1>
-                <p class="product-price" id="productPrice">0 BDT</p>
+                <div class="price-container">
+                    <p class="product-price" id="productPrice">0 BDT</p>
+                    <p class="product-discount-price" id="productDiscountPrice"></p>
+                </div>
                 <p class="product-description" id="productDescription">Loading description...</p>
                 
+                <div class="product-filters">
+                    <div class="filter-group">
+                        <label>Color:</label>
+                        <div class="filter-circles" id="colorCircles"></div>
+                    </div>
+                    <div class="filter-group">
+                        <label>Size:</label>
+                        <div class="filter-circles" id="sizeCircles"></div>     
+                    </div>
+                    <div class="filter-group">
+                        <label>Thickness:</label>
+                        <div class="filter-circles" id="thicknessCircles"></div>
+                    </div>
+                </div>
+
                 <h2 class="recommendation-title">Why Architects Recommend This</h2>
                 <p class="recommendation-text" id="recommendationText">Loading recommendation...</p>
 
