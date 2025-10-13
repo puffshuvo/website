@@ -35,7 +35,8 @@ function generateReceiptNumber() {
   const now = new Date();
   const month = String(now.getMonth() + 1).padStart(2, '0'); // Get month (1-12, padded)
   const year = now.getFullYear(); // Get full year
-  const receiptNo = Math.floor(1000 + Math.random() * 9000); // Random 4-digit number
+  const timestamp = Date.now();
+  const receiptNo = String(timestamp).slice(-4).padStart(4, '0');
   return `ARCHM/${month}${year}/${receiptNo}`;
 }
 
@@ -161,9 +162,9 @@ function downloadPDF() {
 }
 
 function updatePayableTo() {
-  const nameInput = document.getElementById("input-name")?.value.trim() || "Not provided";
-  const phoneInput = document.getElementById("input-phone")?.value.trim() || "Not provided";
-  const addressInput = document.getElementById("input-address")?.value.trim() || "Not provided";
+  const nameInput = document.getElementById("input-name")?.value.trim() || "";
+  const phoneInput = document.getElementById("input-phone")?.value.trim() || "";
+  const addressInput = document.getElementById("input-address")?.value.trim() || "";
 
   document.getElementById("payable-name").textContent = nameInput;
   document.getElementById("payable-phone").textContent = phoneInput;

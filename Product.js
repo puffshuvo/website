@@ -13,22 +13,49 @@ class ProductGallery {
         };
         this.apiBase = 'https://archimartbd.com/product.json';
         this.cart = JSON.parse(localStorage.getItem('cartState')) || [];
+
+        // Debugging toggle: set to false to silence debug logs
+        this.debugEnabled = true;
+
+        // Small helper logging functions
+        this._log = (level, ...args) => {
+            if (!this.debugEnabled) return;
+            const prefix = `[Gallery][${new Date().toISOString()}]`;
+            try {
+                if (console && console[level]) {
+                    console[level](prefix, ...args);
+                } else {
+                    console.log(prefix, ...args);
+                }
+            } catch (e) {
+                // ignore logging errors
+            }
+        };
+        this.debug = (...args) => this._log('debug', ...args);
+        this.info = (...args) => this._log('info', ...args);
+        this.warn = (...args) => this._log('warn', ...args);
+        this.error = (...args) => this._log('error', ...args);
+
+        this.debug('Constructor: starting initialization', { cartLength: this.cart.length, apiBase: this.apiBase });
         this.init();
     }
 
     async init() {
+        this.debug('init() called with currentFilters', this.currentFilters);
         try {
             await this.loadProducts();
             this.setupEventListeners();
             this.updateDisplay();
             this.updateBreadcrumb();
+            this.info('Gallery initialized successfully', { productsLoaded: this.products.length });
         } catch (error) {
-            console.error('Failed to initialize gallery:', error);
+            this.error('Failed to initialize gallery:', error);
             this.showError('Failed to load products. Please try again later.');
         }
     }
 
     async loadProducts(category = null, subcategory = null, subsubcategory = null) {
+        this.debug('loadProducts() called', { category, subcategory, subsubcategory });
         this.showLoading(true);
         try {
             let url = this.apiBase;
@@ -45,17 +72,20 @@ class ProductGallery {
             if (params.toString()) {
                 url += '?' + params.toString();
             }
+            this.debug('Fetching products from URL', url);
             const response = await fetch(url);
+            this.debug('Fetch response status', response.status, response.statusText);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
             this.products = Array.isArray(data) ? data : data.products || [];
             this.filteredProducts = [...this.products];
+            this.debug('Products loaded', { count: this.products.length });
             this.updateSpecificationFilters();
             this.applyFilters();
         } catch (error) {
-            console.error('Error loading products:', error);
+            this.error('Error loading products:', error);
             this.showError('Failed to load products. Please check your connection.');
         } finally {
             this.showLoading(false);
@@ -63,11 +93,13 @@ class ProductGallery {
     }
 
     setupEventListeners() {
+        this.debug('setupEventListeners() start');
         const hamburger = document.querySelector('.hamburger');
         const navLinks = document.querySelector('.nav-links-wrapper');
         if (hamburger && navLinks) {
             hamburger.addEventListener('click', () => {
                 navLinks.classList.toggle('active');
+                this.debug('Hamburger clicked - toggled nav-links-wrapper');
             });
         }
 
@@ -78,6 +110,7 @@ class ProductGallery {
                 const value = e.target.value;
                 maxPriceDisplay.textContent = `৳${parseInt(value).toLocaleString()}`;
                 this.currentFilters.priceRange = parseInt(value);
+                this.debug('Price range changed', this.currentFilters.priceRange);
                 this.debounce(() => this.applyFilters(), 300)();
             });
         }
@@ -86,6 +119,7 @@ class ProductGallery {
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 this.currentFilters.search = e.target.value.toLowerCase();
+                this.debug('Search input changed', this.currentFilters.search);
                 this.debounce(() => this.applyFilters(), 300)();
             });
         }
@@ -94,6 +128,7 @@ class ProductGallery {
         if (sortBy) {
             sortBy.addEventListener('change', (e) => {
                 this.currentFilters.sortBy = e.target.value;
+                this.debug('Sort changed to', this.currentFilters.sortBy);
                 this.applyFilters();
             });
         }
@@ -103,15 +138,22 @@ class ProductGallery {
             item.addEventListener('click', (e) => {
                 e.preventDefault();
                 const category = item.dataset.category;
+                this.debug('Category item clicked', category, item.className);
                 this.handleCategoryClick(item, category);
             });
         });
 
         this.handleURLParameters();
-        window.addEventListener('popstate', () => this.handleURLParameters());
+        window.addEventListener('popstate', () => {
+            this.debug('popstate event received');
+            this.handleURLParameters();
+        });
+
+        this.debug('setupEventListeners() done');
     }
 
     handleCategoryClick(item, category) {
+        this.debug('handleCategoryClick()', { category, classes: item.className });
         document.querySelectorAll('.category-item').forEach(el => {
             el.classList.remove('active');
         });
@@ -184,6 +226,7 @@ class ProductGallery {
     }
 
     updateSpecificationFilters() {
+        this.debug('updateSpecificationFilters() building spec UI from products', { productsCount: this.products.length });
         const specContent = document.getElementById('specificationContent');
         if (!specContent) return;
         const specs = {};
@@ -230,6 +273,7 @@ class ProductGallery {
     handleSpecificationChange(checkbox) {
         const specKey = checkbox.dataset.specKey;
         const specValue = checkbox.dataset.specValue;
+        this.debug('Specification change', { specKey, specValue, checked: checkbox.checked });
         if (!this.currentFilters.specifications[specKey]) {
             this.currentFilters.specifications[specKey] = [];
         }
@@ -238,7 +282,7 @@ class ProductGallery {
                 this.currentFilters.specifications[specKey].push(specValue);
             }
         } else {
-            this.currentFilters.specifications[specKey] = 
+            this.currentFilters.specifications[specKey] =
                 this.currentFilters.specifications[specKey].filter(v => v !== specValue);
             if (this.currentFilters.specifications[specKey].length === 0) {
                 delete this.currentFilters.specifications[specKey];
@@ -248,6 +292,7 @@ class ProductGallery {
     }
 
     clearSpecifications() {
+        this.debug('clearSpecifications() called');
         this.currentFilters.specifications = {};
         const checkboxes = document.querySelectorAll('#specificationContent input[type="checkbox"]');
         checkboxes.forEach(checkbox => checkbox.checked = false);
@@ -255,6 +300,7 @@ class ProductGallery {
     }
 
     applyFilters() {
+        this.debug('applyFilters() currentFilters snapshot', JSON.parse(JSON.stringify(this.currentFilters)));
         let filtered = [...this.products];
         filtered = filtered.filter(product => {
             const price = parseFloat(product.price) || 0;
@@ -281,11 +327,13 @@ class ProductGallery {
         });
         this.sortProducts(filtered);
         this.filteredProducts = filtered;
+        this.debug('applyFilters result count', this.filteredProducts.length);
         this.updateDisplay();
         this.updateStats();
     }
 
     sortProducts(products) {
+        this.debug('sortProducts()', this.currentFilters.sortBy);
         switch (this.currentFilters.sortBy) {
             case 'name':
                 products.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
@@ -309,12 +357,14 @@ class ProductGallery {
         if (this.filteredProducts.length === 0) {
             productGrid.style.display = 'none';
             if (noResults) noResults.style.display = 'block';
+            this.debug('updateDisplay: no results to show');
             return;
         }
         if (noResults) noResults.style.display = 'none';
         productGrid.style.display = 'grid';
         productGrid.innerHTML = this.filteredProducts.map(product => this.createProductCard(product)).join('');
         this.setupProductCardListeners();
+        this.debug('updateDisplay: rendered products', this.filteredProducts.length);
     }
 
     createProductCard(product) {
@@ -326,7 +376,7 @@ class ProductGallery {
         return `
             <div class="product-card" data-product-id="${product.id}">
                 <div class="product-image">
-                    <img src="${imageUrl}" alt="${product.name}" onerror="this.src='Image/placeholder.jpg'">
+                    <img src="${imageUrl}" alt="${product.name}" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='Image/placeholder.jpg';} else {this.onerror=null;}">
                     <div class="product-overlay">
                         <button class="btn-quick-view" onclick="gallery.quickView('${product.id}')">
                             <i class="fas fa-eye"></i> Quick View
@@ -366,6 +416,7 @@ class ProductGallery {
             card.addEventListener('click', (e) => {
                 if (!e.target.closest('button')) {
                     const productId = card.dataset.productId;
+                    this.debug('product card clicked, navigating to details', productId);
                     this.viewProductDetails(productId);
                 }
             });
@@ -373,8 +424,12 @@ class ProductGallery {
     }
 
     quickView(productId) {
-        const product = this.products.find(p => p.id === productId);
-        if (!product) return;
+        this.debug('quickView() for', productId);
+        const product = this.products.find(p => String(p.id) === String(productId));
+        if (!product) {
+            this.warn('quickView: product not found', productId);
+            return;
+        }
         const modal = document.createElement('div');
         modal.className = 'modal quick-view-modal';
         modal.innerHTML = `
@@ -383,7 +438,7 @@ class ProductGallery {
                 <div class="quick-view-content">
                     <div class="quick-view-image">
                         <img src="${product.image || product.imageUrl || 'Image/placeholder.jpg'}" 
-                             alt="${product.name}" onerror="this.src='Image/placeholder.jpg'">
+                             alt="${product.name}" onerror="if(!this.dataset.tried){this.dataset.tried='1'; this.src='Image/placeholder.jpg';} else {this.onerror=null;}">
                     </div>
                     <div class="quick-view-details">
                         <h2>${product.name}</h2>
@@ -429,13 +484,22 @@ class ProductGallery {
     }
 
     addToCart(productId) {
-        const product = this.products.find(p => p.id === productId);
-        if (!product || product.stock <= 0) return;
+        this.debug('addToCart() called for', productId);
+        const product = this.products.find(p => String(p.id) === String(productId));
+        if (!product) {
+            this.warn('addToCart: product not found', productId);
+            return;
+        }
+        if (product.stock <= 0) {
+            this.warn('addToCart: product out of stock', productId);
+            return;
+        }
         const existingItem = this.cart.find(item => item.id === productId);
         if (existingItem) {
             existingItem.quantity += 1;
+            this.debug('Increased quantity for cart item', existingItem);
         } else {
-            this.cart.push({
+            const newItem = {
                 id: productId,
                 name: product.name,
                 price: product.price,
@@ -444,7 +508,9 @@ class ProductGallery {
                 category: product.category,
                 subcategory: product.subcategory,
                 subsubcategory: product.subsubcategory
-            });
+            };
+            this.cart.push(newItem);
+            this.debug('Added new item to cart', newItem);
         }
         this.saveCart();
         this.showNotification(`${product.name} added to cart!`);
@@ -452,9 +518,11 @@ class ProductGallery {
 
     saveCart() {
         localStorage.setItem('cartState', JSON.stringify(this.cart));
+        this.debug('saveCart() persisted cart', { cartLength: this.cart.length });
     }
 
     viewProductDetails(productId) {
+        this.info('viewProductDetails() navigating to details for', productId);
         window.location.href = `Details.html?id=${productId}`;
     }
 
@@ -468,6 +536,7 @@ class ProductGallery {
             const filterCount = this.getActiveFilterCount();
             activeFilters.textContent = filterCount > 0 ? `${filterCount} filters active` : '';
         }
+        this.debug('updateStats() updated UI stats', { found: this.filteredProducts.length, activeFilters: this.getActiveFilterCount() });
     }
 
     getActiveFilterCount() {
@@ -516,6 +585,7 @@ class ProductGallery {
         }
 
         breadcrumbList.innerHTML = breadcrumbs.join('');
+        this.debug('updateBreadcrumb() updated', { category, subcategory, subsubcategory });
     }
 
     getCategoryDisplayName(category) {
@@ -575,6 +645,7 @@ class ProductGallery {
         }
         const newUrl = `${window.location.pathname}${params.toString() ? '?' + params.toString() : ''}`;
         window.history.pushState(null, '', newUrl);
+        this.debug('updateURL() pushed new URL', newUrl);
     }
 
     handleURLParameters() {
@@ -583,6 +654,8 @@ class ProductGallery {
         const subcategory = params.get('subcategory');
         const subsubcategory = params.get('subsubcategory');
         const search = params.get('search');
+
+        this.debug('handleURLParameters() parsed', { category, subcategory, subsubcategory, search });
 
         if (category || subcategory || subsubcategory) {
             this.currentFilters.category = category || 'all';
@@ -621,9 +694,11 @@ class ProductGallery {
                 productGrid.style.display = 'grid';
             }
         }
+        this.debug('showLoading()', show);
     }
 
     showError(message) {
+        this.error('showError()', message);
         const productGrid = document.getElementById('productGrid');
         if (productGrid) {
             productGrid.innerHTML = `
@@ -638,6 +713,7 @@ class ProductGallery {
     }
 
     showNotification(message) {
+        this.debug('showNotification()', message);
         const notification = document.createElement('div');
         notification.className = 'notification';
         notification.textContent = message;

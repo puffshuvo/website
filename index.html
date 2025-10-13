@@ -22,22 +22,131 @@
           <i class="fas fa-search"></i>
         </button>
       </div>
-      <div class="hamburger">
+      <div class="hamburger" aria-expanded="false" role="button" aria-label="Toggle navigation">
         <i class="fas fa-bars"></i>
       </div>
       <nav class="nav-links-wrapper">
         <ul class="nav-links">
-          <li><a href="Construction.html">Construction</a></li>
-          <li><a href="HomeAppliances.html">Home Appliances</a></li>
-          <li><a href="Furnitures.html">Furnitures</a></li>
-          <li><a href="Others.html">Others</a></li>
-          <li><a href="cart.html" class="cart-icon"><i class="fas fa-shopping-cart"></i></a></li>
+          <li class="nav-item">
+            <a href="Construction.html" class="nav-link" aria-expanded="false">
+              Construction <i class="fas fa-chevron-down nav-arrow"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="dropdown-item">
+                <a href="Construction.html?category=civil-work" class="dropdown-link" aria-expanded="false">
+                  Civil Work <i class="fas fa-chevron-right sub-arrow"></i>
+                </a>
+                <ul class="sub-dropdown-menu">
+                  <li><a href="Construction.html?category=cement">Cement</a></li>
+                  <li><a href="Construction.html?category=sand">Sand</a></li>
+                  <li><a href="Construction.html?category=brick">Brick</a></li>
+                  <li><a href="Construction.html?category=reinforcement">Reinforcement</a></li>
+                </ul>
+              </li>
+              <li class="dropdown-item">
+                <a href="Construction.html?category=interior" class="dropdown-link" aria-expanded="false">
+                  Interior <i class="fas fa-chevron-right sub-arrow"></i>
+                </a>
+                <ul class="sub-dropdown-menu">
+                  <li><a href="Construction.html?category=tiles">Tiles</a></li>
+                  <li><a href="Construction.html?category=wood">Wood</a></li>
+                  <li><a href="Construction.html?category=lock">Lock</a></li>
+                  <li><a href="Construction.html?category=mirror">Mirror</a></li>
+                </ul>
+              </li>
+              <li class="dropdown-item">
+                <a href="Construction.html?category=paint" class="dropdown-link">Paint</a>
+              </li>
+              <li class="dropdown-item">
+                <a href="Construction.html?category=electrical" class="dropdown-link">Electrical</a>
+              </li>
+              <li class="dropdown-item">
+                <a href="Construction.html?category=sanitary" class="dropdown-link">Sanitary</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="HomeAppliances.html" class="nav-link" aria-expanded="false">
+              Home Appliances <i class="fas fa-chevron-down nav-arrow"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="dropdown-item">
+                <a href="HomeAppliances.html?category=kitchen" class="dropdown-link" aria-expanded="false">
+                  Kitchen Appliances <i class="fas fa-chevron-right sub-arrow"></i>
+                </a>
+                <ul class="sub-dropdown-menu">
+                  <li><a href="HomeAppliances.html?category=refrigerator">Refrigerator</a></li>
+                  <li><a href="HomeAppliances.html?category=microwave">Microwave</a></li>
+                  <li><a href="HomeAppliances.html?category=oven">Oven</a></li>
+                  <li><a href="HomeAppliances.html?category=blender">Blender</a></li>
+                </ul>
+              </li>
+              <li class="dropdown-item">
+                <a href="HomeAppliances.html?category=laundry" class="dropdown-link" aria-expanded="false">
+                  Laundry <i class="fas fa-chevron-right sub-arrow"></i>
+                </a>
+                <ul class="sub-dropdown-menu">
+                  <li><a href="HomeAppliances.html?category=washing-machine">Washing Machine</a></li>
+                  <li><a href="HomeAppliances.html?category=dryer">Dryer</a></li>
+                </ul>
+              </li>
+              <li class="dropdown-item">
+                <a href="HomeAppliances.html?category=electronics" class="dropdown-link">Electronics</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="Furnitures.html" class="nav-link" aria-expanded="false">
+              Furniture <i class="fas fa-chevron-down nav-arrow"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="dropdown-item">
+                <a href="Furnitures.html?category=living-room" class="dropdown-link" aria-expanded="false">
+                  Living Room <i class="fas fa-chevron-right sub-arrow"></i>
+                </a>
+                <ul class="sub-dropdown-menu">
+                  <li><a href="Furnitures.html?category=sofa">Sofa</a></li>
+                  <li><a href="Furnitures.html?category=armchair">Armchair</a></li>
+                  <li><a href="Furnitures.html?category=coffee-table">Coffee Table</a></li>
+                </ul>
+              </li>
+              <li class="dropdown-item">
+                <a href="Furnitures.html?category=bedroom" class="dropdown-link" aria-expanded="false">
+                  Bedroom <i class="fas fa-chevron-right sub-arrow"></i>
+                </a>
+                <ul class="sub-dropdown-menu">
+                  <li><a href="Furnitures.html?category=bed">Bed</a></li>
+                  <li><a href="Furnitures.html?category=wardrobe">Wardrobe</a></li>
+                  <li><a href="Furnitures.html?category=dresser">Dresser</a></li>
+                </ul>
+              </li>
+              <li class="dropdown-item">
+                <a href="Furnitures.html?category=dining" class="dropdown-link">Dining</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="Others.html" class="nav-link" aria-expanded="false">
+              Others <i class="fas fa-chevron-down nav-arrow"></i>
+            </a>
+            <ul class="dropdown-menu">
+              <li class="dropdown-item"><a href="Others.html?category=tools" class="dropdown-link">Tools</a></li>
+              <li class="dropdown-item"><a href="Others.html?category=safety" class="dropdown-link">Safety Equipment</a></li>
+              <li class="dropdown-item"><a href="Others.html?category=accessories" class="dropdown-link">Accessories</a></li>
+            </ul>
+          </li>
+          <li class="nav-item cart-item">
+            <a href="cart.html" class="nav-link cart-icon">
+              <i class="fas fa-shopping-cart"></i>
+              <span class="cart-count">0</span>
+            </a>
+          </li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <!-- Main Section -->
+  <!-- Main Section (Unchanged) -->
   <section class="main-content">
     <div class="portrait-image">
       <img src="Image/Add.jpg" alt="Portrait Background" class="portrait-img" />
@@ -65,7 +174,7 @@
     </div>
   </section>
 
-  <!-- Menu Section -->
+  <!-- Menu Section (Unchanged) -->
   <section class="menu-section">
     <div class="menu-panel">
       <div class="menu-category" data-image="construction">
@@ -157,6 +266,7 @@
     </div> 
   </section>
 
+  <!-- Footer (Unchanged except for minor accessibility tweaks) -->
   <footer>
     <div class="footer-left">
       <ul class="footer-menu">
@@ -195,12 +305,12 @@
             <p>01533 138 112</p>
           </div>
           <div class="contact-block">
-            <p class="label">Phone</p>
+            <p class="label">Email</p>
             <p>ajakljgk@gmail.com</p>
           </div>
           <div class="contact-block">
             <p class="label">Address</p>
-            <p>Panthapath , Dhaka</p>
+            <p>Panthapath, Dhaka</p>
           </div>
         </div>
       </div>
@@ -208,9 +318,9 @@
     <div class="footer-right">
       <h3>Book Appointment With Expert Architects To Find Your Home Solutions</h3>
       <form>
-        <input type="text" placeholder="Your Name" />
-        <input type="text" placeholder="Phone" />
-        <input type="text" placeholder="How can we assist you?" />
+        <input type="text" placeholder="Your Name" aria-label="Your Name" />
+        <input type="text" placeholder="Phone" aria-label="Phone" />
+        <input type="text" placeholder="How can we assist you?" aria-label="How can we assist you?" />
         <button type="submit">SUBMIT</button>
       </form>
     </div>
