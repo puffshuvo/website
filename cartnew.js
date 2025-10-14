@@ -101,21 +101,6 @@ function clearCart() {
 }
 
 function downloadPDF() {
-  // Require form data and payment before allowing download
-  const name = document.getElementById("input-name")?.value.trim() || "";
-  const phone = document.getElementById("input-phone")?.value.trim() || "";
-  const address = document.getElementById("input-address")?.value.trim() || "";
-  const paymentSelected = document.querySelector('input[name="payment"]:checked');
-
-  if (!name || !phone || !address) {
-    alert("Please fill Name, Phone and Delivery Address before downloading the receipt.");
-    return;
-  }
-  if (!paymentSelected) {
-    alert("Please select a payment method before downloading the receipt.");
-    return;
-  }
-
   if (cartItems.length === 0) {
     alert("Cannot download PDF: Cart is empty.");
     return;
@@ -123,20 +108,6 @@ function downloadPDF() {
 
   const element = document.getElementById("receipt");
   const downloadBtn = document.querySelector(".download-btn");
-  const items = document.querySelectorAll("#receipt-items li");
-  const qtyButtons = document.querySelectorAll(".qty-btn, .delete-btn");
-  const clearCartBtn = document.querySelector('.clear-cart-btn');
-
-  // Hide quantity control buttons (plus, minus, delete) and add PDF-specific class
-  qtyButtons.forEach(button => {
-    button.style.display = "none";
-  });
-  items.forEach(item => {
-    item.classList.add("pdf-quantity-only");
-  });
-
-  // hide clear cart button while generating PDF (optional)
-  if (clearCartBtn) clearCartBtn.style.display = "none";
 
   // Add copyright line
   let copyrightDiv = document.getElementById("copyright-line");
@@ -182,30 +153,11 @@ function downloadPDF() {
 
     pdf.addImage(imgData, "PNG", xOffset, yOffset, imgWidth, imgHeight);
     pdf.save("archimart-receipt.pdf");
-
-    // Restore visibility of buttons, remove PDF-specific class, and show download button
-    qtyButtons.forEach(button => {
-      button.style.display = "flex";
-    });
-    items.forEach(item => {
-      item.classList.remove("pdf-quantity-only");
-    });
     downloadBtn.style.display = "block";
-    // Ensure Clear Cart button is visible after download
-    if (clearCartBtn) clearCartBtn.style.display = "block";
   }).catch(error => {
     console.error("Error generating PDF:", error);
     alert("Failed to generate PDF. Please try again.");
-    // Restore visibility even on error
-    qtyButtons.forEach(button => {
-      button.style.display = "flex";
-    });
-    items.forEach(item => {
-      item.classList.remove("pdf-quantity-only");
-    });
     downloadBtn.style.display = "block";
-    // Ensure Clear Cart button is visible after failure as well
-    if (clearCartBtn) clearCartBtn.style.display = "block";
   });
 }
 
@@ -213,29 +165,16 @@ function updatePayableTo() {
   const nameInput = document.getElementById("input-name")?.value.trim() || "";
   const phoneInput = document.getElementById("input-phone")?.value.trim() || "";
   const addressInput = document.getElementById("input-address")?.value.trim() || "";
-  const paymentSelected = document.querySelector('input[name="payment"]:checked');
 
-  // Determine payment label text (prefer the label text if available)
-  let paymentText = "Not selected";
-  let paymentValue = "";
-  if (paymentSelected) {
-    paymentValue = paymentSelected.value || "";
-    const lbl = document.querySelector(`label[for="${paymentSelected.id}"]`);
-    paymentText = lbl ? lbl.textContent.trim() : (paymentSelected.value || "Selected");
-  }
-
-  document.getElementById("payable-name").textContent = nameInput || "Your Name";
-  document.getElementById("payable-phone").textContent = phoneInput || "Your Phone";
-  document.getElementById("payable-address").textContent = addressInput || "Your Address";
-  const payablePaymentEl = document.getElementById("payable-payment");
-  if (payablePaymentEl) payablePaymentEl.textContent = paymentText;
+  document.getElementById("payable-name").textContent = nameInput;
+  document.getElementById("payable-phone").textContent = phoneInput;
+  document.getElementById("payable-address").textContent = addressInput;
 
   try {
     localStorage.setItem("cartFormData", JSON.stringify({
       name: nameInput,
       phone: phoneInput,
-      address: addressInput,
-      payment: paymentValue
+      address: addressInput
     }));
   } catch (e) {
     console.error("Error saving form data to localStorage:", e);
@@ -306,6 +245,46 @@ function changeAlt(option) {
     return;
   }
 
+  // Collect product ids from cartItems (assume each item has an id property)
+  const productIds = cartItems.map(item => item.id).filter(Boolean).join(",");
+  if (!productIds) {
+    alert("No product IDs found in cart items.");
+    return;
+  }
+
+  // Call the get_similar_product URL (GET request)
+  const url = `https://archimartbd.com/ajax/similar-products/?product_id=${encodeURIComponent(productIds)}&option=${encodeURIComponent(option)}`;
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to fetch similar product");
+      return response.json();
+    })
+    .then(data => {
+      // data is an array of products with possible alternate
+      cartItems = cartItems.map(item => {
+        // Find matching product in response (by id or product_id)
+        const found = data.find(d => (d.product_id == item.id || d.product_id == item.product_id));
+        if (found && found.alternate) {
+          // Replace with alternate info
+          return {
+            ...item,
+            id: found.alternate.id,
+            name: found.alternate.name,
+            price: found.alternate.price,
+            // keep quantity and other fields
+          };
+        }
+        return item;
+      });
+      updateCartDisplay();
+      populateReceipt(cartItems, cartItems.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0));
+      saveCartState();
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
   currentItemType = option;
   // No price changes; only update names for display
   cartItems = cartItems.map(cartItem => ({
@@ -364,11 +343,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById("input-name").value = formData.name || "";
     document.getElementById("input-phone").value = formData.phone || "";
     document.getElementById("input-address").value = formData.address || "";
-    // Restore payment selection if saved
-    if (formData.payment) {
-      const savedRadio = document.querySelector(`input[name="payment"][value="${formData.payment}"]`);
-      if (savedRadio) savedRadio.checked = true;
-    }
   } catch (e) {
     console.error("Error loading form data from localStorage:", e);
   }
@@ -448,13 +422,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById("input-phone")?.addEventListener('input', updatePayableTo);
   document.getElementById("input-address")?.addEventListener('input', updatePayableTo);
 
-  // Ensure payment radio changes update payable-to immediately
-  const paymentRadios = document.querySelectorAll('input[name="payment"]');
-  paymentRadios.forEach(r => r.addEventListener('change', updatePayableTo));
-
-  // call once to set payable payment text from restored state
-  updatePayableTo();
-
   document.querySelector('.confirm-btn').addEventListener('click', function(e) {
     if (cartItems.length === 0) {
       alert("Cannot confirm order: Cart is empty.");
@@ -497,5 +464,3 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
-
-
