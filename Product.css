@@ -631,9 +631,9 @@ body {
 }
 
 .product-card {
-    background: #FFF3E3;
+    background: #ffffff;
     backdrop-filter: blur(10px);
-    border-radius: 20px;
+    border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
