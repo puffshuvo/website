@@ -741,7 +741,7 @@ body {
   z-index: 9999;
   width: 120px;
   height: 80px;
-  background: #fff;
+  background: transparent;
   border: 1px solid rgba(0,0,0,0.12);
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   border-radius: 6px;
@@ -765,7 +765,7 @@ body {
 }
 
 .subcategory-list li a:hover {
-  background-color: #4a2a09;
+  background-color: #868685;
 }
 
 
