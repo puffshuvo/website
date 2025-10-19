@@ -51,11 +51,11 @@ function changeQuantity(index, change) {
 
 function updateCartDisplay() {
   let totalAmount = 0;
-  
+
   cartItems.forEach((item, index) => {
     const qtyDisplay = document.getElementById(`qty-${index}`);
     const priceDisplay = document.getElementById(`price-${index}`);
-    
+
     if (qtyDisplay && priceDisplay) {
       qtyDisplay.textContent = item.quantity;
       const itemTotal = (item.price || 0) * item.quantity;
@@ -66,7 +66,7 @@ function updateCartDisplay() {
       console.warn(`Element not found for item at index ${index}`); // Debug
     }
   });
-  
+
   const totalElement = document.getElementById("receipt-total")?.querySelector("span:last-child");
   if (totalElement) {
     totalElement.textContent = `${totalAmount.toFixed(2)} Tk`;
@@ -300,23 +300,57 @@ function populateReceipt(items, total) {
   updatePayableTo();
 }
 
+
+
+
+
 function changeAlt(option) {
   if (cartItems.length === 0 || window.location.search.includes("combined=true")) {
     alert("Cannot change alternate option: Cart is empty or combined selection is active.");
     return;
   }
 
-  currentItemType = option;
-  // No price changes; only update names for display
-  cartItems = cartItems.map(cartItem => ({
-    ...cartItem,
-    name: option === 'high' ? `Premium ${cartItem.name}` : 
-           option === 'low' ? `Basic ${cartItem.name}` : cartItem.name
-  }));
+  // Collect product ids from cartItems (assume each item has an id property)
+  const productIds = cartItems.map(item => item.id).filter(Boolean).join(",");
+  if (!productIds) {
+    alert("No product IDs found in cart items.");
+    return;
+  }
 
-  updateCartDisplay();
-  populateReceipt(cartItems, cartItems.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0));
-  saveCartState();
+  // Call the get_similar_product URL (GET request)
+  const url = `https://archimartbd.com/ajax/similar-products/?product_id=${encodeURIComponent(productIds)}&option=${encodeURIComponent(option)}`;
+
+  fetch(url)
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to fetch similar product");
+      return response.json();
+    })
+    .then(data => {
+      // data is an array of products with possible alternate
+      cartItems = cartItems.map(item => {
+        // Find matching product in response (by id or product_id)
+        const found = data.find(d => (d.product_id == item.id || d.product_id == item.product_id));
+        if (found && found.alternate) {
+          // Only update name and price, keep original id and quantity
+          return {
+            ...item,
+            name: found.alternate.name,
+            price: found.alternate.price,
+            // keep original id and quantity
+          };
+        }
+        return item;
+      });
+      updateCartDisplay();
+      populateReceipt(cartItems, cartItems.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0));
+      // Do NOT save to localStorage after fetching alternate data
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+  currentItemType = option;
+
 
   const highBtn = document.querySelector(".alt-btnl.high");
   const lowBtn = document.querySelector(".alt-btn.low");
@@ -336,9 +370,11 @@ function changeAlt(option) {
   const compareLowBtn = document.querySelector(".compare-btn.low");
   compareHighBtn.style.display = option === "high" ? "block" : "none";
   compareLowBtn.style.display = option === "low" ? "block" : "none";
+
 }
 
-function goToCompare() {
+
+function goToCompare(option) {
   if (cartItems.length === 0) {
     alert("Cannot compare: Cart is empty.");
     return;
@@ -348,17 +384,18 @@ function goToCompare() {
   } catch (e) {
     console.error("Error saving cart state for compare:", e);
   }
-  window.location.href = "Compare.html";
+  // add query param to Compare.html
+  window.location.href = `Compare.html?option=${encodeURIComponent(option)}`;
 }
 
 function continueShopping() {
   window.location.href = "index.html";
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const urlParams = new URLSearchParams(window.location.search);
   const isCombined = urlParams.get('combined') === 'true';
-  
+
   try {
     const formData = JSON.parse(localStorage.getItem('cartFormData')) || {};
     document.getElementById("input-name").value = formData.name || "";
@@ -375,7 +412,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Load cart items
   loadInitialCart();
-  
+
   if (isCombined) {
     try {
       const combinedSelection = JSON.parse(localStorage.getItem('combinedSelection'));
@@ -386,7 +423,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }));
         console.log('Loaded combined selection:', itemsWithQuantities); // Debug
         populateReceipt(itemsWithQuantities, combinedSelection.totalAmount);
-        
+
         document.querySelector(".alt-btnl.high").disabled = true;
         document.querySelector(".alt-btn.low").disabled = true;
         document.querySelector(".compare-btn.high").style.display = "none";
@@ -412,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const lowBtn = document.querySelector(".alt-btn.low");
   const compareHighBtn = document.querySelector(".compare-btn.high");
   const compareLowBtn = document.querySelector(".compare-btn.low");
-  
+
   if (cartItems.length === 0) {
     highBtn.disabled = true;
     lowBtn.disabled = true;
@@ -455,7 +492,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // call once to set payable payment text from restored state
   updatePayableTo();
 
-  document.querySelector('.confirm-btn').addEventListener('click', function(e) {
+  document.querySelector('.confirm-btn').addEventListener('click', function (e) {
     if (cartItems.length === 0) {
       alert("Cannot confirm order: Cart is empty.");
       return;
@@ -485,11 +522,11 @@ document.addEventListener('DOMContentLoaded', function() {
       localStorage.removeItem('cartFormData');
       localStorage.removeItem('cartState');
       localStorage.removeItem('cartStateForCompare');
-      
+
       document.getElementById("input-name").value = "";
       document.getElementById("input-phone").value = "";
       document.getElementById("input-address").value = "";
-      
+
       clearCart();
       const total = 0;
       populateReceipt(cartItems, total);
@@ -497,5 +534,4 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 });
-
 
