@@ -570,7 +570,7 @@ class ProductGallery {
 
     viewProductDetails(productId) {
         this.info('viewProductDetails() navigating to details for', productId);
-        window.location.href = `Details.html?id=${productId}`;
+        window.location.href = `https://archimartbd.com/details?id=${productId}`;
     }
 
     updateStats() {
