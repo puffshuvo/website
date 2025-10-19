@@ -943,7 +943,7 @@ class ProductGallery {
     // Navigate to product details page
     viewProductDetails(productId) {
         this.info('viewProductDetails() navigating to details for', productId);
-        window.location.href = `https://archimartbd.com/details?id=${productId}`;
+        window.location.href = `Details.html?id=${productId}`;
     }
 
     // Setup listeners for product cards
