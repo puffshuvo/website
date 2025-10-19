@@ -54,44 +54,63 @@ class ProductGallery {
         }
     }
 
-    async loadProducts(category = null, subcategory = null, subsubcategory = null) {
-        this.debug('loadProducts() called', { category, subcategory, subsubcategory });
-        this.showLoading(true);
-        try {
-            let url = this.apiBase;
-            const params = new URLSearchParams();
-            if (category && category !== 'all') {
-                params.append('category', category);
-            }
-            if (subcategory && subcategory !== 'all') {
-                params.append('subcategory', subcategory);
-            }
-            if (subsubcategory && subsubcategory !== 'all') {
-                params.append('subsubcategory', subsubcategory);
-            }
-            if (params.toString()) {
-                url += '?' + params.toString();
-            }
-            this.debug('Fetching products from URL', url);
-            const response = await fetch(url);
-            this.debug('Fetch response status', response.status, response.statusText);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const data = await response.json();
-            this.products = Array.isArray(data) ? data : data.products || [];
-            this.filteredProducts = [...this.products];
-            this.debug('Products loaded', { count: this.products.length });
-            this.updateSpecificationFilters();
-            this.applyFilters();
-        } catch (error) {
-            this.error('Error loading products:', error);
-            this.showError('Failed to load products. Please check your connection.');
-        } finally {
-            this.showLoading(false);
+   async loadProducts(category = null, subcategory = null, subsubcategory = null) {
+    this.debug('loadProducts() called', { category, subcategory, subsubcategory });
+    this.showLoading(true);
+    
+    // ✅ EXPLICIT: Clear ALL previous data
+    this.products = [];
+    this.filteredProducts = [];
+    this.currentFilters.specifications = {}; // Clear specs too
+    
+    try {
+        let url = this.apiBase;
+        const params = new URLSearchParams();
+        if (category && category !== 'all') {
+            params.append('category', category);
         }
+        if (subcategory && subcategory !== 'all') {
+            params.append('subcategory', subcategory);
+        }
+        if (subsubcategory && subsubcategory !== 'all') {
+            params.append('subsubcategory', subsubcategory);
+        }
+        if (params.toString()) {
+            url += '?' + params.toString();
+        }
+        
+        this.debug('🔄 Fetching NEW products from URL', url);
+        const response = await fetch(url);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        this.products = Array.isArray(data) ? data : data.products || [];
+        
+        // ✅ CRITICAL: If NO products returned, show empty state
+        if (this.products.length === 0) {
+            this.filteredProducts = [];
+            this.debug('🚫 NO PRODUCTS found for', { category, subcategory, subsubcategory });
+        } else {
+            this.filteredProducts = [...this.products];
+            this.debug('✅ Loaded NEW products', { count: this.products.length });
+        }
+        
+        // Rebuild filters for NEW products only
+        this.updateSpecificationFilters();
+        this.applyFilters();
+        
+    } catch (error) {
+        this.error('❌ Error loading products:', error);
+        this.products = [];
+        this.filteredProducts = [];
+        this.showError(`No products found for "${category || 'All'}"`);
+    } finally {
+        this.showLoading(false);
     }
-
+}
     setupEventListeners() {
         this.debug('setupEventListeners() start');
         const hamburger = document.querySelector('.hamburger');
@@ -153,43 +172,39 @@ class ProductGallery {
     }
 
     handleCategoryClick(item, category) {
-        this.debug('handleCategoryClick()', { category, classes: item.className });
-        document.querySelectorAll('.category-item').forEach(el => {
-            el.classList.remove('active');
-        });
-        item.classList.add('active');
+    this.debug('🖱️ Category clicked', { category, type: item.className });
+    
+    // Clear all active states first
+    document.querySelectorAll('.category-item').forEach(el => {
+        el.classList.remove('active');
+    });
+    item.classList.add('active');
 
-        const isMainCategory = !item.classList.contains('subcategory') && !item.classList.contains('sub-subcategory');
-        const isSubcategory = item.classList.contains('subcategory');
-        const isSubSubcategory = item.classList.contains('sub-subcategory');
+    const isMainCategory = !item.classList.contains('subcategory') && !item.classList.contains('sub-subcategory');
+    const isSubcategory = item.classList.contains('subcategory');
+    const isSubSubcategory = item.classList.contains('sub-subcategory');
 
-        if (isMainCategory) {
-            this.currentFilters.category = category;
-            this.currentFilters.subcategory = null;
-            this.currentFilters.subsubcategory = null;
-            this.loadProducts(category);
-        } else if (isSubcategory) {
-            const parentCategory = this.findParentCategory(item);
-            this.currentFilters.category = parentCategory;
-            this.currentFilters.subcategory = category;
-            this.currentFilters.subsubcategory = null;
-            this.loadProducts(parentCategory, category);
-        } else if (isSubSubcategory) {
-            const { mainCategory, subCategory } = this.findFullCategoryHierarchy(item);
-            this.currentFilters.category = mainCategory;
-            this.currentFilters.subcategory = subCategory;
-            this.currentFilters.subsubcategory = category;
-            this.loadProducts(mainCategory, subCategory, category);
-        } else {
-            this.currentFilters.category = 'all';
-            this.currentFilters.subcategory = null;
-            this.currentFilters.subsubcategory = null;
-            this.loadProducts();
-        }
-
-        this.updateURL();
-        this.updateBreadcrumb();
+    // ✅ EXPLICIT: Set filters and LOAD NEW DATA
+    if (isMainCategory) {
+        this.currentFilters = { ...this.currentFilters, category, subcategory: null, subsubcategory: null };
+        this.loadProducts(category);
+    } else if (isSubcategory) {
+        const parentCategory = this.findParentCategory(item);
+        this.currentFilters = { ...this.currentFilters, category: parentCategory, subcategory: category, subsubcategory: null };
+        this.loadProducts(parentCategory, category);
+    } else if (isSubSubcategory) {
+        const { mainCategory, subCategory } = this.findFullCategoryHierarchy(item);
+        this.currentFilters = { ...this.currentFilters, category: mainCategory, subcategory: subCategory, subsubcategory: category };
+        this.loadProducts(mainCategory, subCategory, category);
+    } else {
+        this.currentFilters = { ...this.currentFilters, category: 'all', subcategory: null, subsubcategory: null };
+        this.loadProducts();
     }
+
+    this.updateURL();
+    this.updateBreadcrumb();
+    this.debug('✅ Category click handled - new data loading...');
+}
 
     findParentCategory(element) {
         let current = element.previousElementSibling;
@@ -351,21 +366,34 @@ class ProductGallery {
     }
 
     updateDisplay() {
-        const productGrid = document.getElementById('productGrid');
-        const noResults = document.querySelector('.no-results');
-        if (!productGrid) return;
-        if (this.filteredProducts.length === 0) {
-            productGrid.style.display = 'none';
-            if (noResults) noResults.style.display = 'block';
-            this.debug('updateDisplay: no results to show');
-            return;
-        }
+    const productGrid = document.getElementById('productGrid');
+    const noResults = document.querySelector('.no-results');
+    
+    if (!productGrid) return;
+    
+    if (this.filteredProducts.length === 0) {
+        // ✅ BETTER NO PRODUCTS MESSAGE
+        productGrid.innerHTML = `
+            <div class="no-products-message">
+                <i class="fas fa-search" style="font-size: 4rem; color: #ccc; margin-bottom: 1rem;"></i>
+                <h3>No Products Found</h3>
+                <p>No products match your selection.</p>
+                
+            </div>
+        `;
+        productGrid.style.display = 'block';
         if (noResults) noResults.style.display = 'none';
-        productGrid.style.display = 'grid';
-        productGrid.innerHTML = this.filteredProducts.map(product => this.createProductCard(product)).join('');
-        this.setupProductCardListeners();
-        this.debug('updateDisplay: rendered products', this.filteredProducts.length);
+        this.debug('🚫 Displayed "No Products" message');
+        return;
     }
+    
+    // Show products
+    if (noResults) noResults.style.display = 'none';
+    productGrid.style.display = 'grid';
+    productGrid.innerHTML = this.filteredProducts.map(product => this.createProductCard(product)).join('');
+    this.setupProductCardListeners();
+    this.debug('✅ Displayed products', this.filteredProducts.length);
+}
 
     createProductCard(product) {
         const price = parseFloat(product.price) || 0;
@@ -483,38 +511,57 @@ class ProductGallery {
         `;
     }
 
-    addToCart(productId) {
-        this.debug('addToCart() called for', productId);
-        const product = this.products.find(p => String(p.id) === String(productId));
-        if (!product) {
-            this.warn('addToCart: product not found', productId);
-            return;
-        }
-        if (product.stock <= 0) {
-            this.warn('addToCart: product out of stock', productId);
-            return;
-        }
-        const existingItem = this.cart.find(item => item.id === productId);
-        if (existingItem) {
-            existingItem.quantity += 1;
-            this.debug('Increased quantity for cart item', existingItem);
+    addToCart(productId, retries = 5) {
+    this.debug('addToCart() called for', productId);
+
+    if (!this.products || this.products.length === 0) {
+        if (retries > 0) {
+            this.warn('addToCart: products not loaded yet', productId);
+            this.showNotification('Products are still loading. Please try again in a moment.');
+            setTimeout(() => this.addToCart(productId, retries - 1), 500);
         } else {
-            const newItem = {
-                id: productId,
-                name: product.name,
-                price: product.price,
-                image: product.image || product.imageUrl,
-                quantity: 1,
-                category: product.category,
-                subcategory: product.subcategory,
-                subsubcategory: product.subsubcategory
-            };
-            this.cart.push(newItem);
-            this.debug('Added new item to cart', newItem);
+            this.warn('addToCart: products failed to load after retries', productId);
+            this.showNotification('Products failed to load. Please refresh the page.');
         }
-        this.saveCart();
-        this.showNotification(`${product.name} added to cart!`);
+        return;
     }
+
+    const product = this.products.find(p => String(p.id) === String(productId));
+    if (!product) {
+        this.warn('addToCart: product not found', productId, this.products.map(p => p.id));
+        this.showNotification('Product not found. Please refresh the page.');
+        return;
+    }
+
+    if (product.stock <= 0) {
+        this.warn('addToCart: product out of stock', productId);
+        this.showNotification(`${product.name} is out of stock.`);
+        return;
+    }
+
+    const existingItem = this.cart.find(item => item.id === productId);
+    if (existingItem) {
+        existingItem.quantity += 1;
+        this.debug('Increased quantity for cart item', existingItem);
+    } else {
+        const newItem = {
+            id: productId,
+            name: product.name,
+            price: product.price,
+            image: product.image || product.imageUrl,
+            quantity: 1,
+            category: product.category,
+            subcategory: product.subcategory,
+            subsubcategory: product.subsubcategory
+        };
+        this.cart.push(newItem);
+        this.debug('Added new item to cart', newItem);
+    }
+
+    this.saveCart();
+    this.showNotification(`${product.name} added to cart!`);
+}
+
 
     saveCart() {
         localStorage.setItem('cartState', JSON.stringify(this.cart));
@@ -523,7 +570,7 @@ class ProductGallery {
 
     viewProductDetails(productId) {
         this.info('viewProductDetails() navigating to details for', productId);
-        window.location.href = `Details.html?id=${productId}`;
+        window.location.href = `https://archimartbd.com/details?id=${productId}`;
     }
 
     updateStats() {
@@ -740,6 +787,9 @@ class ProductGallery {
     }
 }
 
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     window.gallery = new ProductGallery();
 });
@@ -749,3 +799,6 @@ window.addEventListener('popstate', () => {
         window.gallery.handleURLParameters();
     }
 });
+
+
+
