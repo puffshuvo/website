@@ -631,9 +631,9 @@ body {
 }
 
 .product-card {
-    background: #ffffff;
+    background: #FFF3E3;
     backdrop-filter: blur(10px);
-    border-radius: 8px;
+    border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -1074,4 +1074,41 @@ body {
 .notification.show {
     opacity: 1;
     transform: translateY(0);
+}
+
+
+
+/* no product added by Anirban  */
+
+
+.no-products-message {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.no-products-message h3 {
+    font-size: 2rem;
+    margin: 1rem 0;
+    color: #333;
+}
+
+.no-products-message p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.btn-clear-filters {
+    background: #007bff;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.btn-clear-filters:hover {
+    background: #0056b3;
 }
