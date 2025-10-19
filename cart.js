@@ -318,7 +318,7 @@ function changeAlt(option) {
   }
 
   // Call the get_similar_product URL (GET request)
-  const url = `https://archimartbd.com/ajax/similar-products/?product_id=${encodeURIComponent(productIds)}&option=${encodeURIComponent(option)}`;
+  const url = `https://archimartbd.com/api/similar-products/?product_id=${encodeURIComponent(productIds)}&option=${encodeURIComponent(option)}`;
 
   fetch(url)
     .then(response => {
