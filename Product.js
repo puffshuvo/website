@@ -11,7 +11,7 @@ class ProductGallery {
             sortBy: 'name',
             specifications: {}
         };
-        this.apiBase = 'https://archimartbd.com/product.json';
+        this.apiBase = 'https://archimartbd.com/api/product.json';
         this.cart = JSON.parse(localStorage.getItem('cartState')) || [];
 
         // Debugging toggle: set to false to silence debug logs
