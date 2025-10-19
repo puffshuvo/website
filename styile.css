@@ -11,11 +11,12 @@ body {
   background: #fff5ec;
 }
 
-/* ========================================================================== */
+/* =========================== Navigation Styling =========================== */
 /* Navigation Styling: All styles related to navbar, search, hamburger, dropdowns, and cart */
 /* ========================================================================== */
 
 /* Main Navbar Styling */
+
 .navbar {
   background-color: #331f08;
   color: #fff;
@@ -207,22 +208,18 @@ body {
 }
 
 .cart-dropdown {
-  display: none;
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background-color: #4a2f0a;
-  color: #F7E3BA;
-  border-radius: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-  padding: 15px;
-  min-width: 300px;
-  z-index: 9999;
-  text-align: left;
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #4A2F0A;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    min-width: 300px;
+    z-index: 1000;
+    padding: 10px;
 }
-
-.cart-item:hover .cart-dropdown {
-  display: block;
+.cart-dropdown.active {
+    display: block;
 }
 
 .cart-dropdown h3 {
@@ -232,19 +229,56 @@ body {
 }
 
 .cart-items {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 15px;
-  max-height: 200px;
-  overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 300px;
+    overflow-y: auto;
 }
-
+.cart-item {
+    display: flex;
+    align-items: center;
+}
+.cart-item-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 10px;
+}
 .cart-items li {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 8px 0;
   border-bottom: 1px solid #5a452c;
+}
+.cart-item-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.cart-item-name {
+    font-weight: bold;
+}
+.cart-item-quantity, .cart-item-price {
+    font-size: 0.9em;
+    color: #555;
+}
+.cart-item-remove {
+    background: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+.cart-item-remove:hover {
+    background: #cc0000;
+}
+.cart-empty {
+    padding: 10px;
+    text-align: center;
+    color: #777;
 }
 
 .cart-items li:last-child {
@@ -286,7 +320,7 @@ body {
   margin-bottom: 15px;
   border-top: 1px solid #5a452c;
   padding-top: 10px;
-}
+} 
 
 .view-cart-btn {
   display: block;
@@ -315,7 +349,21 @@ body {
   top: -5px;
   right: -20px;
 }
-
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    z-index: 1000;
+}
+.notification.show {
+    opacity: 1;
+}
 /* Mobile-specific Navigation Styling */
 @media (max-width: 768px) {
   .dropdown-menu {
@@ -422,6 +470,7 @@ body {
     display: none; /* Disable hover on mobile, use click if needed */
   }
 }
+
 
 /* ========================================================================== */
 /* Non-Navigation Styling: Main content, menu section, footer, and others */
