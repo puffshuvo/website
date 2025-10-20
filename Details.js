@@ -294,8 +294,9 @@ function updatePrice() {
     let totalPrice = productData.price;
     let totalDiscount = productData.discount || 0;
 
-    // Calculate total price from specifications
-    productData.specifications.forEach(spec => {
+    // Calculate total price from specifications (guard against undefined)
+    const specifications = Array.isArray(productData.specifications) ? productData.specifications : [];
+    specifications.forEach(spec => {
         if ((spec.key === 'Color' && spec.value === selectedOptions.color) ||
             (spec.key === 'Size' && spec.value === selectedOptions.size) ||
             (spec.key === 'Thickness' && spec.value === selectedOptions.thickness)) {
@@ -337,16 +338,20 @@ function updateStockStatus() {
     if (existingStockDisplay) existingStockDisplay.remove();
     actionButtons.appendChild(stockDisplay);
 
-    // Find stock for the selected combination
+    // Find stock for the selected combination (guard against undefined stock_combinations)
     let stock = 0;
-    const selectedCombo = productData.stock_combinations.find(combo =>
-        combo.color === selectedOptions.color &&
-        combo.size === selectedOptions.size &&
-        combo.thickness === selectedOptions.thickness
+    const stockCombinations = Array.isArray(productData.stock_combinations) ? productData.stock_combinations : [];
+    if (stockCombinations.length === 0) {
+        console.warn('No stock_combinations available for product', productData && productData.id);
+    }
+    const selectedCombo = stockCombinations.find(combo =>
+        combo && combo.color === selectedOptions.color &&
+        combo && combo.size === selectedOptions.size &&
+        combo && combo.thickness === selectedOptions.thickness
     );
 
     if (selectedCombo) {
-        stock = selectedCombo.stock;
+        stock = selectedCombo.stock || 0;
     }
 
     if (stock > 0) {
@@ -382,8 +387,9 @@ function updateImages() {
 
     imageDots.innerHTML = '';
 
-    // Find images for the selected color
-    const colorImages = productData.color_images.find(item => item.color === selectedOptions.color)?.images || ['Image/placeholder.png'];
+    // Find images for the selected color (guard against undefined color_images)
+    const colorImagesArr = Array.isArray(productData.color_images) ? productData.color_images : [];
+    const colorImages = (colorImagesArr.find(item => item && item.color === selectedOptions.color) || {}).images || ['Image/placeholder.png'];
     currentImageIndex = 0; // Reset to first image
     mainImage.src = colorImages[0] || 'Image/placeholder.png';
 
@@ -399,7 +405,8 @@ function updateImages() {
 function changeImage(index) {
     currentImageIndex = index;
     const mainImage = document.getElementById('mainImage');
-    const colorImages = productData.color_images.find(item => item.color === selectedOptions.color)?.images || ['Image/placeholder.png'];
+    const colorImagesArr = Array.isArray(productData.color_images) ? productData.color_images : [];
+    const colorImages = (colorImagesArr.find(item => item && item.color === selectedOptions.color) || {}).images || ['Image/placeholder.png'];
     if (mainImage && colorImages[index]) {
         mainImage.src = colorImages[index] || 'Image/placeholder.png';
     }
@@ -411,12 +418,13 @@ function changeImage(index) {
 }
 
 function increaseQuantity() {
-    const selectedCombo = productData.stock_combinations.find(combo =>
-        combo.color === selectedOptions.color &&
-        combo.size === selectedOptions.size &&
-        combo.thickness === selectedOptions.thickness
+    const stockCombinations = Array.isArray(productData.stock_combinations) ? productData.stock_combinations : [];
+    const selectedCombo = stockCombinations.find(combo =>
+        combo && combo.color === selectedOptions.color &&
+        combo && combo.size === selectedOptions.size &&
+        combo && combo.thickness === selectedOptions.thickness
     );
-    const stock = selectedCombo ? selectedCombo.stock : 0;
+    const stock = selectedCombo ? (selectedCombo.stock || 0) : 0;
 
     if (currentQuantity < stock) {
         currentQuantity++;
@@ -444,12 +452,13 @@ function addToCart() {
         return;
     }
 
-    const selectedCombo = productData.stock_combinations.find(combo =>
-        combo.color === selectedOptions.color &&
-        combo.size === selectedOptions.size &&
-        combo.thickness === selectedOptions.thickness
+    const stockCombinations = Array.isArray(productData.stock_combinations) ? productData.stock_combinations : [];
+    const selectedCombo = stockCombinations.find(combo =>
+        combo && combo.color === selectedOptions.color &&
+        combo && combo.size === selectedOptions.size &&
+        combo && combo.thickness === selectedOptions.thickness
     );
-    const stock = selectedCombo ? selectedCombo.stock : 0;
+    const stock = selectedCombo ? (selectedCombo.stock || 0) : 0;
 
     if (currentQuantity > stock) {
         alert(`Cannot add to cart. Only ${stock} units available for this combination.`);
@@ -472,7 +481,10 @@ function addToCart() {
         price: totalPrice - totalDiscount,
         originalPrice: totalPrice,
         quantity: currentQuantity,
-        image: productData.color_images.find(item => item.color === selectedOptions.color)?.images[0] || 'Image/placeholder.png',
+        image: (() => {
+            const colorImagesArr = Array.isArray(productData.color_images) ? productData.color_images : [];
+            return (colorImagesArr.find(item => item && item.color === selectedOptions.color) || {}).images?.[0] || 'Image/placeholder.png';
+        })(),
         category: productData.category,
         subcategory: productData.subcategory,
         subsubcategory: productData.subsubcategory,
@@ -516,8 +528,8 @@ function addToCartSimilar(productId) {
         alert('Error: Product data not loaded. Please try again.');
         return;
     }
-
-    const similarProduct = productData.similar_products.find(product => product.id === productId);
+    const similarProductsArr = Array.isArray(productData.similar_products) ? productData.similar_products : [];
+    const similarProduct = similarProductsArr.find(product => product && product.id === productId);
     if (!similarProduct) {
         alert('Error: Similar product not found.');
         return;
