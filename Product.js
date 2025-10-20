@@ -204,7 +204,9 @@ class ProductGallery {
     createProductCard(product) {
         const price = parseFloat(product.price) || 0;
         const formattedPrice = price > 0 ? `৳${price.toLocaleString()}` : 'Price on request';
-        const imageUrl = product.image || product.imageUrl || 'Image/placeholder.jpg';
+        const imageUrl = (product.images && product.images.length > 0) 
+        ? product.images[0] 
+        : (product.image || product.imageUrl || 'Image/placeholder.jpg');
         const availability = product.stock > 0 ? 'In Stock' : 'Out of Stock';
         const stockClass = product.stock > 0 ? 'in-stock' : 'out-stock';
         return `
@@ -473,7 +475,9 @@ class ProductGallery {
                 id: productId,
                 name: product.name,
                 price: product.price,
-                image: product.image || product.imageUrl || 'Image/placeholder.jpg',
+                image: (product.images && product.images.length > 0) 
+                    ? product.images[0] 
+                    : (product.image || product.imageUrl || 'Image/placeholder.jpg'),
                 quantity: 1,
                 category: product.category,
                 subcategory: product.subcategory,
@@ -910,9 +914,9 @@ class ProductGallery {
                 <span class="close" onclick="this.closest('.modal').remove()">&times;</span>
                 <div class="quick-view-content">
                     <div class="quick-view-image">
-                        <img src="${product.image || product.imageUrl || 'Image/placeholder.jpg'}" 
-                             alt="${product.name}" 
-                             onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='Image/placeholder.jpg';}else{this.onerror=null;}">
+                        <img src="${(product.images && product.images.length > 0) ? product.images[0] : (product.image || product.imageUrl || 'Image/placeholder.jpg')}" 
+                     alt="${product.name}" 
+                     onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='Image/placeholder.jpg';}else{this.onerror=null;}">
                     </div>
                     <div class="quick-view-details">
                         <h2>${product.name}</h2>
