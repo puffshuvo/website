@@ -94,6 +94,10 @@ async function loadProductData() {
 
     try {
         const res = await fetch(apiUrl, { credentials: 'same-origin' });
+        // If the server responded with HTTP 200, log the requested message
+        if (res.status === 200) {
+            console.log('fix this');
+        }
         if (!res.ok) {
             console.error('Error fetching product API:', res.status, res.statusText);
             const titleEl = document.getElementById('productTitle');
