@@ -74,131 +74,138 @@ function updateBreadcrumb() {
     breadcrumbList.innerHTML = breadcrumbs.join('');
 }
 
-function loadProductData() {
+async function loadProductData() {
     const urlParams = new URLSearchParams(window.location.search);
-    let productId = urlParams.get('id') || '1'; // Fallback to id=1
+    const productId = urlParams.get('id') || '1'; // fallback to id=1
     console.log('Product ID from URL:', productId);
 
     if (!productId) {
         console.error('No product ID found in URL');
-        document.getElementById('productTitle').textContent = 'Error: Product Not Found';
-        document.getElementById('productDescription').textContent = 'Please go back and select a product.';
+        const titleEl = document.getElementById('productTitle');
+        const descEl = document.getElementById('productDescription');
+        if (titleEl) titleEl.textContent = 'Error: Product Not Found';
+        if (descEl) descEl.textContent = 'Please go back and select a product.';
         alert('Error: Product ID not found. Please try again.');
         return;
     }
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', 'Details.json', true);
-    xhr.onreadystatechange = () => {
-        console.log('XHR readyState:', xhr.readyState, 'status:', xhr.status);
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                try {
-                    const data = JSON.parse(xhr.responseText);
-                    console.log('Parsed JSON:', data);
-                    productData = data.id == productId ? data : null;
+    const apiUrl = `/api/single_product/${encodeURIComponent(productId)}`;
+    console.log('Fetching product from API:', apiUrl);
 
-                    if (!productData) {
-                        console.error(`Product with ID ${productId} not found in Details.json`);
-                        document.getElementById('productTitle').textContent = 'Product Not Found';
-                        document.getElementById('productDescription').textContent = 'This product is not available.';
-                        alert('Error: Product not found.');
-                        return;
-                    }
+    try {
+        const res = await fetch(apiUrl, { credentials: 'same-origin' });
+        if (!res.ok) {
+            console.error('Error fetching product API:', res.status, res.statusText);
+            const titleEl = document.getElementById('productTitle');
+            if (titleEl) titleEl.textContent = 'Error Loading Product';
+            alert('Error loading product data. Please try again.');
+            return;
+        }
 
-                    // Populate product details
-                    document.getElementById('productTitle').textContent = productData.name;
-                    document.getElementById('productPrice').textContent = `৳${productData.price.toFixed(2)} ${productData.currency || 'BDT'}`;
-                    document.getElementById('productDescription').textContent = productData.description || 'No description available.';
-                    document.getElementById('recommendationText').textContent = productData.recomended_text || 'This product is recommended for its quality and suitability for construction projects.';
+        const data = await res.json();
+        console.log('Received API response:', data);
 
-                    // Populate specifications
-                    const specsList = document.getElementById('specifications');
-                    if (!specsList) {
-                        console.error('Element with ID "specifications" not found in the DOM');
-                        alert('Error: Specifications list element not found in the page.');
-                        return;
-                    }
-                    specsList.innerHTML = '';
-                    let hasOtherSpecs = false;
-                    console.log('Specifications data:', productData.specifications);
-                    if (productData.specifications && productData.specifications.length > 0) {
-                        productData.specifications.forEach(spec => {
-                            if (spec.key !== 'Color' && spec.key !== 'Size' && spec.key !== 'Thickness') {
-                                console.log('Adding spec:', spec.key, spec.value);
-                                const li = document.createElement('li');
-                                li.textContent = `${spec.key}: ${spec.value}`;
-                                specsList.appendChild(li);
-                                hasOtherSpecs = true;
-                            }
-                        });
-                    }
-                    if (!hasOtherSpecs) {
-                        console.log('No non-filter specifications found');
-                        specsList.innerHTML = '<li>No additional specifications available</li>';
-                    }
+        // Support APIs that wrap payload (e.g. { data: {...} }) or return object directly
+        let payload = data && data.data ? data.data : data;
 
-                    // Populate similar products
-                    const similarGrid = document.querySelector('.similar-grid');
-                    if (!similarGrid) {
-                        console.error('Similar products grid not found in the DOM');
-                        return;
-                    }
-                    similarGrid.innerHTML = '';
-                    console.log('Similar products data:', productData.similar_products);
-                    if (productData.similar_products && productData.similar_products.length > 0) {
-                        productData.similar_products.forEach(product => {
-                            const similarItem = document.createElement('a');
-                            similarItem.className = 'similar-item';
-                            similarItem.href = `Details.html?id=${product.id}`;
-                            const priceContent = product.discount > 0 
-                                ? `<div class="price strikethrough">৳${product.price.toFixed(2)}</div><div class="discount-price">৳${(product.price - product.discount).toFixed(2)} ${productData.currency || 'BDT'}</div>`
-                                : `<div class="price">৳${product.price.toFixed(2)} ${productData.currency || 'BDT'}</div>`;
-                            similarItem.innerHTML = `
-                                <div class="similar-image">
-                                    <img src="${product.image || 'Image/placeholder.png'}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">
-                                </div>
-                                <h4>${product.name}</h4>
-                                ${priceContent}
-                                <button class="add-btn" onclick="addToCartSimilar(${product.id}); event.preventDefault();">Add to Cart</button>
-                            `;
-                            similarGrid.appendChild(similarItem);
-                        });
-                    } else {
-                        similarGrid.innerHTML = '<p>No similar products available.</p>';
-                    }
+        // If payload is an array, try to find by id
+        if (Array.isArray(payload)) {
+            payload = payload.find(item => String(item.id) === String(productId)) || null;
+        }
 
-                    // Populate filter circles and set defaults
-                    populateFilterCircles();
+        productData = payload && String(payload.id) === String(productId) ? payload : null;
 
-                    // Update price, stock, and images based on default selections
-                    updatePrice();
-                    updateStockStatus();
-                    updateImages();
+        if (!productData) {
+            console.error(`Product with ID ${productId} not found in API response`);
+            const titleEl = document.getElementById('productTitle');
+            const descEl = document.getElementById('productDescription');
+            if (titleEl) titleEl.textContent = 'Product Not Found';
+            if (descEl) descEl.textContent = 'This product is not available.';
+            alert('Error: Product not found.');
+            return;
+        }
 
-                    // Update breadcrumb
-                    updateBreadcrumb();
-                } catch (e) {
-                    console.error('Error parsing Details.json:', e);
-                    console.log('Raw response:', xhr.responseText);
-                    document.getElementById('productTitle').textContent = 'Error Loading Product';
-                    alert('Error loading product data. Please try again.');
+        // Populate product details
+        const titleEl = document.getElementById('productTitle');
+        const priceEl = document.getElementById('productPrice');
+        const descEl = document.getElementById('productDescription');
+        const recEl = document.getElementById('recommendationText');
+
+        if (titleEl) titleEl.textContent = productData.name;
+        if (priceEl) priceEl.textContent = `৳${(productData.price || 0).toFixed(2)} ${productData.currency || 'BDT'}`;
+        if (descEl) descEl.textContent = productData.description || 'No description available.';
+        if (recEl) recEl.textContent = productData.recomended_text || 'This product is recommended for its quality and suitability for construction projects.';
+
+        // Populate specifications
+        const specsList = document.getElementById('specifications');
+        if (!specsList) {
+            console.error('Element with ID "specifications" not found in the DOM');
+            alert('Error: Specifications list element not found in the page.');
+            return;
+        }
+        specsList.innerHTML = '';
+        let hasOtherSpecs = false;
+        console.log('Specifications data:', productData.specifications);
+        if (productData.specifications && productData.specifications.length > 0) {
+            productData.specifications.forEach(spec => {
+                if (spec.key !== 'Color' && spec.key !== 'Size' && spec.key !== 'Thickness') {
+                    const li = document.createElement('li');
+                    li.textContent = `${spec.key}: ${spec.value}`;
+                    specsList.appendChild(li);
+                    hasOtherSpecs = true;
                 }
+            });
+        }
+        if (!hasOtherSpecs) {
+            specsList.innerHTML = '<li>No additional specifications available</li>';
+        }
+
+        // Populate similar products
+        const similarGrid = document.querySelector('.similar-grid');
+        if (!similarGrid) {
+            console.error('Similar products grid not found in the DOM');
+        } else {
+            similarGrid.innerHTML = '';
+            console.log('Similar products data:', productData.similar_products);
+            if (productData.similar_products && productData.similar_products.length > 0) {
+                productData.similar_products.forEach(product => {
+                    const similarItem = document.createElement('a');
+                    similarItem.className = 'similar-item';
+                    similarItem.href = `Details.html?id=${product.id}`;
+                    const priceContent = product.discount > 0 
+                        ? `<div class="price strikethrough">৳${product.price.toFixed(2)}</div><div class="discount-price">৳${(product.price - product.discount).toFixed(2)} ${productData.currency || 'BDT'}</div>`
+                        : `<div class="price">৳${product.price.toFixed(2)} ${productData.currency || 'BDT'}</div>`;
+                    similarItem.innerHTML = `
+                        <div class="similar-image">
+                            <img src="${product.image || 'Image/placeholder.png'}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">
+                        </div>
+                        <h4>${product.name}</h4>
+                        ${priceContent}
+                        <button class="add-btn" onclick="addToCartSimilar(${product.id}); event.preventDefault();">Add to Cart</button>
+                    `;
+                    similarGrid.appendChild(similarItem);
+                });
             } else {
-                console.error('Error fetching Details.json:', xhr.statusText);
-                console.log('Raw response:', xhr.responseText);
-                document.getElementById('productTitle').textContent = 'Error Loading Product';
-                alert('Error loading product data. Please try again.');
+                similarGrid.innerHTML = '<p>No similar products available.</p>';
             }
         }
-    };
-    xhr.onerror = () => {
-        console.error('Network error while fetching Details.json');
-        console.log('Raw response (if any):', xhr.responseText);
-        document.getElementById('productTitle').textContent = 'Error Loading Product';
+
+        // Populate filter circles and set defaults
+        populateFilterCircles();
+
+        // Update price, stock, and images based on default selections
+        updatePrice();
+        updateStockStatus();
+        updateImages();
+
+        // Update breadcrumb
+        updateBreadcrumb();
+    } catch (e) {
+        console.error('Error loading product from API:', e);
+        const titleEl = document.getElementById('productTitle');
+        if (titleEl) titleEl.textContent = 'Error Loading Product';
         alert('Error loading product data. Please try again.');
-    };
-    xhr.send();
+    }
 }
 
 function populateFilterCircles() {
