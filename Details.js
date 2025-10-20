@@ -117,7 +117,7 @@ async function loadProductData() {
             payload = payload.find(item => String(item.id) === String(productId)) || null;
         }
 
-        productData = payload && String(payload.id) === String(productId) ? payload : null;
+    productData = payload && String(payload.id) === String(productId) ? payload : null;
 
         if (!productData) {
             console.error(`Product with ID ${productId} not found in API response`);
@@ -127,6 +127,37 @@ async function loadProductData() {
             if (descEl) descEl.textContent = 'This product is not available.';
             alert('Error: Product not found.');
             return;
+        }
+
+        // Normalize payload: ensure arrays exist and map alternate API field names
+        // This prevents runtime errors when API returns different field names (e.g. `images`, `stock_combination`).
+        if (productData) {
+            // specifications
+            productData.specifications = Array.isArray(productData.specifications) ? productData.specifications : [];
+
+            // color_images: prefer existing, else map from top-level `images` if present
+            productData.color_images = Array.isArray(productData.color_images) ? productData.color_images : [];
+            if (productData.color_images.length === 0 && Array.isArray(productData.images) && productData.images.length > 0) {
+                // create a default color_images entry so the image UI still works
+                productData.color_images = [{ color: 'Default', images: productData.images }];
+            }
+
+            // stock_combinations: support `stock_combinations` or `stock_combination`
+            if (!Array.isArray(productData.stock_combinations)) {
+                if (Array.isArray(productData.stock_combination)) {
+                    productData.stock_combinations = productData.stock_combination;
+                } else {
+                    productData.stock_combinations = [];
+                }
+            }
+
+            // similar products
+            productData.similar_products = Array.isArray(productData.similar_products) ? productData.similar_products : [];
+
+            // If no color selected yet, pick the first available color so images and stock display correctly
+            if (!selectedOptions.color && productData.color_images.length > 0) {
+                selectedOptions.color = productData.color_images[0].color || 'Default';
+            }
         }
 
         // Populate product details
