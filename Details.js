@@ -129,7 +129,7 @@ async function loadProductData() {
             return;
         }
 
-        // Normalize payload: ensure arrays exist and map alternate API field names
+         // Normalize payload: ensure arrays exist and map alternate API field names
         // This prevents runtime errors when API returns different field names (e.g. `images`, `stock_combination`).
         if (productData) {
             // specifications
@@ -154,9 +154,16 @@ async function loadProductData() {
             // similar products
             productData.similar_products = Array.isArray(productData.similar_products) ? productData.similar_products : [];
 
-            // If no color selected yet, pick the first available color so images and stock display correctly
-            if (!selectedOptions.color && productData.color_images.length > 0) {
-                selectedOptions.color = productData.color_images[0].color || 'Default';
+            // Smart default selection: pick from first available stock combination or color_images
+            if (!selectedOptions.color) {
+                if (productData.stock_combinations.length > 0) {
+                    const firstStock = productData.stock_combinations[0];
+                    selectedOptions.color = firstStock.color || '';
+                    selectedOptions.size = firstStock.size || '';
+                    selectedOptions.thickness = firstStock.thickness || '';
+                } else if (productData.color_images.length > 0) {
+                    selectedOptions.color = productData.color_images[0].color || 'Default';
+                }
             }
         }
 
