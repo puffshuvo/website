@@ -15,10 +15,10 @@ console.log('Product ID:', productId); // Logging product ID
 
 async function fetchProductDetails() {
     try {
-        const response = await fetch(`https://archimartbd.com/api/single_product/${encodeURIComponent(productId)}`);
+        const response = await fetch(`https://archimartbd.com/api/single_product/${productId}`);
         const data = await response.json();
-        console.log('Fetched product data:', data); // Logging fetched data
-        
+        console.log('Fetched product data:', data);
+        productData = data; // Store the data globally
         displayProductDetails(data);
     } catch (error) {
         console.error('Error fetching product details:', error);
@@ -40,13 +40,18 @@ function displayProductDetails(product) {
     // Display color options
     const colorCircles = document.getElementById('colorCircles');
     if (product.stock_combination && product.stock_combination.length > 0) {
-        console.log('Processing colors:', product.stock_combination); // Logging color data
+        console.log('Processing colors:', product.stock_combination);
         
+        // Get unique colors
         const uniqueColors = [...new Set(product.stock_combination.map(combo => combo.color))];
+        console.log('Unique colors:', uniqueColors);
+        
         colorCircles.innerHTML = uniqueColors.map(color => `
-            <div class="filter-circle" style="background-color: ${color.toLowerCase()}" 
+            <div class="filter-circle" 
+                 style="background-color: ${color.toLowerCase()}" 
                  data-color="${color}"
                  onclick="selectColor('${color}')">
+                 <span class="color-name">${color}</span>
             </div>
         `).join('');
     }
@@ -54,14 +59,17 @@ function displayProductDetails(product) {
     // Display size options
     const sizeCircles = document.getElementById('sizeCircles');
     if (product.stock_combination && product.stock_combination.length > 0) {
-        console.log('Processing sizes:', product.stock_combination); // Logging size data
+        console.log('Processing sizes:', product.stock_combination);
         
+        // Get unique sizes
         const uniqueSizes = [...new Set(product.stock_combination.map(combo => combo.size))];
+        console.log('Unique sizes:', uniqueSizes);
+        
         sizeCircles.innerHTML = uniqueSizes.map(size => `
             <div class="filter-circle size-circle" 
                  data-size="${size}"
                  onclick="selectSize('${size}')">
-                ${size}
+                 ${size}
             </div>
         `).join('');
     }
@@ -69,14 +77,17 @@ function displayProductDetails(product) {
     // Display thickness options
     const thicknessCircles = document.getElementById('thicknessCircles');
     if (product.stock_combination && product.stock_combination.length > 0) {
-        console.log('Processing thickness:', product.stock_combination); // Logging thickness data
+        console.log('Processing thickness:', product.stock_combination);
         
+        // Get unique thickness values
         const uniqueThickness = [...new Set(product.stock_combination.map(combo => combo.thickness))];
+        console.log('Unique thickness:', uniqueThickness);
+        
         thicknessCircles.innerHTML = uniqueThickness.map(thickness => `
             <div class="filter-circle thickness-circle" 
                  data-thickness="${thickness}"
                  onclick="selectThickness('${thickness}')">
-                ${thickness}
+                 ${thickness}
             </div>
         `).join('');
     }
