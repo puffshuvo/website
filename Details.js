@@ -232,58 +232,58 @@ function populateFilterCircles() {
 
     // Populate colors
     if (productData.colors && productData.colors.length > 0) {
-        productData.colors.forEach((colorItem, index) => {
+        productData.colors.forEach((colorItem) => {
             const circle = document.createElement('div');
-            circle.className = `filter-circle color-circle${index === 0 ? ' active' : ''}`;
+            circle.className = 'filter-circle color-circle';
             circle.dataset.value = colorItem.color;
             circle.style.backgroundColor = getColorCode(colorItem.color);
             circle.innerHTML = `<span class="price-tooltip">${colorItem.price >= 0 ? '+' : ''}৳${colorItem.price.toFixed(2)}</span>`;
             circle.onclick = () => selectFilter('color', colorItem.color);
             colorCircles.appendChild(circle);
         });
-        selectedOptions.color = productData.colors[0].color;
         colorCircles.parentElement.style.display = 'block';
     } else {
         colorCircles.parentElement.style.display = 'none';
-        selectedOptions.color = '';
     }
 
     // Populate sizes
     if (productData.sizes && productData.sizes.length > 0) {
-        productData.sizes.forEach((sizeItem, index) => {
+        productData.sizes.forEach((sizeItem) => {
             const circle = document.createElement('div');
-            circle.className = `filter-circle${index === 0 ? ' active' : ''}`;
+            circle.className = 'filter-circle';
             circle.dataset.value = sizeItem.size;
             circle.textContent = sizeItem.size;
             circle.innerHTML += `<span class="price-tooltip">${sizeItem.price >= 0 ? '+' : ''}৳${sizeItem.price.toFixed(2)}</span>`;
             circle.onclick = () => selectFilter('size', sizeItem.size);
             sizeCircles.appendChild(circle);
         });
-        selectedOptions.size = productData.sizes[0].size;
         sizeCircles.parentElement.style.display = 'block';
     } else {
         sizeCircles.parentElement.style.display = 'none';
-        selectedOptions.size = '';
     }
 
     // Populate thicknesses
     if (productData.thicknesses && productData.thicknesses.length > 0) {
-        productData.thicknesses.forEach((thicknessItem, index) => {
+        productData.thicknesses.forEach((thicknessItem) => {
             const circle = document.createElement('div');
-            circle.className = `filter-circle${index === 0 ? ' active' : ''}`;
+            circle.className = 'filter-circle';
             circle.dataset.value = thicknessItem.thickness;
             circle.textContent = thicknessItem.thickness;
             circle.innerHTML += `<span class="price-tooltip">${thicknessItem.price >= 0 ? '+' : ''}৳${thicknessItem.price.toFixed(2)}</span>`;
             circle.onclick = () => selectFilter('thickness', thicknessItem.thickness);
             thicknessCircles.appendChild(circle);
         });
-        selectedOptions.thickness = productData.thicknesses[0].thickness;
         thicknessCircles.parentElement.style.display = 'block';
     } else {
         thicknessCircles.parentElement.style.display = 'none';
-        selectedOptions.thickness = '';
     }
+
+    // Reset selected options
+    selectedOptions.color = '';
+    selectedOptions.size = '';
+    selectedOptions.thickness = '';
 }
+
 
 function selectFilter(type, value) {
     selectedOptions[type] = value;
