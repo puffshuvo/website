@@ -1,0 +1,44 @@
+{
+	"id": 8,
+	"name": "Shah Cement",
+	"price": {
+		"source": "550.0",
+		"parsedValue": 550
+	},
+	"discount": {
+		"source": "0.0",
+		"parsedValue": 0
+	},
+	"currency": "BDT",
+	"description": "Shah Cement is the No. 1 cement brand in Bangladesh for over 20 years. It’s a concern of Abul Khair Group; one of the largest group of companies in our country. The brand became the market leader during the first year of introduction and consolidated its leadership every year. Superior technology coupled with focus on quality and customer service has been at the core of its success. Shah Cement is the preferred brand of the most individual house builders as well as mega construction projects of the country.",
+	"recomended_title": null,
+	"recomended_text": "",
+	"category": "Construction",
+	"subcategory": "Civil Work",
+	"subsubcategory": "Cement",
+	"specifications": [
+		{
+			"key": "Weight",
+			"value": "50",
+			"price": 550,
+			"image": "http://archimartbd.com/media/Specification/KEHEM.webp"
+		}
+	],
+	"color_images": [
+		{
+			"color": "Red",
+			"images": [
+				"http://archimartbd.com/media/Product/ape18-removebg-preview-1200x1580.webp"
+			]
+		}
+	],
+	"stock_combinations": [
+		{
+			"color": "Red",
+			"size": "25",
+			"thickness": "2",
+			"stock": 5
+		}
+	],
+	"similar_products": []
+}
