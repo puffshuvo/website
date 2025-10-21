@@ -15,7 +15,7 @@ console.log('Product ID:', productId); // Logging product ID
 
 async function fetchProductDetails() {
     try {
-        const response = await fetch(`https://archimartbd.com/api/product/${productId}`);
+        const response = await fetch(`https://archimartbd.com/api/single_product/${encodeURIComponent(productId)}`);
         const data = await response.json();
         console.log('Fetched product data:', data); // Logging fetched data
         
