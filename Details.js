@@ -129,7 +129,7 @@ async function loadProductData() {
             return;
         }
 
-         // Normalize payload: ensure arrays exist and map alternate API field names
+        // Normalize payload: ensure arrays exist and map alternate API field names
         // This prevents runtime errors when API returns different field names (e.g. `images`, `stock_combination`).
         if (productData) {
             // specifications
@@ -166,7 +166,7 @@ async function loadProductData() {
                 }
             }
         }
-
+        
         // Populate product details
         const titleEl = document.getElementById('productTitle');
         const priceEl = document.getElementById('productPrice');
