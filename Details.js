@@ -7,140 +7,6 @@ let selectedOptions = {
     thickness: ''
 };
 
-// Get product ID from URL
-const urlParams = new URLSearchParams(window.location.search);
-const productId = urlParams.get('id');
-
-console.log('Product ID:', productId); // Logging product ID
-
-async function fetchProductDetails() {
-    try {
-        const response = await fetch(`https://archimartbd.com/api/single_product/${productId}`);
-        const data = await response.json();
-        console.log('Fetched product data:', data);
-        productData = data; // Store the data globally
-        displayProductDetails(data);
-    } catch (error) {
-        console.error('Error fetching product details:', error);
-    }
-}
-
-function displayProductDetails(product) {
-    // Update basic product info
-    document.getElementById('productTitle').textContent = product.name;
-    document.getElementById('productPrice').textContent = `${product.price.parsedValue} ${product.currency}`;
-    document.getElementById('productDescription').textContent = product.description;
-    document.getElementById('recommendationText').textContent = product.recomended_text || 'No recommendation available';
-
-    // Update main image
-    if (product.images && product.images.length > 0) {
-        document.getElementById('mainImage').src = product.images[0];
-    }
-
-    // Display color options
-    const colorCircles = document.getElementById('colorCircles');
-    if (product.stock_combination && product.stock_combination.length > 0) {
-        console.log('Processing colors:', product.stock_combination);
-        
-        // Get unique colors
-        const uniqueColors = [...new Set(product.stock_combination.map(combo => combo.color))];
-        console.log('Unique colors:', uniqueColors);
-        
-        colorCircles.innerHTML = uniqueColors.map(color => `
-            <div class="filter-circle" 
-                 style="background-color: ${color.toLowerCase()}" 
-                 data-color="${color}"
-                 onclick="selectColor('${color}')">
-                 <span class="color-name">${color}</span>
-            </div>
-        `).join('');
-    }
-
-    // Display size options
-    const sizeCircles = document.getElementById('sizeCircles');
-    if (product.stock_combination && product.stock_combination.length > 0) {
-        console.log('Processing sizes:', product.stock_combination);
-        
-        // Get unique sizes
-        const uniqueSizes = [...new Set(product.stock_combination.map(combo => combo.size))];
-        console.log('Unique sizes:', uniqueSizes);
-        
-        sizeCircles.innerHTML = uniqueSizes.map(size => `
-            <div class="filter-circle size-circle" 
-                 data-size="${size}"
-                 onclick="selectSize('${size}')">
-                 ${size}
-            </div>
-        `).join('');
-    }
-
-    // Display thickness options
-    const thicknessCircles = document.getElementById('thicknessCircles');
-    if (product.stock_combination && product.stock_combination.length > 0) {
-        console.log('Processing thickness:', product.stock_combination);
-        
-        // Get unique thickness values
-        const uniqueThickness = [...new Set(product.stock_combination.map(combo => combo.thickness))];
-        console.log('Unique thickness:', uniqueThickness);
-        
-        thicknessCircles.innerHTML = uniqueThickness.map(thickness => `
-            <div class="filter-circle thickness-circle" 
-                 data-thickness="${thickness}"
-                 onclick="selectThickness('${thickness}')">
-                 ${thickness}
-            </div>
-        `).join('');
-    }
-
-    // Display specifications
-    const specsList = document.getElementById('specifications');
-    if (product.specifications && product.specifications.length > 0) {
-        console.log('Processing specifications:', product.specifications); // Logging specifications
-        
-        specsList.innerHTML = product.specifications.map(spec => `
-            <li>
-                <strong>${spec.key}:</strong> ${spec.value}
-                ${spec.price ? `(${spec.price} ${product.currency})` : ''}
-            </li>
-        `).join('');
-    }
-
-    // Update breadcrumb
-    updateBreadcrumb(product.category, product.subcategory, product.subsubcategory);
-}
-
-function updateBreadcrumb(category, subcategory, subsubcategory) {
-    const breadcrumbList = document.getElementById('breadcrumbList');
-    breadcrumbList.innerHTML = `
-        <li><a href="index.html">Home</a></li>
-        ${category ? `<li><a href="index.html?category=${category}">${category}</a></li>` : ''}
-        ${subcategory ? `<li><a href="index.html?category=${category}&subcategory=${subcategory}">${subcategory}</a></li>` : ''}
-        ${subsubcategory ? `<li>${subsubcategory}</li>` : ''}
-    `;
-}
-
-// Selection handlers
-function selectColor(color) {
-    console.log('Color selected:', color);
-    document.querySelectorAll('[data-color]').forEach(el => el.classList.remove('selected'));
-    document.querySelector(`[data-color="${color}"]`).classList.add('selected');
-}
-
-function selectSize(size) {
-    console.log('Size selected:', size);
-    document.querySelectorAll('[data-size]').forEach(el => el.classList.remove('selected'));
-    document.querySelector(`[data-size="${size}"]`).classList.add('selected');
-}
-
-function selectThickness(thickness) {
-    console.log('Thickness selected:', thickness);
-    document.querySelectorAll('[data-thickness]').forEach(el => el.classList.remove('selected'));
-    document.querySelector(`[data-thickness="${thickness}"]`).classList.add('selected');
-}
-
-// Initialize
-fetchProductDetails();
-
 function getCategoryDisplayName(category) {
     const displayNames = {
         'Construction': 'Construction Materials',
@@ -208,196 +74,131 @@ function updateBreadcrumb() {
     breadcrumbList.innerHTML = breadcrumbs.join('');
 }
 
-async function loadProductData() {
+function loadProductData() {
     const urlParams = new URLSearchParams(window.location.search);
-    const productId = urlParams.get('id') || '1'; // fallback to id=1
+    let productId = urlParams.get('id') || '1'; // Fallback to id=1
     console.log('Product ID from URL:', productId);
 
     if (!productId) {
         console.error('No product ID found in URL');
-        const titleEl = document.getElementById('productTitle');
-        const descEl = document.getElementById('productDescription');
-        if (titleEl) titleEl.textContent = 'Error: Product Not Found';
-        if (descEl) descEl.textContent = 'Please go back and select a product.';
+        document.getElementById('productTitle').textContent = 'Error: Product Not Found';
+        document.getElementById('productDescription').textContent = 'Please go back and select a product.';
         alert('Error: Product ID not found. Please try again.');
         return;
     }
 
-    const apiUrl = `/api/single_product/${encodeURIComponent(productId)}`;
-    console.log('Fetching product from API:', apiUrl);
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', `api/single_product/${productId}`, true);
+    xhr.onreadystatechange = () => {
+        console.log('XHR readyState:', xhr.readyState, 'status:', xhr.status);
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                try {
+                    const data = JSON.parse(xhr.responseText);
+                    console.log('Parsed JSON:', data);
+                    productData = data.id == productId ? data : null;
 
-    try {
-        const res = await fetch(apiUrl, { credentials: 'same-origin' });
-        // If the server responded with HTTP 200, log the requested message
-        if (res.status === 200) {
-            console.log('fix this');
-        }
-        if (!res.ok) {
-            console.error('Error fetching product API:', res.status, res.statusText);
-            const titleEl = document.getElementById('productTitle');
-            if (titleEl) titleEl.textContent = 'Error Loading Product';
-            alert('Error loading product data. Please try again.');
-            return;
-        }
+                    if (!productData) {
+                        console.error(`Product with ID ${productId} not found in Details.json`);
+                        document.getElementById('productTitle').textContent = 'Product Not Found';
+                        document.getElementById('productDescription').textContent = 'This product is not available.';
+                        alert('Error: Product not found.');
+                        return;
+                    }
 
-        const data = await res.json();
-        console.log('Received API response:', data);
+                    // Populate product details
+                    document.getElementById('productTitle').textContent = productData.name;
+                    document.getElementById('productPrice').textContent = `৳${productData.price.toFixed(2)} ${productData.currency || 'BDT'}`;
+                    document.getElementById('productDescription').textContent = productData.description || 'No description available.';
+                    document.getElementById('recommendationText').textContent = productData.recomended_text || 'This product is recommended for its quality and suitability for construction projects.';
 
-        // Support APIs that wrap payload (e.g. { data: {...} }) or return object directly
-        let payload = data && data.data ? data.data : data;
+                    // Populate specifications
+                    const specsList = document.getElementById('specifications');
+                    if (!specsList) {
+                        console.error('Element with ID "specifications" not found in the DOM');
+                        alert('Error: Specifications list element not found in the page.');
+                        return;
+                    }
+                    specsList.innerHTML = '';
+                    let hasOtherSpecs = false;
+                    console.log('Specifications data:', productData.specifications);
+                    if (productData.specifications && productData.specifications.length > 0) {
+                        productData.specifications.forEach(spec => {
+                            if (spec.key !== 'Color' && spec.key !== 'Size' && spec.key !== 'Thickness') {
+                                console.log('Adding spec:', spec.key, spec.value);
+                                const li = document.createElement('li');
+                                li.textContent = `${spec.key}: ${spec.value}`;
+                                specsList.appendChild(li);
+                                hasOtherSpecs = true;
+                            }
+                        });
+                    }
+                    if (!hasOtherSpecs) {
+                        console.log('No non-filter specifications found');
+                        specsList.innerHTML = '<li>No additional specifications available</li>';
+                    }
 
-        // If payload is an array, try to find by id
-        if (Array.isArray(payload)) {
-            payload = payload.find(item => String(item.id) === String(productId)) || null;
-        }
+                    // Populate similar products
+                    const similarGrid = document.querySelector('.similar-grid');
+                    if (!similarGrid) {
+                        console.error('Similar products grid not found in the DOM');
+                        return;
+                    }
+                    similarGrid.innerHTML = '';
+                    console.log('Similar products data:', productData.similar_products);
+                    if (productData.similar_products && productData.similar_products.length > 0) {
+                        productData.similar_products.forEach(product => {
+                            const similarItem = document.createElement('a');
+                            similarItem.className = 'similar-item';
+                            similarItem.href = `Details.html?id=${product.id}`;
+                            const priceContent = product.discount > 0 
+                                ? `<div class="price strikethrough">৳${product.price.toFixed(2)}</div><div class="discount-price">৳${(product.price - product.discount).toFixed(2)} ${productData.currency || 'BDT'}</div>`
+                                : `<div class="price">৳${product.price.toFixed(2)} ${productData.currency || 'BDT'}</div>`;
+                            similarItem.innerHTML = `
+                                <div class="similar-image">
+                                    <img src="${product.image || 'Image/placeholder.png'}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">
+                                </div>
+                                <h4>${product.name}</h4>
+                                ${priceContent}
+                                <button class="add-btn" onclick="addToCartSimilar(${product.id}); event.preventDefault();">Add to Cart</button>
+                            `;
+                            similarGrid.appendChild(similarItem);
+                        });
+                    } else {
+                        similarGrid.innerHTML = '<p>No similar products available.</p>';
+                    }
 
-    productData = payload && String(payload.id) === String(productId) ? payload : null;
+                    // Populate filter circles and set defaults
+                    populateFilterCircles();
 
-        if (!productData) {
-            console.error(`Product with ID ${productId} not found in API response`);
-            const titleEl = document.getElementById('productTitle');
-            const descEl = document.getElementById('productDescription');
-            if (titleEl) titleEl.textContent = 'Product Not Found';
-            if (descEl) descEl.textContent = 'This product is not available.';
-            alert('Error: Product not found.');
-            return;
-        }
+                    // Update price, stock, and images based on default selections
+                    updatePrice();
+                    updateStockStatus();
+                    updateImages();
 
-        // Normalize payload: ensure arrays exist and map alternate API field names
-        // This prevents runtime errors when API returns different field names (e.g. `images`, `stock_combination`).
-        if (productData) {
-            console.log('--- NORMALIZING PRODUCT DATA ---');
-            
-            // specifications
-            productData.specifications = Array.isArray(productData.specifications) ? productData.specifications : [];
-            console.log('Specifications:', productData.specifications);
-
-            // color_images: prefer existing, else map from top-level `images` if present
-            productData.color_images = Array.isArray(productData.color_images) ? productData.color_images : [];
-            console.log('Color images (before fallback):', productData.color_images);
-            if (productData.color_images.length === 0 && Array.isArray(productData.images) && productData.images.length > 0) {
-                // create a default color_images entry so the image UI still works
-                productData.color_images = [{ color: 'Default', images: productData.images }];
-                console.log('Created default color_images from top-level images:', productData.color_images);
-            }
-
-            // stock_combinations: support `stock_combinations` or `stock_combination`
-            console.log('Stock combinations (original):', productData.stock_combinations);
-            console.log('Stock combination (singular):', productData.stock_combination);
-            if (!Array.isArray(productData.stock_combinations)) {
-                if (Array.isArray(productData.stock_combination)) {
-                    productData.stock_combinations = productData.stock_combination;
-                    console.log('Mapped stock_combination to stock_combinations:', productData.stock_combinations);
-                } else {
-                    productData.stock_combinations = [];
-                    console.log('No stock combinations found, using empty array');
+                    // Update breadcrumb
+                    updateBreadcrumb();
+                } catch (e) {
+                    console.error('Error parsing Details.json:', e);
+                    console.log('Raw response:', xhr.responseText);
+                    document.getElementById('productTitle').textContent = 'Error Loading Product';
+                    alert('Error loading product data. Please try again.');
                 }
-            }
-
-            // similar products
-            productData.similar_products = Array.isArray(productData.similar_products) ? productData.similar_products : [];
-            console.log('Similar products:', productData.similar_products.length);
-
-            // Smart default selection: pick from first available stock combination or color_images
-            console.log('--- SETTING DEFAULT OPTIONS ---');
-            console.log('Current selectedOptions:', selectedOptions);
-            if (!selectedOptions.color) {
-                if (productData.stock_combinations.length > 0) {
-                    const firstStock = productData.stock_combinations[0];
-                    console.log('First stock combination:', firstStock);
-                    selectedOptions.color = firstStock.color || '';
-                    selectedOptions.size = firstStock.size || '';
-                    selectedOptions.thickness = firstStock.thickness || '';
-                    console.log('Set options from stock combination:', selectedOptions);
-                } else if (productData.color_images.length > 0) {
-                    selectedOptions.color = productData.color_images[0].color || 'Default';
-                    console.log('Set color from color_images:', selectedOptions.color);
-                }
-            }
-            console.log('Final selectedOptions:', selectedOptions);
-        }
-
-        // Populate product details
-        const titleEl = document.getElementById('productTitle');
-        const priceEl = document.getElementById('productPrice');
-        const descEl = document.getElementById('productDescription');
-        const recEl = document.getElementById('recommendationText');
-
-        if (titleEl) titleEl.textContent = productData.name;
-        if (priceEl) priceEl.textContent = `৳${(productData.price || 0).toFixed(2)} ${productData.currency || 'BDT'}`;
-        if (descEl) descEl.textContent = productData.description || 'No description available.';
-        if (recEl) recEl.textContent = productData.recomended_text || 'This product is recommended for its quality and suitability for construction projects.';
-
-        // Populate specifications
-        const specsList = document.getElementById('specifications');
-        if (!specsList) {
-            console.error('Element with ID "specifications" not found in the DOM');
-            alert('Error: Specifications list element not found in the page.');
-            return;
-        }
-        specsList.innerHTML = '';
-        let hasOtherSpecs = false;
-        console.log('Specifications data:', productData.specifications);
-        if (productData.specifications && productData.specifications.length > 0) {
-            productData.specifications.forEach(spec => {
-                if (spec.key !== 'Color' && spec.key !== 'Size' && spec.key !== 'Thickness') {
-                    const li = document.createElement('li');
-                    li.textContent = `${spec.key}: ${spec.value}`;
-                    specsList.appendChild(li);
-                    hasOtherSpecs = true;
-                }
-            });
-        }
-        if (!hasOtherSpecs) {
-            specsList.innerHTML = '<li>No additional specifications available</li>';
-        }
-
-        // Populate similar products
-        const similarGrid = document.querySelector('.similar-grid');
-        if (!similarGrid) {
-            console.error('Similar products grid not found in the DOM');
-        } else {
-            similarGrid.innerHTML = '';
-            console.log('Similar products data:', productData.similar_products);
-            if (productData.similar_products && productData.similar_products.length > 0) {
-                productData.similar_products.forEach(product => {
-                    const similarItem = document.createElement('a');
-                    similarItem.className = 'similar-item';
-                    similarItem.href = `Details.html?id=${product.id}`;
-                    const priceContent = product.discount > 0 
-                        ? `<div class="price strikethrough">৳${product.price.toFixed(2)}</div><div class="discount-price">৳${(product.price - product.discount).toFixed(2)} ${productData.currency || 'BDT'}</div>`
-                        : `<div class="price">৳${product.price.toFixed(2)} ${productData.currency || 'BDT'}</div>`;
-                    similarItem.innerHTML = `
-                        <div class="similar-image">
-                            <img src="${product.image || 'Image/placeholder.png'}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">
-                        </div>
-                        <h4>${product.name}</h4>
-                        ${priceContent}
-                        <button class="add-btn" onclick="addToCartSimilar(${product.id}); event.preventDefault();">Add to Cart</button>
-                    `;
-                    similarGrid.appendChild(similarItem);
-                });
             } else {
-                similarGrid.innerHTML = '<p>No similar products available.</p>';
+                console.error('Error fetching Details.json:', xhr.statusText);
+                console.log('Raw response:', xhr.responseText);
+                document.getElementById('productTitle').textContent = 'Error Loading Product';
+                alert('Error loading product data. Please try again.');
             }
         }
-
-        // Populate filter circles and set defaults
-        populateFilterCircles();
-
-        // Update price, stock, and images based on default selections
-        updatePrice();
-        updateStockStatus();
-        updateImages();
-
-        // Update breadcrumb
-        updateBreadcrumb();
-    } catch (e) {
-        console.error('Error loading product from API:', e);
-        const titleEl = document.getElementById('productTitle');
-        if (titleEl) titleEl.textContent = 'Error Loading Product';
+    };
+    xhr.onerror = () => {
+        console.error('Network error while fetching Details.json');
+        console.log('Raw response (if any):', xhr.responseText);
+        document.getElementById('productTitle').textContent = 'Error Loading Product';
         alert('Error loading product data. Please try again.');
-    }
+    };
+    xhr.send();
 }
 
 function populateFilterCircles() {
@@ -482,9 +283,8 @@ function updatePrice() {
     let totalPrice = productData.price;
     let totalDiscount = productData.discount || 0;
 
-    // Calculate total price from specifications (guard against undefined)
-    const specifications = Array.isArray(productData.specifications) ? productData.specifications : [];
-    specifications.forEach(spec => {
+    // Calculate total price from specifications
+    productData.specifications.forEach(spec => {
         if ((spec.key === 'Color' && spec.value === selectedOptions.color) ||
             (spec.key === 'Size' && spec.value === selectedOptions.size) ||
             (spec.key === 'Thickness' && spec.value === selectedOptions.thickness)) {
@@ -526,20 +326,16 @@ function updateStockStatus() {
     if (existingStockDisplay) existingStockDisplay.remove();
     actionButtons.appendChild(stockDisplay);
 
-    // Find stock for the selected combination (guard against undefined stock_combinations)
+    // Find stock for the selected combination
     let stock = 0;
-    const stockCombinations = Array.isArray(productData.stock_combinations) ? productData.stock_combinations : [];
-    if (stockCombinations.length === 0) {
-        console.warn('No stock_combinations available for product', productData && productData.id);
-    }
-    const selectedCombo = stockCombinations.find(combo =>
-        combo && combo.color === selectedOptions.color &&
-        combo && combo.size === selectedOptions.size &&
-        combo && combo.thickness === selectedOptions.thickness
+    const selectedCombo = productData.stock_combinations.find(combo =>
+        combo.color === selectedOptions.color &&
+        combo.size === selectedOptions.size &&
+        combo.thickness === selectedOptions.thickness
     );
 
     if (selectedCombo) {
-        stock = selectedCombo.stock || 0;
+        stock = selectedCombo.stock;
     }
 
     if (stock > 0) {
@@ -575,9 +371,8 @@ function updateImages() {
 
     imageDots.innerHTML = '';
 
-    // Find images for the selected color (guard against undefined color_images)
-    const colorImagesArr = Array.isArray(productData.color_images) ? productData.color_images : [];
-    const colorImages = (colorImagesArr.find(item => item && item.color === selectedOptions.color) || {}).images || ['Image/placeholder.png'];
+    // Find images for the selected color
+    const colorImages = productData.color_images.find(item => item.color === selectedOptions.color)?.images || ['Image/placeholder.png'];
     currentImageIndex = 0; // Reset to first image
     mainImage.src = colorImages[0] || 'Image/placeholder.png';
 
@@ -593,8 +388,7 @@ function updateImages() {
 function changeImage(index) {
     currentImageIndex = index;
     const mainImage = document.getElementById('mainImage');
-    const colorImagesArr = Array.isArray(productData.color_images) ? productData.color_images : [];
-    const colorImages = (colorImagesArr.find(item => item && item.color === selectedOptions.color) || {}).images || ['Image/placeholder.png'];
+    const colorImages = productData.color_images.find(item => item.color === selectedOptions.color)?.images || ['Image/placeholder.png'];
     if (mainImage && colorImages[index]) {
         mainImage.src = colorImages[index] || 'Image/placeholder.png';
     }
@@ -606,13 +400,12 @@ function changeImage(index) {
 }
 
 function increaseQuantity() {
-    const stockCombinations = Array.isArray(productData.stock_combinations) ? productData.stock_combinations : [];
-    const selectedCombo = stockCombinations.find(combo =>
-        combo && combo.color === selectedOptions.color &&
-        combo && combo.size === selectedOptions.size &&
-        combo && combo.thickness === selectedOptions.thickness
+    const selectedCombo = productData.stock_combinations.find(combo =>
+        combo.color === selectedOptions.color &&
+        combo.size === selectedOptions.size &&
+        combo.thickness === selectedOptions.thickness
     );
-    const stock = selectedCombo ? (selectedCombo.stock || 0) : 0;
+    const stock = selectedCombo ? selectedCombo.stock : 0;
 
     if (currentQuantity < stock) {
         currentQuantity++;
@@ -640,13 +433,12 @@ function addToCart() {
         return;
     }
 
-    const stockCombinations = Array.isArray(productData.stock_combinations) ? productData.stock_combinations : [];
-    const selectedCombo = stockCombinations.find(combo =>
-        combo && combo.color === selectedOptions.color &&
-        combo && combo.size === selectedOptions.size &&
-        combo && combo.thickness === selectedOptions.thickness
+    const selectedCombo = productData.stock_combinations.find(combo =>
+        combo.color === selectedOptions.color &&
+        combo.size === selectedOptions.size &&
+        combo.thickness === selectedOptions.thickness
     );
-    const stock = selectedCombo ? (selectedCombo.stock || 0) : 0;
+    const stock = selectedCombo ? selectedCombo.stock : 0;
 
     if (currentQuantity > stock) {
         alert(`Cannot add to cart. Only ${stock} units available for this combination.`);
@@ -669,10 +461,7 @@ function addToCart() {
         price: totalPrice - totalDiscount,
         originalPrice: totalPrice,
         quantity: currentQuantity,
-        image: (() => {
-            const colorImagesArr = Array.isArray(productData.color_images) ? productData.color_images : [];
-            return (colorImagesArr.find(item => item && item.color === selectedOptions.color) || {}).images?.[0] || 'Image/placeholder.png';
-        })(),
+        image: productData.color_images.find(item => item.color === selectedOptions.color)?.images[0] || 'Image/placeholder.png',
         category: productData.category,
         subcategory: productData.subcategory,
         subsubcategory: productData.subsubcategory,
@@ -716,8 +505,8 @@ function addToCartSimilar(productId) {
         alert('Error: Product data not loaded. Please try again.');
         return;
     }
-    const similarProductsArr = Array.isArray(productData.similar_products) ? productData.similar_products : [];
-    const similarProduct = similarProductsArr.find(product => product && product.id === productId);
+
+    const similarProduct = productData.similar_products.find(product => product.id === productId);
     if (!similarProduct) {
         alert('Error: Similar product not found.');
         return;
