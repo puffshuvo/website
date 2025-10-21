@@ -7,6 +7,129 @@ let selectedOptions = {
     thickness: ''
 };
 
+// Get product ID from URL
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get('id');
+
+console.log('Product ID:', productId); // Logging product ID
+
+async function fetchProductDetails() {
+    try {
+        const response = await fetch(`http://archimartbd.com/api/product/${productId}`);
+        const data = await response.json();
+        console.log('Fetched product data:', data); // Logging fetched data
+        
+        displayProductDetails(data);
+    } catch (error) {
+        console.error('Error fetching product details:', error);
+    }
+}
+
+function displayProductDetails(product) {
+    // Update basic product info
+    document.getElementById('productTitle').textContent = product.name;
+    document.getElementById('productPrice').textContent = `${product.price.parsedValue} ${product.currency}`;
+    document.getElementById('productDescription').textContent = product.description;
+    document.getElementById('recommendationText').textContent = product.recomended_text || 'No recommendation available';
+
+    // Update main image
+    if (product.images && product.images.length > 0) {
+        document.getElementById('mainImage').src = product.images[0];
+    }
+
+    // Display color options
+    const colorCircles = document.getElementById('colorCircles');
+    if (product.stock_combination && product.stock_combination.length > 0) {
+        console.log('Processing colors:', product.stock_combination); // Logging color data
+        
+        const uniqueColors = [...new Set(product.stock_combination.map(combo => combo.color))];
+        colorCircles.innerHTML = uniqueColors.map(color => `
+            <div class="filter-circle" style="background-color: ${color.toLowerCase()}" 
+                 data-color="${color}"
+                 onclick="selectColor('${color}')">
+            </div>
+        `).join('');
+    }
+
+    // Display size options
+    const sizeCircles = document.getElementById('sizeCircles');
+    if (product.stock_combination && product.stock_combination.length > 0) {
+        console.log('Processing sizes:', product.stock_combination); // Logging size data
+        
+        const uniqueSizes = [...new Set(product.stock_combination.map(combo => combo.size))];
+        sizeCircles.innerHTML = uniqueSizes.map(size => `
+            <div class="filter-circle size-circle" 
+                 data-size="${size}"
+                 onclick="selectSize('${size}')">
+                ${size}
+            </div>
+        `).join('');
+    }
+
+    // Display thickness options
+    const thicknessCircles = document.getElementById('thicknessCircles');
+    if (product.stock_combination && product.stock_combination.length > 0) {
+        console.log('Processing thickness:', product.stock_combination); // Logging thickness data
+        
+        const uniqueThickness = [...new Set(product.stock_combination.map(combo => combo.thickness))];
+        thicknessCircles.innerHTML = uniqueThickness.map(thickness => `
+            <div class="filter-circle thickness-circle" 
+                 data-thickness="${thickness}"
+                 onclick="selectThickness('${thickness}')">
+                ${thickness}
+            </div>
+        `).join('');
+    }
+
+    // Display specifications
+    const specsList = document.getElementById('specifications');
+    if (product.specifications && product.specifications.length > 0) {
+        console.log('Processing specifications:', product.specifications); // Logging specifications
+        
+        specsList.innerHTML = product.specifications.map(spec => `
+            <li>
+                <strong>${spec.key}:</strong> ${spec.value}
+                ${spec.price ? `(${spec.price} ${product.currency})` : ''}
+            </li>
+        `).join('');
+    }
+
+    // Update breadcrumb
+    updateBreadcrumb(product.category, product.subcategory, product.subsubcategory);
+}
+
+function updateBreadcrumb(category, subcategory, subsubcategory) {
+    const breadcrumbList = document.getElementById('breadcrumbList');
+    breadcrumbList.innerHTML = `
+        <li><a href="index.html">Home</a></li>
+        ${category ? `<li><a href="index.html?category=${category}">${category}</a></li>` : ''}
+        ${subcategory ? `<li><a href="index.html?category=${category}&subcategory=${subcategory}">${subcategory}</a></li>` : ''}
+        ${subsubcategory ? `<li>${subsubcategory}</li>` : ''}
+    `;
+}
+
+// Selection handlers
+function selectColor(color) {
+    console.log('Color selected:', color);
+    document.querySelectorAll('[data-color]').forEach(el => el.classList.remove('selected'));
+    document.querySelector(`[data-color="${color}"]`).classList.add('selected');
+}
+
+function selectSize(size) {
+    console.log('Size selected:', size);
+    document.querySelectorAll('[data-size]').forEach(el => el.classList.remove('selected'));
+    document.querySelector(`[data-size="${size}"]`).classList.add('selected');
+}
+
+function selectThickness(thickness) {
+    console.log('Thickness selected:', thickness);
+    document.querySelectorAll('[data-thickness]').forEach(el => el.classList.remove('selected'));
+    document.querySelector(`[data-thickness="${thickness}"]`).classList.add('selected');
+}
+
+// Initialize
+fetchProductDetails();
+
 function getCategoryDisplayName(category) {
     const displayNames = {
         'Construction': 'Construction Materials',
