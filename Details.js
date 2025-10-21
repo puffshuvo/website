@@ -132,41 +132,57 @@ async function loadProductData() {
         // Normalize payload: ensure arrays exist and map alternate API field names
         // This prevents runtime errors when API returns different field names (e.g. `images`, `stock_combination`).
         if (productData) {
+            console.log('--- NORMALIZING PRODUCT DATA ---');
+            
             // specifications
             productData.specifications = Array.isArray(productData.specifications) ? productData.specifications : [];
+            console.log('Specifications:', productData.specifications);
 
             // color_images: prefer existing, else map from top-level `images` if present
             productData.color_images = Array.isArray(productData.color_images) ? productData.color_images : [];
+            console.log('Color images (before fallback):', productData.color_images);
             if (productData.color_images.length === 0 && Array.isArray(productData.images) && productData.images.length > 0) {
                 // create a default color_images entry so the image UI still works
                 productData.color_images = [{ color: 'Default', images: productData.images }];
+                console.log('Created default color_images from top-level images:', productData.color_images);
             }
 
             // stock_combinations: support `stock_combinations` or `stock_combination`
+            console.log('Stock combinations (original):', productData.stock_combinations);
+            console.log('Stock combination (singular):', productData.stock_combination);
             if (!Array.isArray(productData.stock_combinations)) {
                 if (Array.isArray(productData.stock_combination)) {
                     productData.stock_combinations = productData.stock_combination;
+                    console.log('Mapped stock_combination to stock_combinations:', productData.stock_combinations);
                 } else {
                     productData.stock_combinations = [];
+                    console.log('No stock combinations found, using empty array');
                 }
             }
 
             // similar products
             productData.similar_products = Array.isArray(productData.similar_products) ? productData.similar_products : [];
+            console.log('Similar products:', productData.similar_products.length);
 
             // Smart default selection: pick from first available stock combination or color_images
+            console.log('--- SETTING DEFAULT OPTIONS ---');
+            console.log('Current selectedOptions:', selectedOptions);
             if (!selectedOptions.color) {
                 if (productData.stock_combinations.length > 0) {
                     const firstStock = productData.stock_combinations[0];
+                    console.log('First stock combination:', firstStock);
                     selectedOptions.color = firstStock.color || '';
                     selectedOptions.size = firstStock.size || '';
                     selectedOptions.thickness = firstStock.thickness || '';
+                    console.log('Set options from stock combination:', selectedOptions);
                 } else if (productData.color_images.length > 0) {
                     selectedOptions.color = productData.color_images[0].color || 'Default';
+                    console.log('Set color from color_images:', selectedOptions.color);
                 }
             }
+            console.log('Final selectedOptions:', selectedOptions);
         }
-        
+
         // Populate product details
         const titleEl = document.getElementById('productTitle');
         const priceEl = document.getElementById('productPrice');
