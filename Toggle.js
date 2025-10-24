@@ -421,40 +421,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Hover Preview for Subcategory Links
-  const preview = document.getElementById('hover-preview');
-  const previewImg = preview.querySelector('img');
-  const links = document.querySelectorAll('.subcategory-list a');
-
-  links.forEach(link => {
-    // Hover Preview for Subcategory Links
+function initHoverPreview() {
     const preview = document.getElementById('hover-preview');
-    const previewImg = preview.querySelector('img');
     const links = document.querySelectorAll('.subcategory-list a');
-    const imgSrc = link.dataset.image;
-    if (!imgSrc) return;
-    link.addEventListener('mouseenter', (e) => {
-      previewImg.src = imgSrc;
-      previewImg.alt = link.textContent.trim();
-      preview.style.display = 'block';
-      preview.setAttribute('aria-hidden', 'false');
-    });
-    link.addEventListener('mousemove', (e) => {
-      const offset = 12;
-      const rect = preview.getBoundingClientRect();
-      let x = e.clientX + offset;
-      let y = e.clientY + offset;
-      if (x + rect.width > window.innerWidth) x = e.clientX - rect.width - offset;
-      if (y + rect.height > window.innerHeight) y = e.clientY - rect.height - offset;
-      preview.style.left = x + 'px';
-      preview.style.top = y + 'px';
-    });
-    link.addEventListener('mouseleave', () => {
-      preview.style.display = 'none';
-      preview.setAttribute('aria-hidden', 'true');
-      previewImg.src = '';
-    });
-  });
+    
+    // Only initialize if both preview element and links exist
+    if (preview && links.length > 0) {
+        const previewImg = preview.querySelector('img');
+        
+        links.forEach(link => {
+            const imgSrc = link.dataset.image;
+            if (!imgSrc) return;
+            
+            link.addEventListener('mouseenter', (e) => {
+                previewImg.src = imgSrc;
+                previewImg.alt = link.textContent.trim();
+                preview.style.display = 'block';
+                preview.setAttribute('aria-hidden', 'false');
+            });
+            
+            link.addEventListener('mousemove', (e) => {
+                const offset = 12;
+                const rect = preview.getBoundingClientRect();
+                let x = e.clientX + offset;
+                let y = e.clientY + offset;
+                if (x + rect.width > window.innerWidth) x = e.clientX - rect.width - offset;
+                if (y + rect.height > window.innerHeight) y = e.clientY - rect.height - offset;
+                preview.style.left = x + 'px';
+                preview.style.top = y + 'px';
+            });
+            
+            link.addEventListener('mouseleave', () => {
+                preview.style.display = 'none';
+                preview.setAttribute('aria-hidden', 'true');
+                previewImg.src = '';
+            });
+        });
+    }
+}
+
+// Call the function only if needed (you can control this based on page)
+if (document.querySelector('.subcategory-list')) {
+    initHoverPreview();
+}
 
   // Footer Dropdown Handling
   const footerDropdowns = document.querySelectorAll('.footer-menu .dropdown');
