@@ -559,11 +559,13 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateCartDisplay() {
     const cart = getCart();
     const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    // Update cart icon count
     const cartCountElem = document.querySelector('.cart-count');
-    if (cartCountElem) cartCountElementextContent = count;
+    if (cartCountElem) cartCountElem.textContent = count;
 
     const itemsList = document.querySelector('.cart-items');
-    const totalAmount = document.querySelector('.total-amount');
+    const totalAmount = document.querySelector('.cart-total-amount');
     if (!itemsList || !totalAmount) return;
 
     itemsList.innerHTML = '';
@@ -611,4 +613,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Example usage: Call addToCart({id: 1, name: 'Cement', price: 10}) from product pages
   initNavigation();
-}); 
+});
