@@ -11,12 +11,11 @@ body {
   background: #fff5ec;
 }
 
-/* =========================== Navigation Styling =========================== */
+/* ========================================================================== */
 /* Navigation Styling: All styles related to navbar, search, hamburger, dropdowns, and cart */
 /* ========================================================================== */
 
 /* Main Navbar Styling */
-
 .navbar {
   background-color: #331f08;
   color: #fff;
@@ -25,20 +24,17 @@ body {
   position: sticky;
   top: 0;
   z-index: 10;
-  transition: all 0.5s ease-in-out;
 }
 
 .navbar-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: flex-direction 0.5s ease-in-out, align-items 0.5s ease-in-out;
 }
 
 /* Logo Styling */
 .logo {
   transform: translateX(0);
-  transition: transform 0.5s ease-in-out;
 }
 
 .logo-img {
@@ -51,7 +47,6 @@ body {
 .nav-links-wrapper {
   margin-top: 1.5rem;
   transform: translateX(0);
-  transition: transform 0.5s ease-in-out, margin-top 0.5s ease-in-out;
   z-index: 15;
 }
 
@@ -59,11 +54,10 @@ body {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 3rem;
+  gap: 9rem;
   list-style: none;
   padding: 0;
   margin: 0;
-  transition: gap 0.5s ease-in-out;
 }
 
 .nav-links li a {
@@ -85,22 +79,6 @@ body {
   right: 2rem;
 }
 
-/* Navbar Scrolled State */
-.navbar.scrolled .navbar-content {
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navbar.scrolled .nav-links-wrapper {
-  margin-top: 0;
-}
-
-.navbar.scrolled .nav-links {
-  justify-content: flex-start;
-  gap: 2rem;
-}
-
 /* Navigation Items and Dropdowns */
 .nav-item,
 .dropdown-item {
@@ -116,19 +94,20 @@ body {
   position: absolute;
   background: #4a2f0a;
   list-style: none;
-  padding: 12px 0;
   margin: 0;
   top: 100%;
-  left: -10px;
+  left: 50px;
   transform: translateY(-10px);
   min-width: 200px;
   z-index: 9999;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
-  border-radius: 1px;
+  border-radius: 4px;
   text-align: left;
   pointer-events: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  padding: 10px 0;
 }
 
 .nav-item:hover .dropdown-menu {
@@ -136,6 +115,22 @@ body {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+
+.dropdown-link {
+  display: block;
+  padding: 12px 20px;
+  color: #F7E3BA;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 400;
+  transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+}
+
+.dropdown-link:hover {
+  background-color: #331b04;
+  color: #fff;
+  padding-left: 25px;
 }
 
 .sub-dropdown-menu {
@@ -155,6 +150,7 @@ body {
   transform: translateY(-10px);
   border-radius: 4px;
   pointer-events: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .dropdown-item:hover .sub-dropdown-menu {
@@ -162,6 +158,22 @@ body {
   opacity: 1;
   visibility: visible;
   transform: translateY(0);
+}
+
+.sub-dropdown-menu li a {
+  display: block;
+  padding: 10px 20px;
+  color: #F7E3BA;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 400;
+  transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+}
+
+.sub-dropdown-menu li a:hover {
+  background-color: #5a310b;
+  color: #fff;
+  padding-left: 25px;
 }
 
 /* Search Bar Styling */
@@ -202,6 +214,10 @@ body {
   color: #fff;
 }
 
+.search-dropdown div.focused {
+  background: #5a310b;
+}
+
 /* Cart Dropdown Styling */
 .cart-item {
   position: relative;
@@ -218,6 +234,7 @@ body {
     z-index: 1000;
     padding: 10px;
 }
+
 .cart-dropdown.active {
     display: block;
 }
@@ -235,16 +252,19 @@ body {
     max-height: 300px;
     overflow-y: auto;
 }
+
 .cart-item {
     display: flex;
     align-items: center;
 }
+
 .cart-item-image {
     width: 50px;
     height: 50px;
     object-fit: cover;
     margin-right: 10px;
 }
+
 .cart-items li {
   display: flex;
   justify-content: space-between;
@@ -252,18 +272,22 @@ body {
   padding: 8px 0;
   border-bottom: 1px solid #5a452c;
 }
+
 .cart-item-details {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
+
 .cart-item-name {
     font-weight: bold;
 }
+
 .cart-item-quantity, .cart-item-price {
     font-size: 0.9em;
     color: #555;
 }
+
 .cart-item-remove {
     background: #ff4d4d;
     color: white;
@@ -272,9 +296,11 @@ body {
     cursor: pointer;
     font-size: 0.8em;
 }
+
 .cart-item-remove:hover {
     background: #cc0000;
 }
+
 .cart-empty {
     padding: 10px;
     text-align: center;
@@ -349,6 +375,7 @@ body {
   top: -5px;
   right: -20px;
 }
+
 .notification {
     position: fixed;
     bottom: 20px;
@@ -361,9 +388,11 @@ body {
     transition: opacity 0.3s;
     z-index: 1000;
 }
+
 .notification.show {
     opacity: 1;
 }
+
 /* Mobile-specific Navigation Styling */
 @media (max-width: 768px) {
   .dropdown-menu {
@@ -375,6 +404,8 @@ body {
     display: none;
     width: 100%;
     border-radius: 0;
+    box-shadow: none;
+    padding: 10px 0;
   }
 
   .nav-item .dropdown-menu.active {
@@ -390,6 +421,8 @@ body {
     display: none;
     width: 100%;
     border-radius: 0;
+    box-shadow: none;
+    padding: 10px 0;
   }
 
   .dropdown-item .sub-dropdown-menu.active {
@@ -398,7 +431,17 @@ body {
 
   .dropdown-link,
   .sub-dropdown-menu li a {
-    padding: 10px 20px;
+    padding: 12px 20px;
+    font-size: 1rem;
+    color: #F7E3BA;
+    transition: background-color 0.2s ease, color 0.2s ease, padding-left 0.2s ease;
+  }
+
+  .dropdown-link:hover,
+  .sub-dropdown-menu li a:hover {
+    background-color: #5a310b;
+    color: #fff;
+    padding-left: 25px;
   }
 
   .nav-arrow,
@@ -432,12 +475,12 @@ body {
     padding: 1rem 0;
   }
 
-  .navbar.scrolled .navbar-content {
+  .navbar .navbar-content {
     flex-direction: column;
     align-items: center;
   }
 
-  .navbar.scrolled .nav-links {
+  .navbar .nav-links {
     flex-direction: column;
     gap: 1rem;
   }
@@ -470,6 +513,7 @@ body {
     display: none; /* Disable hover on mobile, use click if needed */
   }
 }
+
 
 
 /* ========================================================================== */
@@ -644,8 +688,6 @@ body {
   color: #F7E3BA;
   text-decoration: none;
   border-radius: 25px;
-  font-size: 1rem;
-  font-weight: 500;
   z-index: 7;
   transition: background-color 0.3s ease, transform 0.3s ease;
   animation: bounce 2s infinite;
@@ -770,17 +812,19 @@ body {
   content: '▼';
   float: right;
   margin-left: 10px;
+  transition: transform .12s ease, opacity .12s ease; 
 }
 
 .subcategory-list {
   list-style: none;
   position: absolute;
   top: 0;
-  left: 100%;
-  background: #EBEBEB;
+  left: 24%;
+  background: #868685;
   display: none;
   z-index: 1001;
-  min-width: 150px;
+  min-width: 500px;
+
 }
 
 .hover-preview {
@@ -814,7 +858,7 @@ body {
 }
 
 .subcategory-list li a:hover {
-  background-color: #868685;
+  background-color: #D4D4D4;
 }
 
 
@@ -1046,11 +1090,13 @@ footer {
   padding-left: 40px;
 }
 
-.footer-right h4 {
+.footer-right p {
   margin-bottom: 20px;
   line-height: 1.5;
   color: #f5deb3;
   text-align: center;
+  font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  text-decoration: none;
 }
 
 .footer-right form {
@@ -1063,7 +1109,7 @@ footer {
   background: #4c3b26;
   border: none;
   padding: 12px;
-  border-radius: 25px;
+  border-radius: 4px;
   color: #f5deb3;
 }
 
@@ -1071,7 +1117,7 @@ footer {
   background: #5f3104;
   border: none;
   padding: 14px;
-  border-radius: 25px;
+  border-radius: 4px;
   color: #f5deb3;
   cursor: pointer;
   transition: background 0.3s ease;
