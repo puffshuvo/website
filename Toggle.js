@@ -1,5 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
   // Select key DOM elements
+  // ...existing code...
+
+    // Initialize cart display when page loads
+    initializeCartDisplay();
+    
+    // Initialize cart interactions
+    initCartInteractions();
+    
+    // ...rest of your existing code...
   const navbar = document.querySelector('.navbar') || null;
   const navLinksWrapper = document.querySelector('.nav-links-wrapper');
   const hamburger = document.querySelector('.hamburger');
@@ -622,6 +631,50 @@ function changeQuantity(index, change) {
         updateCartDisplay();
     }
 }
+function initializeCartDisplay() {
+    const cart = getCart();
+    const cartCountElem = document.querySelector('.cart-count');
+    const itemsList = document.querySelector('.cart-items');
+    const totalAmount = document.querySelector('.cart-total-amount');
+
+    // Update cart count in the navigation
+    if (cartCountElem) {
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartCountElem.textContent = totalItems;
+    }
+
+    // Update cart dropdown contents
+    if (itemsList && totalAmount) {
+        itemsList.innerHTML = '';
+        let total = 0;
+
+        if (cart.length === 0) {
+            itemsList.innerHTML = '<p class="cart-empty">Your cart is empty.</p>';
+        } else {
+            cart.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <div class="item-details">
+                        <span class="item-name">${item.name} x ${item.quantity}</span>
+                        <div class="quantity-controls">
+                            <button class="qty-btn minus" onclick="changeQuantity(${index}, -1)">−</button>
+                            <span class="qty-display">${item.quantity}</span>
+                            <button class="qty-btn plus" onclick="changeQuantity(${index}, 1)">+</button>
+                            <button class="delete-btn" onclick="removeFromCart('${item.id}')" title="Remove item">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <span class="item-price">${(item.price * item.quantity).toFixed(2)} Tk</span>
+                `;
+                itemsList.appendChild(li);
+                total += item.price * item.quantity;
+            });
+        }
+        totalAmount.textContent = `${total.toFixed(2)} Tk`;
+    }
+}
+
 
 // Initialize cart display
 updateCartDisplay();
@@ -645,3 +698,7 @@ updateCartDisplay();
   // Example usage: Call addToCart({id: 1, name: 'Cement', price: 10}) from product pages
   initNavigation();
 });
+
+
+window.changeQuantity = changeQuantity;
+window.removeFromCart = removeFromCart;
