@@ -421,47 +421,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-function initHoverPreview() {
+  function initHoverPreview() {
     const preview = document.getElementById('hover-preview');
     const links = document.querySelectorAll('.subcategory-list a');
-    
+
     // Only initialize if both preview element and links exist
     if (preview && links.length > 0) {
-        const previewImg = preview.querySelector('img');
-        
-        links.forEach(link => {
-            const imgSrc = link.dataset.image;
-            if (!imgSrc) return;
-            
-            link.addEventListener('mouseenter', (e) => {
-                previewImg.src = imgSrc;
-                previewImg.alt = link.textContent.trim();
-                preview.style.display = 'block';
-                preview.setAttribute('aria-hidden', 'false');
-            });
-            
-            link.addEventListener('mousemove', (e) => {
-                const offset = 12;
-                const rect = preview.getBoundingClientRect();
-                let x = e.clientX + offset;
-                let y = e.clientY + offset;
-                if (x + rect.width > window.innerWidth) x = e.clientX - rect.width - offset;
-                if (y + rect.height > window.innerHeight) y = e.clientY - rect.height - offset;
-                preview.style.left = x + 'px';
-                preview.style.top = y + 'px';
-            });
-            
-            link.addEventListener('mouseleave', () => {
-                preview.style.display = 'none';
-                preview.setAttribute('aria-hidden', 'true');
-                previewImg.src = '';
-            });
-        });
-    }
-}
+      const previewImg = preview.querySelector('img');
 
-// Call the function only if needed (you can control this based on page)
-if (document.querySelector('.subcategory-list')) {
+      links.forEach(link => {
+        const imgSrc = link.dataset.image;
+        if (!imgSrc) return;
+
+        link.addEventListener('mouseenter', (e) => {
+          previewImg.src = imgSrc;
+          previewImg.alt = link.textContent.trim();
+          preview.style.display = 'block';
+          preview.setAttribute('aria-hidden', 'false');
+        });
+
+        link.addEventListener('mousemove', (e) => {
+          const offset = 12;
+          const rect = preview.getBoundingClientRect();
+          let x = e.clientX + offset;
+          let y = e.clientY + offset;
+          if (x + rect.width > window.innerWidth) x = e.clientX - rect.width - offset;
+          if (y + rect.height > window.innerHeight) y = e.clientY - rect.height - offset;
+          preview.style.left = x + 'px';
+          preview.style.top = y + 'px';
+        });
+
+        link.addEventListener('mouseleave', () => {
+          preview.style.display = 'none';
+          preview.setAttribute('aria-hidden', 'true');
+          previewImg.src = '';
+        });
+      });
+    }
+  }
+
+  // Call the function only if needed (you can control this based on page)
+  if (document.querySelector('.subcategory-list')) {
     initHoverPreview();
   }
 
@@ -552,8 +552,8 @@ if (document.querySelector('.subcategory-list')) {
     if (existing) {
       existing.quantity += product.quantity || 1;
     } else {
-      cart.push({ 
-        ...product, 
+      cart.push({
+        ...product,
         quantity: product.quantity || 1,
         price: parseFloat(product.price) || 0 // Ensure price is a number
       });
@@ -572,7 +572,7 @@ if (document.querySelector('.subcategory-list')) {
   function updateCartDisplay() {
     const cart = getCart();
     const count = cart.reduce((sum, item) => sum + item.quantity, 0);
-    
+
     // Update cart icon count
     const cartCountElem = document.querySelector('.cart-count');
     if (cartCountElem) cartCountElem.textContent = count;
@@ -585,44 +585,50 @@ if (document.querySelector('.subcategory-list')) {
     let total = 0;
 
     if (cart.length === 0) {
-        const emptyMsg = document.createElement('p');
-        emptyMsg.classList.add('cart-empty');
-        emptyMsg.textContent = 'Your cart is empty.';
-        itemsList.appendChild(emptyMsg);
+      const emptyMsg = document.createElement('p');
+      emptyMsg.classList.add('cart-empty');
+      emptyMsg.textContent = 'Your cart is empty.';
+      itemsList.appendChild(emptyMsg);
     } else {
-        cart.forEach((item, index) => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-               <li class="cart-item" data-product-id="${item.id}">
-                    <img src="${item.image || 'Image/placeholder.jpg'}" alt="${item.name}" class="cart-item-image">
-                    <div class="cart-item-details">
-                        <span class="cart-item-name">${item.name || 'Unknown Product'}</span>
-                        <span class="cart-item-quantity">Qty: ${item.quantity || 1}</span>
-                        <span class="cart-item-price">৳${price.toLocaleString()} x ${item.quantity || 1} = ৳${total}</span>
-                        <button class="cart-item-remove" onclick="window.gallery.removeFromCart('${item.id}')">Remove</button>
-                    </div>
-                </li>
-            `;
-            itemsList.appendChild(li);
-            total += item.price * item.quantity;
-        });
+      cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.classList.add('cart-item');
+        li.dataset.productId = item.id;
+
+        const price = item.price || 0;
+        const quantity = item.quantity || 1;
+        const subtotal = price * quantity;
+        total += subtotal;
+
+        li.innerHTML = `
+        <img src="${item.image || 'Image/placeholder.jpg'}" alt="${item.name}" class="cart-item-image">
+        <div class="cart-item-details">
+            <span class="cart-item-name">${item.name || 'Unknown Product'}</span>
+            <span class="cart-item-quantity">Qty: ${quantity}</span>
+            <span class="cart-item-price">৳${price.toLocaleString()} x ${quantity} = ৳${subtotal.toLocaleString()}</span>
+            <button class="cart-item-remove" onclick="window.gallery.removeFromCart('${item.id}')">Remove</button>
+        </div>
+    `;
+
+        itemsList.appendChild(li);
+      });
     }
 
     totalAmount.textContent = `${total.toFixed(2)} Tk`;
-}
+  }
 
-function changeQuantity(index, change) {
+  function changeQuantity(index, change) {
     let cart = getCart();
     if (index >= 0 && index < cart.length) {
-        cart[index].quantity = Math.max(1, cart[index].quantity + change);
-        saveCart(cart);
-        updateCartDisplay();
+      cart[index].quantity = Math.max(1, cart[index].quantity + change);
+      saveCart(cart);
+      updateCartDisplay();
     }
-}
+  }
 
 
-// Initialize cart display
-updateCartDisplay();
+  // Initialize cart display
+  updateCartDisplay();
 
   // Sync cart across browser tabs
   window.addEventListener('storage', (e) => {
