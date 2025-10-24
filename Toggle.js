@@ -645,7 +645,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
-
+  window.removeFromCart = removeFromCart;
   // Example usage: Call addToCart({id: 1, name: 'Cement', price: 10}) from product pages
   initNavigation();
 });
