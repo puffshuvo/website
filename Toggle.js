@@ -463,7 +463,7 @@ function initHoverPreview() {
 // Call the function only if needed (you can control this based on page)
 if (document.querySelector('.subcategory-list')) {
     initHoverPreview();
-}
+  }
 
   // Footer Dropdown Handling
   const footerDropdowns = document.querySelectorAll('.footer-menu .dropdown');
@@ -552,7 +552,11 @@ if (document.querySelector('.subcategory-list')) {
     if (existing) {
       existing.quantity += product.quantity || 1;
     } else {
-      cart.push({ ...product, quantity: product.quantity || 1 });
+      cart.push({ 
+        ...product, 
+        quantity: product.quantity || 1,
+        price: parseFloat(product.price) || 0 // Ensure price is a number
+      });
     }
     saveCart(cart);
     updateCartDisplay();
@@ -581,28 +585,46 @@ if (document.querySelector('.subcategory-list')) {
     let total = 0;
 
     if (cart.length === 0) {
-      const emptyMsg = document.createElement('p');
-      emptyMsg.classList.add('cart-empty');
-      emptyMsg.textContent = 'Your cart is empty.';
-      itemsList.appendChild(emptyMsg);
+        const emptyMsg = document.createElement('p');
+        emptyMsg.classList.add('cart-empty');
+        emptyMsg.textContent = 'Your cart is empty.';
+        itemsList.appendChild(emptyMsg);
     } else {
-      cart.forEach(item => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <span class="item-name">${item.name} x ${item.quantity}</span>
-          <span class="item-price">$${(item.price * item.quantity).toFixed(2)}</span>
-          <button class="remove-item" data-id="${item.id}"><i class="fas fa-trash"></i></button>
-        `;
-        itemsList.appendChild(li);
-        total += item.price * item.quantity;
-      });
+        cart.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="item-details">
+                    <span class="item-name">${item.name} x ${item.quantity}</span>
+                    <div class="quantity-controls">
+                        <button class="qty-btn minus" onclick="changeQuantity(${index}, -1)">−</button>
+                        <span class="qty-display">${item.quantity}</span>
+                        <button class="qty-btn plus" onclick="changeQuantity(${index}, 1)">+</button>
+                        <button class="delete-btn" onclick="removeFromCart('${item.id}')" title="Remove item">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+                <span class="item-price">${(item.price * item.quantity).toFixed(2)} Tk</span>
+            `;
+            itemsList.appendChild(li);
+            total += item.price * item.quantity;
+        });
     }
 
-    totalAmount.textContent = `$${total.toFixed(2)}`;
-  }
+    totalAmount.textContent = `${total.toFixed(2)} Tk`;
+}
 
-  // Initialize cart display
-  updateCartDisplay();
+function changeQuantity(index, change) {
+    let cart = getCart();
+    if (index >= 0 && index < cart.length) {
+        cart[index].quantity = Math.max(1, cart[index].quantity + change);
+        saveCart(cart);
+        updateCartDisplay();
+    }
+}
+
+// Initialize cart display
+updateCartDisplay();
 
   // Sync cart across browser tabs
   window.addEventListener('storage', (e) => {
