@@ -606,7 +606,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="cart-item-name">${item.name || 'Unknown Product'}</span>
             <span class="cart-item-quantity">Qty: ${quantity}</span>
             <span class="cart-item-price">৳${price.toLocaleString()} x ${quantity} = ৳${subtotal.toLocaleString()}</span>
-            <button class="cart-item-remove" onclick="window.gallery.removeFromCart('${item.id}')">Remove</button>
+            <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">Remove</button>
         </div>
     `;
 
