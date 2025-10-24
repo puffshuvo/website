@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
   const searchBtn = document.querySelector('.search-btn');
   const menuSection = document.querySelector('.menu-section') || null;
-  const logoImg = document.querySelector('.logo-img'); 
+  const logoImg = document.querySelector('.logo-img');
 
   // ==========================================================================
   // Navigation Functionality: Scroll behavior, hamburger, dropdowns, and search
@@ -290,8 +290,8 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(item._hideTimeout);
             dropdown.style.opacity = '1';
             dropdown.style.visibility = 'visible';
-            dropdown.style.transform = dropdown.classList.contains('dropdown-menu') 
-              ? 'translateX(-50%) translateY(0)' 
+            dropdown.style.transform = dropdown.classList.contains('dropdown-menu')
+              ? 'translateX(-50%) translateY(0)'
               : 'translateY(0)';
             if (link) link.setAttribute('aria-expanded', 'true');
           });
@@ -301,8 +301,8 @@ document.addEventListener('DOMContentLoaded', () => {
             item._hideTimeout = setTimeout(() => {
               dropdown.style.opacity = '0';
               dropdown.style.visibility = 'hidden';
-              dropdown.style.transform = dropdown.classList.contains('dropdown-menu') 
-                ? 'translateX(-50%) translateY(-10px)' 
+              dropdown.style.transform = dropdown.classList.contains('dropdown-menu')
+                ? 'translateX(-50%) translateY(-10px)'
                 : 'translateY(-10px)';
               if (link) link.setAttribute('aria-expanded', 'false');
             }, 120);
@@ -350,8 +350,8 @@ document.addEventListener('DOMContentLoaded', () => {
           dropdown.classList.remove('active');
           dropdown.style.opacity = '0';
           dropdown.style.visibility = 'hidden';
-          dropdown.style.transform = dropdown.classList.contains('dropdown-menu') 
-            ? 'translateX(-50%) translateY(-10px)' 
+          dropdown.style.transform = dropdown.classList.contains('dropdown-menu')
+            ? 'translateX(-50%) translateY(-10px)'
             : 'translateY(-10px)';
         });
         const allLinks = navLinksWrapper.querySelectorAll('.nav-link, .dropdown-link');
@@ -427,6 +427,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const links = document.querySelectorAll('.subcategory-list a');
 
   links.forEach(link => {
+    // Hover Preview for Subcategory Links
+    const preview = document.getElementById('hover-preview');
+    const previewImg = preview.querySelector('img');
+    const links = document.querySelectorAll('.subcategory-list a');
     const imgSrc = link.dataset.image;
     if (!imgSrc) return;
     link.addEventListener('mouseenter', (e) => {
