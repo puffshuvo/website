@@ -593,18 +593,15 @@ if (document.querySelector('.subcategory-list')) {
         cart.forEach((item, index) => {
             const li = document.createElement('li');
             li.innerHTML = `
-                <div class="item-details">
-                    <span class="item-name">${item.name} x ${item.quantity}</span>
-                    <div class="quantity-controls">
-                        <button class="qty-btn minus" onclick="changeQuantity(${index}, -1)">−</button>
-                        <span class="qty-display">${item.quantity}</span>
-                        <button class="qty-btn plus" onclick="changeQuantity(${index}, 1)">+</button>
-                        <button class="delete-btn" onclick="removeFromCart('${item.id}')" title="Remove item">
-                            <i class="fas fa-trash"></i>
-                        </button>
+               <li class="cart-item" data-product-id="${item.id}">
+                    <img src="${item.image || 'Image/placeholder.jpg'}" alt="${item.name}" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <span class="cart-item-name">${item.name || 'Unknown Product'}</span>
+                        <span class="cart-item-quantity">Qty: ${item.quantity || 1}</span>
+                        <span class="cart-item-price">৳${price.toLocaleString()} x ${item.quantity || 1} = ৳${total}</span>
+                        <button class="cart-item-remove" onclick="window.gallery.removeFromCart('${item.id}')">Remove</button>
                     </div>
-                </div>
-                <span class="item-price">${(item.price * item.quantity).toFixed(2)} Tk</span>
+                </li>
             `;
             itemsList.appendChild(li);
             total += item.price * item.quantity;
