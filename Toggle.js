@@ -602,13 +602,17 @@ document.addEventListener('DOMContentLoaded', () => {
         total += subtotal;
 
         li.innerHTML = `
-        <img src="${item.image || 'Image/placeholder.jpg'}" alt="${item.name}" class="cart-item-image">
-        <div class="cart-item-details">
-            <span class="cart-item-name">${item.name || 'Unknown Product'}</span>
-            <span class="cart-item-quantity">Qty: ${quantity}</span>
-            <span class="cart-item-price">৳${price.toLocaleString()} x ${quantity} = ৳${subtotal.toLocaleString()}</span>
-            <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">Remove</button>
-        </div>
+        <li class="cart-item">
+      <img src="${item.image || 'Image/placeholder.png'}" alt="${item.name}" class="cart-item-image">
+      <div class="cart-item-details">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-quantity">Qty: ${item.quantity}</div>
+        <div class="cart-item-price">৳${((item.price || 0) * item.quantity).toFixed(2)}</div>
+      </div>
+      <button class="cart-item-remove" data-id="${item.id}">
+        <i class="fas fa-times"></i>
+      </button>
+    </li>
     `;
 
         itemsList.appendChild(li);
