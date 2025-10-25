@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('searchInput');
   const searchBtn = document.querySelector('.search-btn');
   const menuSection = document.querySelector('.menu-section') || null;
-  const logoImg = document.querySelector('.logo-img');
+  const logoImg = document.querySelector('.logo-img'); 
 
   // ==========================================================================
   // Navigation Functionality: Scroll behavior, hamburger, dropdowns, and search
@@ -290,8 +290,8 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(item._hideTimeout);
             dropdown.style.opacity = '1';
             dropdown.style.visibility = 'visible';
-            dropdown.style.transform = dropdown.classList.contains('dropdown-menu')
-              ? 'translateX(-50%) translateY(0)'
+            dropdown.style.transform = dropdown.classList.contains('dropdown-menu') 
+              ? 'translateX(-50%) translateY(0)' 
               : 'translateY(0)';
             if (link) link.setAttribute('aria-expanded', 'true');
           });
@@ -301,8 +301,8 @@ document.addEventListener('DOMContentLoaded', () => {
             item._hideTimeout = setTimeout(() => {
               dropdown.style.opacity = '0';
               dropdown.style.visibility = 'hidden';
-              dropdown.style.transform = dropdown.classList.contains('dropdown-menu')
-                ? 'translateX(-50%) translateY(-10px)'
+              dropdown.style.transform = dropdown.classList.contains('dropdown-menu') 
+                ? 'translateX(-50%) translateY(-10px)' 
                 : 'translateY(-10px)';
               if (link) link.setAttribute('aria-expanded', 'false');
             }, 120);
@@ -350,8 +350,8 @@ document.addEventListener('DOMContentLoaded', () => {
           dropdown.classList.remove('active');
           dropdown.style.opacity = '0';
           dropdown.style.visibility = 'hidden';
-          dropdown.style.transform = dropdown.classList.contains('dropdown-menu')
-            ? 'translateX(-50%) translateY(-10px)'
+          dropdown.style.transform = dropdown.classList.contains('dropdown-menu') 
+            ? 'translateX(-50%) translateY(-10px)' 
             : 'translateY(-10px)';
         });
         const allLinks = navLinksWrapper.querySelectorAll('.nav-link, .dropdown-link');
@@ -421,49 +421,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  function initHoverPreview() {
-    const preview = document.getElementById('hover-preview');
-    const links = document.querySelectorAll('.subcategory-list a');
+  // Hover Preview for Subcategory Links
+  const preview = document.getElementById('hover-preview');
+  const previewImg = preview.querySelector('img');
+  const links = document.querySelectorAll('.subcategory-list a');
 
-    // Only initialize if both preview element and links exist
-    if (preview && links.length > 0) {
-      const previewImg = preview.querySelector('img');
-
-      links.forEach(link => {
-        const imgSrc = link.dataset.image;
-        if (!imgSrc) return;
-
-        link.addEventListener('mouseenter', (e) => {
-          previewImg.src = imgSrc;
-          previewImg.alt = link.textContent.trim();
-          preview.style.display = 'block';
-          preview.setAttribute('aria-hidden', 'false');
-        });
-
-        link.addEventListener('mousemove', (e) => {
-          const offset = 12;
-          const rect = preview.getBoundingClientRect();
-          let x = e.clientX + offset;
-          let y = e.clientY + offset;
-          if (x + rect.width > window.innerWidth) x = e.clientX - rect.width - offset;
-          if (y + rect.height > window.innerHeight) y = e.clientY - rect.height - offset;
-          preview.style.left = x + 'px';
-          preview.style.top = y + 'px';
-        });
-
-        link.addEventListener('mouseleave', () => {
-          preview.style.display = 'none';
-          preview.setAttribute('aria-hidden', 'true');
-          previewImg.src = '';
-        });
-      });
-    }
-  }
-
-  // Call the function only if needed (you can control this based on page)
-  if (document.querySelector('.subcategory-list')) {
-    initHoverPreview();
-  }
+  links.forEach(link => {
+    const imgSrc = link.dataset.image;
+    if (!imgSrc) return;
+    link.addEventListener('mouseenter', (e) => {
+      previewImg.src = imgSrc;
+      previewImg.alt = link.textContent.trim();
+      preview.style.display = 'block';
+      preview.setAttribute('aria-hidden', 'false');
+    });
+    link.addEventListener('mousemove', (e) => {
+      const offset = 12;
+      const rect = preview.getBoundingClientRect();
+      let x = e.clientX + offset;
+      let y = e.clientY + offset;
+      if (x + rect.width > window.innerWidth) x = e.clientX - rect.width - offset;
+      if (y + rect.height > window.innerHeight) y = e.clientY - rect.height - offset;
+      preview.style.left = x + 'px';
+      preview.style.top = y + 'px';
+    });
+    link.addEventListener('mouseleave', () => {
+      preview.style.display = 'none';
+      preview.setAttribute('aria-hidden', 'true');
+      previewImg.src = '';
+    });
+  });
 
   // Footer Dropdown Handling
   const footerDropdowns = document.querySelectorAll('.footer-menu .dropdown');
@@ -539,8 +526,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Cart Functionality
   function getCart() {
-    return JSON.parse(localStorage.getItem('cartState') || '[]');
+  try {
+    const savedCart = localStorage.getItem('cartState') || '[]';
+    return JSON.parse(savedCart);
+  } catch (e) {
+    console.error('Error loading cart:', e);
+    return [];
   }
+}
 
   function saveCart(cart) {
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -552,57 +545,39 @@ document.addEventListener('DOMContentLoaded', () => {
     if (existing) {
       existing.quantity += product.quantity || 1;
     } else {
-      cart.push({
-        ...product,
-        quantity: product.quantity || 1,
-        price: parseFloat(product.price) || 0 // Ensure price is a number
-      });
+      cart.push({ ...product, quantity: product.quantity || 1 });
     }
     saveCart(cart);
     updateCartDisplay();
   }
 
   function removeFromCart(id) {
+  try {
     let cart = getCart();
     cart = cart.filter(item => item.id !== id);
-    saveCart(cart);
+    localStorage.setItem('cartState', JSON.stringify(cart));
     updateCartDisplay();
+  } catch (e) {
+    console.error('Error removing item from cart:', e);
   }
-  window.removeFromCart = removeFromCart;
+}
 
   function updateCartDisplay() {
-    const cart = getCart();
-    const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const cart = getCart();
+  updateCartCount();
 
-    // Update cart icon count
-    const cartCountElem = document.querySelector('.cart-count');
-    if (cartCountElem) cartCountElem.textContent = count;
+  const itemsList = document.querySelector('.cart-items');
+  const totalAmount = document.querySelector('.cart-total .total-amount');
+  if (!itemsList) return;
 
-    const itemsList = document.querySelector('.cart-items');
-    const totalAmount = document.querySelector('.cart-total-amount');
-    if (!itemsList || !totalAmount) return;
+  if (cart.length === 0) {
+    itemsList.innerHTML = '<li class="cart-empty">Your cart is empty</li>';
+    if (totalAmount) totalAmount.textContent = '৳0.00';
+    return;
+  }
 
-    itemsList.innerHTML = '';
-    let total = 0;
-
-    if (cart.length === 0) {
-      const emptyMsg = document.createElement('p');
-      emptyMsg.classList.add('cart-empty');
-      emptyMsg.textContent = 'Your cart is empty.';
-      itemsList.appendChild(emptyMsg);
-    } else {
-      cart.forEach((item, index) => {
-        const li = document.createElement('li');
-        li.classList.add('cart-item');
-        li.dataset.productId = item.id;
-
-        const price = item.price || 0;
-        const quantity = item.quantity || 1;
-        const subtotal = price * quantity;
-        total += subtotal;
-
-        li.innerHTML = `
-        <li class="cart-item">
+  itemsList.innerHTML = cart.map(item => `
+    <li class="cart-item">
       <img src="${item.image || 'Image/placeholder.png'}" alt="${item.name}" class="cart-item-image">
       <div class="cart-item-details">
         <div class="cart-item-name">${item.name}</div>
@@ -613,43 +588,43 @@ document.addEventListener('DOMContentLoaded', () => {
         <i class="fas fa-times"></i>
       </button>
     </li>
-    `;
+  `).join('');
 
-        itemsList.appendChild(li);
-      });
-    }
+  const total = cart.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0);
+  if (totalAmount) totalAmount.textContent = `৳${total.toFixed(2)}`;
+}
 
-    totalAmount.textContent = `${total.toFixed(2)} Tk`;
+  function updateCartCount() {
+    const cartCountElements = document.querySelectorAll('.cart-count');
+    const count = getCart().reduce((sum, item) => sum + (item.quantity || 1), 0);
+    cartCountElements.forEach(elem => {
+      elem.textContent = count;
+    });
   }
-
-  function changeQuantity(index, change) {
-    let cart = getCart();
-    if (index >= 0 && index < cart.length) {
-      cart[index].quantity = Math.max(1, cart[index].quantity + change);
-      saveCart(cart);
-      updateCartDisplay();
-    }
-  }
-
 
   // Initialize cart display
   updateCartDisplay();
 
   // Sync cart across browser tabs
   window.addEventListener('storage', (e) => {
-    if (e.key === 'cart') updateCartDisplay();
+    if (e.key === 'cartState') {
+      updateCartDisplay();
+    }
   });
 
   // Handle remove item from cart
   const cartDropdown = document.querySelector('.cart-dropdown');
   if (cartDropdown) {
     cartDropdown.addEventListener('click', (e) => {
-      if (e.target.closest('.remove-item')) {
-        const id = e.target.closest('.remove-item').dataset.id;
-        removeFromCart(parseInt(id));
+      const removeBtn = e.target.closest('.cart-item-remove');
+      if (removeBtn) {
+        e.preventDefault();
+        const id = removeBtn.dataset.id;
+        removeFromCart(id);
       }
     });
   }
+
   // Example usage: Call addToCart({id: 1, name: 'Cement', price: 10}) from product pages
   initNavigation();
 });
