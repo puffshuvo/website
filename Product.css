@@ -483,6 +483,7 @@ body {
     gap: 0.75rem; /* Tighter spacing for modern look */
     font-size: 0.95rem; /* Slightly larger for readability */
     color: #2b1e0a; /* Darker neutral for contrast */
+    margin-left: 1rem;
 }
 
 .breadcrumb-list li {
