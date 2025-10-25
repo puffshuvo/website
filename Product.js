@@ -228,8 +228,6 @@ class ProductGallery {
                     <h3 class="product-name">${product.name}</h3>
                     <p class="product-category">${product.category}${product.subcategory ? ' > ' + product.subcategory : ''}${product.subsubcategory ? ' > ' + product.subsubcategory : ''}</p>
                     <div class="product-price">${formattedPrice}</div>
-                    <div class="product-availability ${stockClass}">${availability}</div>
-                    ${product.specifications ? this.renderSpecifications(product.specifications) : ''}
                 </div>
             </div>
         `;
