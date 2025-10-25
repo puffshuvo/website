@@ -215,7 +215,9 @@ class ProductGallery {
                     <img src="${imageUrl}" alt="${product.name}" 
                          onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='Image/placeholder.jpg';}else{this.onerror=null;}">
                     <div class="product-overlay">
-                        
+                        <button class="btn-quick-view" onclick="window.gallery.quickView('${product.id}')">
+                            <i class="fas fa-eye"></i> Quick View
+                        </button>
                         <button class="btn-add-cart" onclick="window.gallery.addToCart('${product.id}')" 
                                 ${product.stock <= 0 ? 'disabled' : ''}>
                             <i class="fas fa-shopping-cart"></i> Add to Cart
