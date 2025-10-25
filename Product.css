@@ -8,6 +8,9 @@ body {
   background: #ffffff;
 }
 
+.sidebar h4{
+    color:#ffffff;
+}
 /* Main Navbar Styling */
 .navbar {
   background-color: #331f08;
