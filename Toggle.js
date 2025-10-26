@@ -637,26 +637,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const materials = [
             {
                 name: "Basin",
-                defaultImage: "1.png", // Add your default image path here
-                hoverImage: "1.png",   // Add your hover image path here
+                defaultImage: "cat/1.png", // Add your default image path here
+                hoverImage: "cat/1.png",   // Add your hover image path here
                 link: "construction.html "   // Add your link here
             },
             {
                 name: "bathtub",
-                defaultImage: "2.png",
-                hoverImage: "2.png",
+                defaultImage: "cat/2.png",
+                hoverImage: "cat/2.png",
                 link: "#bathtub"
             },
             {
                 name: "Cement",
-                defaultImage: "3.png",
-                hoverImage: "3.png",
+                defaultImage: "cat/3.png",
+                hoverImage: "cat/3.png",
                 link: "#cement"
             },
             {
                 name: "Kitchen Sink",
-                defaultImage: "4.png",
-                hoverImage: "4-hover.png",
+                defaultImage: "cat/4.png",
+                hoverImage: "4-hovecat/r.png",
                 link: "#sink"
             }
         ];
