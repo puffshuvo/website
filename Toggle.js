@@ -639,25 +639,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: "Basin",
                 defaultImage: "cat/1.png", // Add your default image path here
                 hoverImage: "cat/1.png",   // Add your hover image path here
-                link: "construction.html?category=Construction&subcategory=Interior&subsubcategory=basin"   // Add your link here
+                link: "Construction.html?category=Construction&subcategory=Interior&subsubcategory=basin"   // Add your link here
             },
             {
                 name: "bathtub",
                 defaultImage: "cat/2.png",
                 hoverImage: "cat/2.png",
-                link: "construction.html?category=Construction&subcategory=Interior&subsubcategory=bathtab"
+                link: "Construction.html?category=Construction&subcategory=Interior&subsubcategory=bathtab"
             },
             {
                 name: "Cement",
                 defaultImage: "cat/3.png",
                 hoverImage: "cat/3.png",
-                link: "construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=cement"
+                link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=cement"
             },
             {
                 name: "Kitchen Sink",
                 defaultImage: "cat/4.png",
                 hoverImage: "cat/4-hover.png",
-                link: "construction.html?category=Construction&subcategory=Interior&subsubcategory=sink"
+                link: "Construction.html?category=Construction&subcategory=Interior&subsubcategory=sink"
             }
         ];
 
