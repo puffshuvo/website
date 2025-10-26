@@ -198,98 +198,18 @@
     </a>
   </section>
 
-  <!-- Menu Section: Category navigation with image previews -->
-  <section class="menu-section">
-    <div class="menu-panel">
-      <div class="menu-category" data-image="construction">
-        <div class="category-title" role="button" aria-expanded="false">
-          <a href="Construction.html?category=Construction">Construction Materials</a>
+  <section class="materials-section">
+        <div class="materials-container">
+            <div class="section-header">
+                <h2 class="section-title">Materials</h2>
+                <p class="section-subtitle">Explore materials with Architects Recommendations</p>
+            </div>
+            
+            <div class="materials-grid" id="materialsGrid">
+                <!-- Material cards will be inserted here by JavaScript -->
+            </div>
         </div>
-        <ul class="dropdown-list">
-          <li class="subcategory">
-            <a href="Construction.html?category=Construction&subcategory=Civil+Work">Civil Work</a>
-            <ul class="subcategory-list">
-              <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=cement" data-image="archimart product/1.png">Cement</a></li>
-              <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=sand" data-image="archimart product/1.png">Sand</a></li>
-              <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=brick" data-image="archimart product/3.png">Brick</a></li>
-              <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=reinforcement" data-image="archimart product/4.png">Reinforcement</a></li>
-            </ul>
-          </li>
-          <li class="subcategory">
-            <a href="Construction.html?category=interior">Interior</a>
-            <ul class="subcategory-list">
-              <li><a href="Construction.html?category=Tiles" data-image="Image/1 (1).png">Tiles</a></li>
-              <li><a href="Construction.html?category=Wood" data-image="Image/2 (1).jpg">Wood</a></li>
-              <li><a href="Construction.html?category=Lock" data-image="Image/3 (1).jpg">Lock</a></li>
-              <li><a href="Construction.html?category=Mirror" data-image="Image/4.jpg">Mirror</a></li>
-            </ul>
-          </li>
-          <li class="subcategory">
-            <a href="Construction.html?category=Paint">Paint</a>
-            <ul class="subcategory-list">
-              <li><a href="Construction.html?category=Waterproofing" data-image="Image/1 (1).png">Waterproofing</a></li>
-              <li><a href="Construction.html?category=Interior" data-image="Image/2 (1).jpg">Interior</a></li>
-              <li><a href="Construction.html?category=Exterior" data-image="Image/3 (1).jpg">Exterior</a></li>
-            </ul>
-          </li>
-          <li class="subcategory">
-            <a href="Construction.html?category=electronics">Electrical</a>
-            <ul class="subcategory-list">
-              <li><a href="Construction.html?category=Cable" data-image="Image/2 (1).jpg">Cable</a></li>
-              <li><a href="Construction.html?category=Holder" data-image="Image/3 (1).jpg">Holder</a></li>
-              <li><a href="Construction.html?category=PVCConduit" data-image="Image/4.jpg">PVC Conduit</a></li>
-            </ul>
-          </li>
-          <li class="subcategory">
-            <a href="Construction.html?category=Sanitary">Sanitary</a>
-            <ul class="subcategory-list">
-              <li><a href="Construction.html?category=Fittings" data-image="Image/1 (1).png">Fittings</a></li>
-              <li><a href="Construction.html?category=Fixture" data-image="Image/2 (1).jpg">Fixture</a></li>
-              <li><a href="Construction.html?category=Pump" data-image="Image/3 (1).jpg">Pump</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div class="menu-category" data-image="tools">
-        <div class="category-title" role="button" aria-expanded="false">
-          <a href="HomeAppliances.html">Home Appliances</a>
-        </div>
-        <ul class="dropdown-list">
-          <li><a href="HomeAppliances.html?category=Hammer">Hammer</a></li> 
-          <li><a href="HomeAppliances.html?category=Drill">Drill</a></li>
-          <li><a href="HomeAppliances.html?category=Saw">Saw</a></li>
-        </ul>
-      </div>
-      <div class="menu-category" data-image="safety">
-        <div class="category-title" role="button" aria-expanded="false">
-          <a href="Furnitures.html">Furniture</a>
-        </div>
-        <ul class="dropdown-list">
-          <li><a href="Furnitures.html?category=Helmet">Helmet</a></li>
-          <li><a href="Furnitures.html?category=Gloves">Gloves</a></li>
-          <li><a href="Furnitures.html?category=Boots">Boots</a></li>
-        </ul>
-      </div>
-      <div class="menu-category" data-image="finishing">
-        <div class="category-title" role="button" aria-expanded="false">
-          <a href="Others.html">Others</a>
-        </div>
-        <ul class="dropdown-list">
-          <li><a href="Others.html?category=Paint">Paint</a></li>
-          <li><a href="Others.html?category=Tiles">Tiles</a></li>
-          <li><a href="Others.html?category=Wallpaper">Wallpaper</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="image-panel">
-      <img src="Image/Sketch.png" alt="Default cover image" class="active" data-image="default" />
-      <img src="Image/1 (1).png" alt="Construction materials" data-image="construction" />
-      <img src="Image/2 (1).jpg" alt="Home Appliances" data-image="tools" />
-      <img src="Image/3 (1).jpg" alt="Furniture" data-image="safety" />
-      <img src="Image/4.jpg" alt="Finishing materials" data-image="finishing" />
-    </div> 
-  </section>
-
+    </section>
   <!-- Hover preview container for subcategory images -->
   <div id="hover-preview" class="hover-preview" aria-hidden="true">
     <img src="" alt="preview" />

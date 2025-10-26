@@ -628,3 +628,98 @@ document.addEventListener('DOMContentLoaded', () => {
   // Example usage: Call addToCart({id: 1, name: 'Cement', price: 10}) from product pages
   initNavigation();
 });
+
+
+
+
+
+        // neww matarials js 
+        const materials = [
+            {
+                name: "Basin",
+                defaultImage: "1.png", // Add your default image path here
+                hoverImage: "1.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
+            },
+            {
+                name: "bathtub",
+                defaultImage: "2.png",
+                hoverImage: "2.png",
+                link: "#bathtub"
+            },
+            {
+                name: "Cement",
+                defaultImage: "3.png",
+                hoverImage: "3.png",
+                link: "#cement"
+            },
+            {
+                name: "Kitchen Sink",
+                defaultImage: "4.png",
+                hoverImage: "4-hover.png",
+                link: "#sink"
+            }
+        ];
+
+        // Function to create material card HTML
+        function createMaterialCard(material) {
+            const card = document.createElement('a');
+            card.href = material.link;
+            card.className = 'material-card';
+            
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'material-image-container';
+            
+            // Default image
+            if (material.defaultImage) {
+                const defaultImg = document.createElement('img');
+                defaultImg.src = material.defaultImage;
+                defaultImg.alt = material.name;
+                defaultImg.className = 'material-image default';
+                imageContainer.appendChild(defaultImg);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'material-image default placeholder-image';
+                placeholder.textContent = 'Default Image';
+                imageContainer.appendChild(placeholder);
+            }
+            
+            // Hover image
+            if (material.hoverImage) {
+                const hoverImg = document.createElement('img');
+                hoverImg.src = material.hoverImage;
+                hoverImg.alt = material.name + ' hover';
+                hoverImg.className = 'material-image hover';
+                imageContainer.appendChild(hoverImg);
+            } else {
+                const placeholder = document.createElement('div');
+                placeholder.className = 'material-image hover placeholder-image';
+                placeholder.textContent = 'Hover Image';
+                imageContainer.appendChild(placeholder);
+            }
+            
+            const info = document.createElement('div');
+            info.className = 'material-info';
+            
+            const name = document.createElement('p');
+            name.className = 'material-name';
+            name.textContent = material.name;
+            
+            info.appendChild(name);
+            card.appendChild(imageContainer);
+            card.appendChild(info);
+            
+            return card;
+        }
+
+        // Initialize materials grid
+        function initMaterials() {
+            const grid = document.getElementById('materialsGrid');
+            materials.forEach(material => {
+                const card = createMaterialCard(material);
+                grid.appendChild(card);
+            });
+        }
+
+        // Load materials when page loads
+        document.addEventListener('DOMContentLoaded', initMaterials);
