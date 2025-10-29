@@ -632,32 +632,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-        // neww matarials js 
-        const materials = [
-            {
-                name: "Basin",
-                defaultImage: "cat/1.png", // Add your default image path here
-                hoverImage: "cat/1.png",   // Add your hover image path here
-                link: "Construction.html?category=Construction&subcategory=Interior&subsubcategory=basin"   // Add your link here
-            },
-            {
-                name: "bathtub",
-                defaultImage: "cat/2.png",
-                hoverImage: "cat/2.png",
-                link: "Construction.html?category=Construction&subcategory=Interior&subsubcategory=bathtab"
-            },
+const materials = [
             {
                 name: "Cement",
-                defaultImage: "cat/3.png",
-                hoverImage: "cat/3.png",
-                link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=cement"
+                defaultImage: "cat/Cement.png", // Add your default image path here
+                hoverImage: "cat/Cementh.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
+            },
+             {
+                name: "Sand",
+                defaultImage: "cat/Sand.png", // Add your default image path here
+                hoverImage: "cat/Sandh.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
+            },
+             {
+                name: "Brick",
+                defaultImage: "cat/Brick.png", // Add your default image path here
+                hoverImage: "cat/Brickh.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
             },
             {
-                name: "Kitchen Sink",
-                defaultImage: "cat/4.png",
-                hoverImage: "cat/4-hover.png",
-                link: "Construction.html?category=Construction&subcategory=Interior&subsubcategory=sink"
+                name: "Reinforcement", 
+                defaultImage: "cat/Rainforcement.png", // Add your default image path here
+                hoverImage: "cat/Rainforcementh.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
+            },
+            {
+                name: "Paint", 
+                defaultImage: "cat/Paint.png", // Add your default image path here
+                hoverImage: "cat/painth.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
+            },
+            {
+                name: "Tiles", 
+                defaultImage: "cat/Ti.png", // Add your default image path here
+                hoverImage: "cat/Tih.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
+            },
+            {
+                name: "Electrical Matrials ", 
+                defaultImage: "cat/Fan.png", // Add your default image path here
+                hoverImage: "cat/Fanh.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
+            },
+            {
+                name: "Wood & Board", 
+                defaultImage: "cat/Wood.png", // Add your default image path here
+                hoverImage: "cat/woodh.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
+            },
+            {
+                name: "sanitary fixtures", 
+                defaultImage: "cat/Basin.png", // Add your default image path here
+                hoverImage: "cat/Basinh.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
+            },
+            {
+                name: "sanitary fittings", 
+                defaultImage: "cat/Sanitary.png", // Add your default image path here
+                hoverImage: "cat/Sanitaryh.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
+            },
+            {
+                name: "Glass & Aluminum", 
+                defaultImage: "cat/glass.png", // Add your default image path here
+                hoverImage: "cat/glassh.png",   // Add your hover image path here
+                link: "construction.html "   // Add your link here
             }
         ];
 
