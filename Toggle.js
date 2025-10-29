@@ -637,49 +637,49 @@ const materials = [
                 name: "Cement",
                 defaultImage: "cat/Cement.png", // Add your default image path here
                 hoverImage: "cat/Cementh.png",   // Add your hover image path here
-                link: "construction.html "   // Add your link here
+                link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=cement"   // Add your link here
             },
              {
                 name: "Sand",
                 defaultImage: "cat/Sand.png", // Add your default image path here
                 hoverImage: "cat/Sandh.png",   // Add your hover image path here
-                link: "construction.html "   // Add your link here
+                link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=sand"   // Add your link here
             },
              {
                 name: "Brick",
                 defaultImage: "cat/Brick.png", // Add your default image path here
                 hoverImage: "cat/Brickh.png",   // Add your hover image path here
-                link: "construction.html "   // Add your link here
+                link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=brick"   // Add your link here
             },
             {
                 name: "Reinforcement", 
                 defaultImage: "cat/Rainforcement.png", // Add your default image path here
                 hoverImage: "cat/Rainforcementh.png",   // Add your hover image path here
-                link: "construction.html "   // Add your link here
+                link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=reinforcement"   // Add your link here
             },
             {
                 name: "Paint", 
                 defaultImage: "cat/Paint.png", // Add your default image path here
                 hoverImage: "cat/painth.png",   // Add your hover image path here
-                link: "construction.html "   // Add your link here
+                link: "Construction.html?category=Paint"   // Add your link here
             },
             {
                 name: "Tiles", 
                 defaultImage: "cat/Ti.png", // Add your default image path here
                 hoverImage: "cat/Tih.png",   // Add your hover image path here
-                link: "construction.html "   // Add your link here
+                link: "Construction.html?category=Interior&subcategory=Tiles"   // Add your link here
             },
             {
                 name: "Electrical Matrials ", 
                 defaultImage: "cat/Fan.png", // Add your default image path here
                 hoverImage: "cat/Fanh.png",   // Add your hover image path here
-                link: "construction.html "   // Add your link here
+                link: "Construction.html?category=electrical"   // Add your link here
             },
             {
                 name: "Wood & Board", 
                 defaultImage: "cat/Wood.png", // Add your default image path here
                 hoverImage: "cat/woodh.png",   // Add your hover image path here
-                link: "construction.html "   // Add your link here
+                link: "Construction.html?category=Interior&subcategory=Wood"   // Add your link here
             },
             {
                 name: "sanitary fixtures", 
@@ -691,13 +691,13 @@ const materials = [
                 name: "sanitary fittings", 
                 defaultImage: "cat/Sanitary.png", // Add your default image path here
                 hoverImage: "cat/Sanitaryh.png",   // Add your hover image path here
-                link: "construction.html "   // Add your link here
+                link: "Construction.html?category=sanitary"   // Add your link here
             },
             {
                 name: "Glass & Aluminum", 
                 defaultImage: "cat/glass.png", // Add your default image path here
                 hoverImage: "cat/glassh.png",   // Add your hover image path here
-                link: "construction.html "   // Add your link here
+                link: "Construction.html?category=Interior&subcategory=Glass"   // Add your link here
             }
         ];
 
