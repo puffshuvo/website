@@ -702,7 +702,7 @@ const materials = [
             {
               name: "Furniture",
               defaultImage: "cat/furniture.png",
-              hoverImage: "cat/Furnitureh.png",
+              hoverImage: "cat/furnitureh.png",
               link: "Construction.html?category=Furniture"
             }
 
