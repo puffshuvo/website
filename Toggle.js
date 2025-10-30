@@ -660,7 +660,7 @@ const materials = [
             {
                 name: "Paint", 
                 defaultImage: "cat/Paint.png", // Add your default image path here
-                hoverImage: "cat/painth.png",   // Add your hover image path here
+                hoverImage: "cat/Painth.png",   // Add your hover image path here
                 link: "Construction.html?category=Paint"   // Add your link here
             },
             {
@@ -685,7 +685,7 @@ const materials = [
                 name: "sanitary fixtures", 
                 defaultImage: "cat/Basin.png", // Add your default image path here
                 hoverImage: "cat/Basinh.png",   // Add your hover image path here
-                link: "construction.html "   // Add your link here
+                link: "Construction.html?category=sanitary"   // Add your link here
             },
             {
                 name: "sanitary fittings", 
@@ -698,7 +698,14 @@ const materials = [
                 defaultImage: "cat/glass.png", // Add your default image path here
                 hoverImage: "cat/glassh.png",   // Add your hover image path here
                 link: "Construction.html?category=Interior&subcategory=Glass"   // Add your link here
+            },
+            {
+              name: "Furniture",
+              defaultImage: "cat/furniture.png",
+              hoverImage: "cat/Furnitureh.png",
+              link: "Construction.html?category=Furniture"
             }
+
         ];
 
         // Function to create material card HTML
