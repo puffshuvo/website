@@ -17,7 +17,7 @@
 </head>
 
 <body>
-    <header class="navbar">
+  <header class="navbar">
     <div class="navbar-content">
       <!-- Logo for branding -->
       <div class="logo">
@@ -25,13 +25,10 @@
       </div>
       <!-- Search bar for product search -->
       <div class="search-bar">
-        <div class="search-input-container">
-          <input type="text" id="main_search" placeholder="Search products..." aria-label="Search products">
-          <button class="search-btn" aria-label="Search">
-            <i class="fas fa-search"></i>
-          </button>
-          <div class="search-results" id="search-results"></div>
-        </div>
+        <input type="text" id="searchInput" placeholder="Search products..." aria-label="Search products">
+        <button class="search-btn" aria-label="Search">
+          <i class="fas fa-search"></i>
+        </button>
       </div>
       <!-- Hamburger menu for mobile navigation toggle -->
       <div class="hamburger" aria-expanded="false" role="button" aria-label="Toggle navigation">
@@ -64,18 +61,26 @@
                 <ul class="sub-dropdown-menu">
                   <li><a href="Construction.html?category=tiles">Tiles</a></li>
                   <li><a href="Construction.html?category=wood">Wood</a></li>
-                  <li><a href="Construction.html?category=lock">Lock</a></li>
+                  <li><a href="Construction.html?category=lock">Hardware fittings</a></li>
+                  <li><a href="Construction.html?category=wood">Electrical accessories</a></li>
                   <li><a href="Construction.html?category=mirror">Mirror</a></li>
                 </ul>
               </li>
               <li class="dropdown-item">
                 <a href="Construction.html?category=paint" class="dropdown-link">Paint</a>
+                <ul class="sub-dropdown-menu">
+                  <li><a href="Construction.html?category=tiles">Berger</a></li>
+                  <li><a href="Construction.html?category=wood">Sayerlac</a></li>
+                  <li><a href="Construction.html?category=lock">Asian Paints</a></li>
+                </ul>
               </li>
-              <li class="dropdown-item">
-                <a href="Construction.html?category=electrical" class="dropdown-link">Electrical</a>
-              </li>
+              
               <li class="dropdown-item">
                 <a href="Construction.html?category=sanitary" class="dropdown-link">Sanitary</a>
+                <ul class="sub-dropdown-menu">
+                  <li><a href="Construction.html?category=tiles">Sanitary fittings</a></li>
+                  <li><a href="Construction.html?category=wood">Sanitary fixtures </a></li>
+                </ul>
               </li>
             </ul>
           </li>
@@ -87,27 +92,16 @@
             <ul class="dropdown-menu">
               <li class="dropdown-item">
                 <a href="HomeAppliances.html?category=kitchen" class="dropdown-link" aria-expanded="false">
-                  Kitchen Appliances <i class="fas fa-chevron-right sub-arrow"></i>
+                  Electronic appliances <i class="fas fa-chevron-right sub-arrow"></i>
                 </a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="HomeAppliances.html?category=refrigerator">Refrigerator</a></li>
-                  <li><a href="HomeAppliances.html?category=microwave">Microwave</a></li>
-                  <li><a href="HomeAppliances.html?category=oven">Oven</a></li>
-                  <li><a href="HomeAppliances.html?category=blender">Blender</a></li>
+                  <li><a href="Construction.html?category=tiles">Ac</a></li>
+                  <li><a href="Construction.html?category=wood">Fan</a></li>
+                  <li><a href="Construction.html?category=wood">Lights</a></li>
+                  <li><a href="Construction.html?category=wood">Refrigerator </a></li>
                 </ul>
               </li>
-              <li class="dropdown-item">
-                <a href="HomeAppliances.html?category=laundry" class="dropdown-link" aria-expanded="false">
-                  Laundry <i class="fas fa-chevron-right sub-arrow"></i>
-                </a>
-                <ul class="sub-dropdown-menu">
-                  <li><a href="HomeAppliances.html?category=washing-machine">Washing Machine</a></li>
-                  <li><a href="HomeAppliances.html?category=dryer">Dryer</a></li>
-                </ul>
-              </li>
-              <li class="dropdown-item">
-                <a href="HomeAppliances.html?category=electronics" class="dropdown-link">Electronics</a>
-              </li>
+              
             </ul>
           </li>
           <!-- Furniture category with nested dropdowns -->
@@ -138,6 +132,11 @@
               </li>
               <li class="dropdown-item">
                 <a href="Furnitures.html?category=dining" class="dropdown-link">Dining</a>
+                <ul class="sub-dropdown-menu">
+                  <li><a href="Furnitures.html?category=bed">Dining Table</a></li>
+                  <li><a href="Furnitures.html?category=wardrobe">Dining Wagon</a></li>
+                  
+                </ul>
               </li>
             </ul>
           </li>
@@ -163,7 +162,7 @@
               <ul class="cart-items"></ul>
               <div class="cart-total">
                 <span>Total:</span>
-                <span class="cart-total-amount">0</span>
+                <span class="cart-count">0</span>
               </div>
               <a href="cart.html" class="view-cart-btn">View Cart</a>
             </div>
