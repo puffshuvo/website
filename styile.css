@@ -616,8 +616,7 @@ body {
 /* Main Content Styling */
 .main-content {
   position: relative;
-  background-image: linear-gradient(rgba(3, 3, 3, 0.5), rgba(3, 3, 3, 0.5)), 
-                    url('Image/home.png');
+  background-image: url('Image/home.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
