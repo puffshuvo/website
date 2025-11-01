@@ -2,20 +2,30 @@
 :root {
   --portrait-width: 300px;
 }
-
-html {
-  margin: 0; /* Added */
-  padding: 0; /* Added */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* General Body Styling */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  min-height: 100%;
+}
+
 body {
   margin: 0;
-  padding: 0; /* Added */
+  padding: 0;
   font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 300;
   background: #fff5ec;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
 
 /* ========================================================================== */
 /* Navigation Styling: All styles related to navbar, search, hamburger, dropdowns, and cart */
@@ -1059,7 +1069,10 @@ footer {
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  margin: 0;
+  margin-top: auto; /* Push footer to bottom */
 }
+
 
 .footer-left {
   flex: 1;
@@ -1219,6 +1232,7 @@ footer {
   color: #f5deb3;
   cursor: pointer;
   transition: background 0.3s ease;
+  margin-bottom: 0; /* Ensure no bottom margin */
 }
 
 .footer-right button:hover {
