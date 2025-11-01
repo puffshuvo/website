@@ -3,9 +3,15 @@
   --portrait-width: 300px;
 }
 
+html {
+  margin: 0; /* Added */
+  padding: 0; /* Added */
+}
+
 /* General Body Styling */
 body {
   margin: 0;
+  padding: 0; /* Added */
   font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 300;
   background: #fff5ec;
@@ -1470,6 +1476,7 @@ footer {
   justify-content: space-between;
   flex-wrap: wrap;
   margin: 0; /* Added */
+  margin-bottom: 0; /* Explicitly set */
 }
 
 .footer-left {
