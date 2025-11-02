@@ -184,73 +184,87 @@
   </header>
 
   <div class="container">
-    <div class="filter-section category-filter">
-    <p>Categories</p>
-    <ul class="category-list">
-        <li>
-            <span class="category-item active" data-category="all">All Products</span>
-        </li>
-        <li>
-            <span class="category-item" data-category="Construction">Construction Materials</span>
-            <ul>
-                <li>
-                    <span class="category-item" data-category="Civil Work">Civil Work</span>
-                    <ul>
-                        <li><span class="category-item" data-category="cement">Cement</span></li>
-                        <li><span class="category-item" data-category="Sand">Sand</span></li>
-                        <li><span class="category-item" data-category="Brick">Brick</span></li>
-                        <li><span class="category-item" data-category="Reinforcement">Reinforcement</span></li>
-                    </ul>
-                </li>
-                <li>
-                    <span class="category-item" data-category="interior">Interior Materials</span>
-                    <ul>
-                        <li><span class="category-item" data-category="Tiles">Tiles</span></li>
-                        <li><span class="category-item" data-category="Wood">Wood</span></li>
-                        <li><span class="category-item" data-category="FAccessories">Furniture Accessories</span></li>
-                        <li><span class="category-item" data-category="DAccessories">Door Accessories</span></li>
-                        <li><span class="category-item" data-category="MHardware">Misc Hardware</span></li>
-                        <li><span class="category-item" data-category="Lock">Lock</span></li>
-                        <li><span class="category-item" data-category="Mirror">Mirror</span></li>
-                    </ul>
-                </li>
-                <li>
-                    <span class="category-item" data-category="Paint">Paint</span>
-                    <ul>
-                        <li><span class="category-item" data-category="Waterproofing">Waterproofing</span></li>
-                        <li><span class="category-item" data-category="Interior">Interior</span></li>
-                        <li><span class="category-item" data-category="Exterior">Exterior</span></li>
-                        <li><span class="category-item" data-category="Enamel">Enamel Paints</span></li>
-                        <li><span class="category-item" data-category="WoodCoating">Wood Coating</span></li>
-                    </ul>
-                </li>
-                <li>
-                    <span class="category-item" data-category="electronics">Electronics</span>
-                    <ul>
-                        <li><span class="category-item" data-category="MK">MK Switch</span></li>
-                        <li><span class="category-item" data-category="Universal">Universal Socket</span></li>
-                        <li><span class="category-item" data-category="Gang">Gang Box</span></li>
-                        <li><span class="category-item" data-category="PVCConduit">PVC Conduit</span></li>
-                        <li><span class="category-item" data-category="Cable">Cable</span></li>
-                        <li><span class="category-item" data-category="FanBox">Fan Box</span></li>
-                        <li><span class="category-item" data-category="LightBox">Light Box</span></li>
-                        <li><span class="category-item" data-category="PVCBand">PVC Band</span></li>
-                        <li><span class="category-item" data-category="Holder">Holder</span></li>
-                        <li><span class="category-item" data-category="OtherEssentialItems">Other Essential Items</span></li>
-                    </ul>
-                </li>
-                <li>
-                    <span class="category-item" data-category="Sanitary">Sanitary</span>
-                    <ul>
-                        <li><span class="category-item" data-category="Fittings">Fittings</span></li>
-                        <li><span class="category-item" data-category="Fixture">Fixture</span></li>
-                        <li><span class="category-item" data-category="Pump">Pump</span></li>
-                    </ul>
-                </li>
-            </ul>
-        </li>
-    </ul>
-</div>
+    <div class="sidebar">
+      <div class="filter-section price-range">
+        <p>Price Range</p>
+        <div class="range-container">
+          <input type="range" id="priceRange" class="range-slider" min="0" max="100000" value="100000" step="1">
+          <div class="price-display">
+            <span>৳0</span>
+            <span id="maxPrice">৳100000</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-section search-sort">
+        <p>Search & Sort</p>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search products...">
+        </div>
+        <div class="sort-controls">
+          <select id="sortBy">
+            <option value="name">Sort by Name</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="category">Category</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="specification-filter" id="specificationFilter">
+        <h3>
+          Product Specifications
+        </h3>
+        <div id="specificationContent">
+          <!-- Dynamic content will be loaded here -->
+        </div>
+        <button class="clear-specs" onclick="gallery.clearSpecifications()">
+          Clear All Specs
+        </button>
+      </div>
+
+      <div class="filter-section category-filter">
+        <p>Categories</p>
+        <ul class="category-list">
+          <li class="category-item active" data-category="all">All Products</li>
+          <li class="category-item" data-category="Construction">Construction Materials</li>
+          <li class="category-item subcategory" data-category="Civil Work">Civil Work</li>
+          <li class="category-item sub-subcategory" data-category="cement">Cement</li>
+          <li class="category-item sub-subcategory" data-category="Sand">Sand</li>
+          <li class="category-item sub-subcategory" data-category="Brick">Brick</li>
+          <li class="category-item sub-subcategory" data-category="Reinforcement">Reinforcement</li>
+          <li class="category-item subcategory" data-category="interior">Interior Materials</li>
+          <li class="category-item sub-subcategory" data-category="Tiles">Tiles</li>
+          <li class="category-item sub-subcategory" data-category="Wood">Wood</li>
+          <li class="category-item sub-subcategory" data-category="FAccessories">Furniture Accessories</li>
+          <li class="category-item sub-subcategory" data-category="DAccessories">Door Accessories</li>
+          <li class="category-item sub-subcategory" data-category="MHardware">Misc Hardware</li>
+          <li class="category-item sub-subcategory" data-category="Lock">Lock</li>
+          <li class="category-item sub-subcategory" data-category="Mirror">Mirror</li>
+          <li class="category-item subcategory" data-category="Paint">Paint</li>
+          <li class="category-item sub-subcategory" data-category="Waterproofing">Waterproofing</li>
+          <li class="category-item sub-subcategory" data-category="Interior">Interior</li>
+          <li class="category-item sub-subcategory" data-category="Exterior">Exterior</li>
+          <li class="category-item sub-subcategory" data-category="Enamel">Enamel Paints</li>
+          <li class="category-item sub-subcategory" data-category="WoodCoating">Wood Coating</li>
+          <li class="category-item subcategory" data-category="electronics">Electronics</li>
+          <li class="category-item sub-subcategory" data-category="MK">MK Switch</li>
+          <li class="category-item sub-subcategory" data-category="Universal">Universal Socket</li>
+          <li class="category-item sub-subcategory" data-category="Gang">Gang Box</li>
+          <li class="category-item sub-subcategory" data-category="PVCConduit">PVC Conduit</li>
+          <li class="category-item sub-subcategory" data-category="Cable">Cable</li>
+          <li class="category-item sub-subcategory" data-category="FanBox">Fan Box</li>
+          <li class="category-item sub-subcategory" data-category="LightBox">Light Box</li>
+          <li class="category-item sub-subcategory" data-category="PVCBand">PVC Band</li>
+          <li class="category-item sub-subcategory" data-category="Holder">Holder</li>
+          <li class="category-item sub-subcategory" data-category="OtherEssentialItems">Other Essential Items</li>
+          <li class="category-item subcategory" data-category="Sanitary">Sanitary</li>
+          <li class="category-item sub-subcategory" data-category="Fittings">Fittings</li>
+          <li class="category-item sub-subcategory" data-category="Fixture">Fixture</li>
+          <li class="category-item sub-subcategory" data-category="Pump">Pump</li>
+        </ul>
+      </div>
+    </div>
 
     <div class="main-content" style="background-image: initial;display: initial;">
       <nav class="breadcrumb">
