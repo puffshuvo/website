@@ -9,7 +9,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <script src="Toggle.js" defer></script>
+    <script src="Toggle.js" defer></script>
   <script src="Product.js" defer></script>
   <link rel="stylesheet" href="styile.css" />
   <link rel="stylesheet" href="search.css" />
@@ -44,23 +44,14 @@
             </a>
             <ul class="dropdown-menu">
               <li class="dropdown-item">
-                <a href="Construction.html?category=Construction&subcategory=Civil+Work" class="dropdown-link"
-                  aria-expanded="false">
+                <a href="Construction.html?category=Construction&subcategory=Civil+Work" class="dropdown-link" aria-expanded="false">
                   Civil Work <i class="fas fa-chevron-right sub-arrow"></i>
                 </a>
                 <ul class="sub-dropdown-menu">
-                  <li><a
-                      href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=cement">Cement</a>
-                  </li>
-                  <li><a
-                      href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=sand">Sand</a>
-                  </li>
-                  <li><a
-                      href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=brick">Brick</a>
-                  </li>
-                  <li><a
-                      href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=reinforcement">Reinforcement</a>
-                  </li>
+                  <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=cement">Cement</a></li>
+                  <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=sand">Sand</a></li>
+                  <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=brick">Brick</a></li>
+                  <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=reinforcement">Reinforcement</a></li>
                 </ul>
               </li>
               <li class="dropdown-item">
@@ -83,7 +74,7 @@
                   <li><a href="Construction.html?category=lock">Asian Paints</a></li>
                 </ul>
               </li>
-
+              
               <li class="dropdown-item">
                 <a href="Construction.html?category=sanitary" class="dropdown-link">Sanitary</a>
                 <ul class="sub-dropdown-menu">
@@ -110,7 +101,7 @@
                   <li><a href="Construction.html?category=wood">Refrigerator </a></li>
                 </ul>
               </li>
-
+              
             </ul>
           </li>
           <!-- Furniture category with nested dropdowns -->
@@ -144,7 +135,7 @@
                 <ul class="sub-dropdown-menu">
                   <li><a href="Furnitures.html?category=bed">Dining Table</a></li>
                   <li><a href="Furnitures.html?category=wardrobe">Dining Wagon</a></li>
-
+                  
                 </ul>
               </li>
             </ul>
@@ -156,10 +147,8 @@
             </a>
             <ul class="dropdown-menu">
               <li class="dropdown-item"><a href="Others.html?category=tools" class="dropdown-link">Tools</a></li>
-              <li class="dropdown-item"><a href="Others.html?category=safety" class="dropdown-link">Safety Equipment</a>
-              </li>
-              <li class="dropdown-item"><a href="Others.html?category=accessories" class="dropdown-link">Accessories</a>
-              </li>
+              <li class="dropdown-item"><a href="Others.html?category=safety" class="dropdown-link">Safety Equipment</a></li>
+              <li class="dropdown-item"><a href="Others.html?category=accessories" class="dropdown-link">Accessories</a></li>
             </ul>
           </li>
           <!-- Cart icon with dropdown (part of navigation) -->
@@ -185,86 +174,86 @@
 
   <div class="container">
     <div class="sidebar">
-      <div class="filter-section price-range">
-        <p>Price Range</p>
-        <div class="range-container">
-          <input type="range" id="priceRange" class="range-slider" min="0" max="100000" value="100000" step="1">
-          <div class="price-display">
-            <span>৳0</span>
-            <span id="maxPrice">৳100000</span>
-          </div>
-        </div>
-      </div>
+            <div class="filter-section price-range">
+                <p>Price Range</p>
+                <div class="range-container">
+                    <input type="range" id="priceRange" class="range-slider" min="0" max="100000" value="100000" step="1">
+                    <div class="price-display">
+                        <span>৳0</span>
+                        <span id="maxPrice">৳100000</span>
+                    </div>
+                </div>
+            </div>
 
-      <div class="filter-section search-sort">
-        <p>Search & Sort</p>
-        <div class="search-box">
-          <input type="text" id="searchInput" placeholder="Search products...">
-        </div>
-        <div class="sort-controls">
-          <select id="sortBy">
-            <option value="name">Sort by Name</option>
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
-            <option value="category">Category</option>
-          </select>
-        </div>
-      </div>
+            <div class="filter-section search-sort">
+                <p>Search & Sort</p>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search products...">
+                </div>
+                <div class="sort-controls">
+                    <select id="sortBy">
+                        <option value="name">Sort by Name</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="category">Category</option>
+                    </select>
+                </div>
+            </div>
 
-      <div class="specification-filter" id="specificationFilter">
-        <h3>
-          Product Specifications
-        </h3>
-        <div id="specificationContent">
-          <!-- Dynamic content will be loaded here -->
-        </div>
-        <button class="clear-specs" onclick="gallery.clearSpecifications()">
-          Clear All Specs
-        </button>
-      </div>
+            <div class="specification-filter" id="specificationFilter">
+                <h3>
+                    Product Specifications
+                </h3>
+                <div id="specificationContent">
+                    <!-- Dynamic content will be loaded here -->
+                </div>
+                <button class="clear-specs" onclick="gallery.clearSpecifications()">
+                    Clear All Specs
+                </button>
+            </div>
 
-      <div class="filter-section category-filter">
-        <p>Categories</p>
-        <ul class="category-list">
-          <li class="category-item active" data-category="all">All Products</li>
-          <li class="category-item" data-category="Construction">Construction Materials</li>
-          <li class="category-item subcategory" data-category="Civil Work">Civil Work</li>
-          <li class="category-item sub-subcategory" data-category="cement">Cement</li>
-          <li class="category-item sub-subcategory" data-category="Sand">Sand</li>
-          <li class="category-item sub-subcategory" data-category="Brick">Brick</li>
-          <li class="category-item sub-subcategory" data-category="Reinforcement">Reinforcement</li>
-          <li class="category-item subcategory" data-category="interior">Interior Materials</li>
-          <li class="category-item sub-subcategory" data-category="Tiles">Tiles</li>
-          <li class="category-item sub-subcategory" data-category="Wood">Wood</li>
-          <li class="category-item sub-subcategory" data-category="FAccessories">Furniture Accessories</li>
-          <li class="category-item sub-subcategory" data-category="DAccessories">Door Accessories</li>
-          <li class="category-item sub-subcategory" data-category="MHardware">Misc Hardware</li>
-          <li class="category-item sub-subcategory" data-category="Lock">Lock</li>
-          <li class="category-item sub-subcategory" data-category="Mirror">Mirror</li>
-          <li class="category-item subcategory" data-category="Paint">Paint</li>
-          <li class="category-item sub-subcategory" data-category="Waterproofing">Waterproofing</li>
-          <li class="category-item sub-subcategory" data-category="Interior">Interior</li>
-          <li class="category-item sub-subcategory" data-category="Exterior">Exterior</li>
-          <li class="category-item sub-subcategory" data-category="Enamel">Enamel Paints</li>
-          <li class="category-item sub-subcategory" data-category="WoodCoating">Wood Coating</li>
-          <li class="category-item subcategory" data-category="electronics">Electronics</li>
-          <li class="category-item sub-subcategory" data-category="MK">MK Switch</li>
-          <li class="category-item sub-subcategory" data-category="Universal">Universal Socket</li>
-          <li class="category-item sub-subcategory" data-category="Gang">Gang Box</li>
-          <li class="category-item sub-subcategory" data-category="PVCConduit">PVC Conduit</li>
-          <li class="category-item sub-subcategory" data-category="Cable">Cable</li>
-          <li class="category-item sub-subcategory" data-category="FanBox">Fan Box</li>
-          <li class="category-item sub-subcategory" data-category="LightBox">Light Box</li>
-          <li class="category-item sub-subcategory" data-category="PVCBand">PVC Band</li>
-          <li class="category-item sub-subcategory" data-category="Holder">Holder</li>
-          <li class="category-item sub-subcategory" data-category="OtherEssentialItems">Other Essential Items</li>
-          <li class="category-item subcategory" data-category="Sanitary">Sanitary</li>
-          <li class="category-item sub-subcategory" data-category="Fittings">Fittings</li>
-          <li class="category-item sub-subcategory" data-category="Fixture">Fixture</li>
-          <li class="category-item sub-subcategory" data-category="Pump">Pump</li>
-        </ul>
-      </div>
-    </div>
+            <div class="filter-section category-filter">
+                <p>Categories</p>
+                <ul class="category-list">
+                    <li class="category-item active" data-category="all">All Products</li>
+                    <li class="category-item" data-category="Construction">Construction Materials</li>
+                        <li class="category-item subcategory" data-category="Civil Work">Civil Work</li>
+                            <li class="category-item sub-subcategory" data-category="cement">Cement</li>
+                            <li class="category-item sub-subcategory" data-category="Sand">Sand</li>
+                            <li class="category-item sub-subcategory" data-category="Brick">Brick</li>
+                            <li class="category-item sub-subcategory" data-category="Reinforcement">Reinforcement</li>
+                        <li class="category-item subcategory" data-category="interior">Interior Materials</li>
+                            <li class="category-item sub-subcategory" data-category="Tiles">Tiles</li>
+                            <li class="category-item sub-subcategory" data-category="Wood">Wood</li>
+                            <li class="category-item sub-subcategory" data-category="FAccessories">Furniture Accessories</li>
+                            <li class="category-item sub-subcategory" data-category="DAccessories">Door Accessories</li>
+                            <li class="category-item sub-subcategory" data-category="MHardware">Misc Hardware</li>
+                            <li class="category-item sub-subcategory" data-category="Lock">Lock</li> 
+                            <li class="category-item sub-subcategory" data-category="Mirror">Mirror</li>
+                        <li class="category-item subcategory" data-category="Paint">Paint</li>
+                            <li class="category-item sub-subcategory" data-category="Waterproofing">Waterproofing</li>
+                            <li class="category-item sub-subcategory" data-category="Interior">Interior</li>
+                            <li class="category-item sub-subcategory" data-category="Exterior">Exterior</li>
+                            <li class="category-item sub-subcategory" data-category="Enamel">Enamel Paints</li>
+                            <li class="category-item sub-subcategory" data-category="WoodCoating">Wood Coating</li>
+                        <li class="category-item subcategory" data-category="electronics">Electronics</li>
+                            <li class="category-item sub-subcategory" data-category="MK">MK Switch</li>
+                            <li class="category-item sub-subcategory" data-category="Universal">Universal Socket</li>
+                            <li class="category-item sub-subcategory" data-category="Gang">Gang Box</li>
+                            <li class="category-item sub-subcategory" data-category="PVCConduit">PVC Conduit</li>
+                            <li class="category-item sub-subcategory" data-category="Cable">Cable</li>
+                            <li class="category-item sub-subcategory" data-category="FanBox">Fan Box</li>
+                            <li class="category-item sub-subcategory" data-category="LightBox">Light Box</li>
+                            <li class="category-item sub-subcategory" data-category="PVCBand">PVC Band</li> 
+                            <li class="category-item sub-subcategory" data-category="Holder">Holder</li>
+                            <li class="category-item sub-subcategory" data-category="OtherEssentialItems">Other Essential Items</li>
+                        <li class="category-item subcategory" data-category="Sanitary">Sanitary</li>
+                            <li class="category-item sub-subcategory" data-category="Fittings">Fittings</li>
+                            <li class="category-item sub-subcategory" data-category="Fixture">Fixture</li>
+                            <li class="category-item sub-subcategory" data-category="Pump">Pump</li> 
+                </ul>
+            </div>
+        </div>
 
     <div class="main-content" style="background-image: initial;display: initial;">
       <nav class="breadcrumb">
