@@ -808,9 +808,12 @@ body {
 
 .category-list {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .category-item {
+    display: block;
     padding: 12px 16px;
     color: #838383;
     cursor: pointer;
@@ -819,22 +822,70 @@ body {
     border-left: 4px solid transparent;
     position: relative;
     overflow: hidden;
-    margin-left: -50px;
 }
-
 .category-item:hover {
-    background: linear-gradient(135deg, #EBEBEB);
+    background: linear-gradient(135deg, #d5d5d5);
     color: #111111;
     transform: translateX(5px);
     border-left-color: #3f3f3e;
-    box-shadow: 0 5px 15px rgba(43, 28, 0, 0.3);
+    box-shadow: 0 5px 15px rgba(43, 28, 0, 0.2);
 }
 
 .category-item.active {
-    background: linear-gradient(135deg, #EBEBEB);
+    background: linear-gradient(135deg, #d5d5d5);
     color: #111111;
     border-left-color: #3f3f3e;
     box-shadow: 0 5px 15px rgba(43, 28, 0, 0.3);
+}
+
+
+.category-list > li {
+    margin-bottom: 2px;
+}
+
+.category-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    position: relative;
+    border-left: 2px solid #c5c5c5;
+    margin-left: 20px;
+}
+
+
+.category-list ul > li {
+    position: relative;
+    margin-bottom: 2px;
+}
+
+.category-list ul > li::before {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: 50%;
+    width: 12px;
+    height: 2px;
+    background: #c5c5c5;
+}
+
+/* Level 3: Sub-subcategories - nested further */
+.category-list ul ul {
+    margin-left: 24px;
+    border-left: 2px solid #d5d5d5;
+}
+
+.category-list ul ul > li::before {
+    width: 16px;
+    background: #d5d5d5;
+}
+
+/* Reduce font size for nested levels */
+.category-list ul .category-item {
+    font-size: 0.9rem;
+}
+
+.category-list ul ul .category-item {
+    font-size: 0.85rem;
 }
 
 .subcategory {
