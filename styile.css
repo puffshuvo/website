@@ -992,6 +992,7 @@ footer {
   transform: translateY(-6px);
   transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s;
   pointer-events: none;
+  height:auto;
 }
 .footer-menu .dropdown:hover .dropdown-menu,
 .footer-menu .dropdown.open .dropdown-menu {
