@@ -11,7 +11,7 @@ body {
 
 
 .breadcrumb {
-    background: #f5f0e8;
+    background: #ffffff;
     padding: 15px 0;
     margin-bottom: 20px;
 }
@@ -94,7 +94,7 @@ body {
 .container {
     max-width: 1500px;
     margin: 40px auto;
-    background-color: #f5f0e8;
+    background-color: #ffffff;
     min-height: 100vh;
     padding: 20px;
 }
