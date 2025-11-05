@@ -220,24 +220,28 @@ function populateSimilarProducts() {
 }
 
 function getColorCode(colorName) {
-    const colorMap = {
-        'Red': '#FF0000',
-        'Blue': '#0000FF',
-        'Green': '#00FF00',
-        'Yellow': '#FFFF00',
-        'Black': '#000000',
-        'White': '#FFFFFF',
-        'Gray': '#808080',
-        'Grey': '#808080',
-        'Brown': '#A52A2A',
-        'Orange': '#FFA500',
-        'Purple': '#800080',
-        'Pink': '#FFC0CB',
-        'Beige': '#F5F5DC',
-        'Cream': '#FFFDD0'
-    };
-    return colorMap[colorName] || '#CCCCCC';
+    if (!colorName) return '#CCCCCC'; // fallback
+
+    // Create a temporary element
+    const tempDiv = document.createElement('div');
+    tempDiv.style.color = colorName;
+    document.body.appendChild(tempDiv);
+
+    // Get computed rgb color
+    const rgb = getComputedStyle(tempDiv).color;
+    document.body.removeChild(tempDiv);
+
+    // Parse rgb(a) string
+    const rgbValues = rgb.match(/\d+/g);
+    if (!rgbValues || rgbValues.length < 3) return '#CCCCCC';
+
+    const hex = rgbValues.slice(0, 3) // only r,g,b
+        .map(val => parseInt(val).toString(16).padStart(2, '0'))
+        .join('');
+
+    return `#${hex}`;
 }
+
 
 function populateFilterCircles() {
     const colorCircles = document.getElementById('colorCircles');
