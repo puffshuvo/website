@@ -219,30 +219,24 @@ function populateSimilarProducts() {
     }
 }
 
+// Dynamic color conversion function
 function getColorCode(colorName) {
-    if (!colorName) return '#CCCCCC'; // fallback
+    if (!colorName) return '#CCCCCC'; // fallback color
 
-    // Create a temporary element
     const tempDiv = document.createElement('div');
     tempDiv.style.color = colorName;
     document.body.appendChild(tempDiv);
 
-    // Get computed rgb color
-    const rgb = getComputedStyle(tempDiv).color;
+    const computedColor = getComputedStyle(tempDiv).color;
     document.body.removeChild(tempDiv);
 
-    // Parse rgb(a) string
-    const rgbValues = rgb.match(/\d+/g);
-    if (!rgbValues || rgbValues.length < 3) return '#CCCCCC';
+    const rgb = computedColor.match(/\d+/g);
+    if (!rgb || rgb.length < 3) return '#CCCCCC';
 
-    const hex = rgbValues.slice(0, 3) // only r,g,b
-        .map(val => parseInt(val).toString(16).padStart(2, '0'))
-        .join('');
-
-    return `#${hex}`;
+    return '#' + rgb.slice(0, 3).map(val => parseInt(val).toString(16).padStart(2,'0')).join('');
 }
 
-
+// Populate filter circles
 function populateFilterCircles() {
     const colorCircles = document.getElementById('colorCircles');
     const sizeCircles = document.getElementById('sizeCircles');
@@ -253,17 +247,17 @@ function populateFilterCircles() {
         return;
     }
 
-    // Clear existing circles
     colorCircles.innerHTML = '';
     sizeCircles.innerHTML = '';
     thicknessCircles.innerHTML = '';
 
-    // Populate colors
+    // --- Colors ---
     if (productData.colors && productData.colors.length > 0) {
         productData.colors.forEach((colorItem, index) => {
             const circle = document.createElement('div');
             circle.className = `filter-circle color-circle${index === 0 ? ' active' : ''}`;
             circle.dataset.value = colorItem.color;
+            // Use dynamic color conversion
             circle.style.backgroundColor = getColorCode(colorItem.color);
             circle.innerHTML = `<span class="price-tooltip">${colorItem.price >= 0 ? '+' : ''}৳${colorItem.price.toFixed(2)}</span>`;
             circle.onclick = () => selectFilter('color', colorItem.color);
@@ -276,7 +270,7 @@ function populateFilterCircles() {
         selectedOptions.color = '';
     }
 
-    // Populate sizes
+    // --- Sizes ---
     if (productData.sizes && productData.sizes.length > 0) {
         productData.sizes.forEach((sizeItem, index) => {
             const circle = document.createElement('div');
@@ -294,7 +288,7 @@ function populateFilterCircles() {
         selectedOptions.size = '';
     }
 
-    // Populate thicknesses
+    // --- Thickness ---
     if (productData.thicknesses && productData.thicknesses.length > 0) {
         productData.thicknesses.forEach((thicknessItem, index) => {
             const circle = document.createElement('div');
@@ -312,6 +306,7 @@ function populateFilterCircles() {
         selectedOptions.thickness = '';
     }
 }
+
 
 function selectFilter(type, value) {
     selectedOptions[type] = value;
