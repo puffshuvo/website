@@ -144,33 +144,38 @@ function loadProductData() {
     };
     xhr.send();
 }
+
 function populateSpecifications() {
     const specsList = document.getElementById('specifications');
     if (!specsList) return;
 
     specsList.innerHTML = '';
 
-    // Case 1: API gives array
+    // Case 1: specifications = array of objects
     if (productData.specifications && Array.isArray(productData.specifications) && productData.specifications.length > 0) {
         productData.specifications.forEach(spec => {
             const li = document.createElement('li');
-            li.textContent = `${spec.key || 'Property'}: ${spec.value || 'N/A'}`;
+            li.innerHTML = `<strong>${spec.key || 'Property'}:</strong> ${spec.value || 'N/A'}`;
             specsList.appendChild(li);
         });
         return;
     }
 
-    // Case 2: API gives string with \r\n or newline
+    // Case 2: specifications = string with line breaks
     if (typeof productData.specifications === 'string' && productData.specifications.trim() !== '') {
         const lines = productData.specifications
-            .split(/\r?\n/) // Split by line breaks
+            .split(/\r?\n/) // split by newline
             .filter(line => line.trim() !== '');
 
         lines.forEach(line => {
             const [key, ...rest] = line.split(':');
             const value = rest.join(':').trim();
             const li = document.createElement('li');
-            li.textContent = key ? `${key.trim()}: ${value}` : line.trim();
+            if (key) {
+                li.innerHTML = `<strong>${key.trim()}:</strong> ${value}`;
+            } else {
+                li.textContent = line.trim();
+            }
             specsList.appendChild(li);
         });
         return;
@@ -179,6 +184,8 @@ function populateSpecifications() {
     // Fallback
     specsList.innerHTML = '<li>No specifications available</li>';
 }
+
+
 function populateSimilarProducts() {
     const similarGrid = document.querySelector('.similar-grid');
     if (!similarGrid) return;
