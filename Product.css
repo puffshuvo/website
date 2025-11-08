@@ -44,6 +44,7 @@ body {
 
 /* Search */
 .search-bar {
+    position: relative;
   display: flex;
   align-items: center;
   background: #4a2f0a;
