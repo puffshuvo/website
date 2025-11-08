@@ -157,7 +157,7 @@ html, body {
   visibility: hidden;
   pointer-events: none;
   transition: opacity .5s cubic-bezier(.4,0,.2,1), visibility .5s;
-  z-index: 10002;
+  z-index: 2;
   overflow: hidden;
   padding: 100px 60px 60px;
   display: flex;
