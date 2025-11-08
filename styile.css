@@ -150,7 +150,7 @@ html, body {
   top: 180px;
   left: 0;
   width: 100vw;
-  height: 50vh;
+  height: max-content;
   background: #FFFFFF;
   backdrop-filter: blur(20px);
   opacity: 0;
