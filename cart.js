@@ -107,7 +107,8 @@ async function downloadPDF() {
   const address = document.getElementById("input-address")?.value.trim() || "";
   const email = document.getElementById("input-email")?.value.trim() || ""; // Add email field if needed
   const paymentSelected = document.querySelector('input[name="payment"]:checked');
-  const invoice = document.getElementById("receipt-number")?.value.trim() || "";
+  const receiptNumberElement = document.querySelector(".receipt-header span:first-child");
+  const invoice = receiptNumberElement ? (receiptNumberElement.textContent.trim() || "") : "";
   const totalElement = document.getElementById("receipt-total")?.querySelector("span:last-child");
   let totalFirstToken = 0;
   if (totalElement) {
