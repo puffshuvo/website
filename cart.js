@@ -111,6 +111,7 @@ async function downloadPDF() {
   const invoice = receiptNumberElement ? (receiptNumberElement.textContent.trim() || "") : "";
   const totalElement = document.getElementById("receipt-total")?.querySelector("span:last-child");
   let totalFirstToken = 0;
+  let firstToken = 0;
   if (totalElement) {
     const totalText = (totalElement.textContent || "").trim();
     const firstToken = totalText.split(" ")[0] || "";
