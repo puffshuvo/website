@@ -310,13 +310,15 @@
       </div>
       <!-- Search bar for product search -->
       <div class="search-bar">
-        <input type="text" id="main_search" placeholder="Search products..." aria-label="Search products">
-        <button class="search-btn" aria-label="Search">
+        <input type="text" id="main_search" placeholder="Search products...">
+        <button class="search-btn">
           <i class="fas fa-search"></i>
         </button>
-        <div id="search-results" class="search-results"></div>
+        <div id="search-results" class="search-results">
+          <!-- results go here -->
+        </div>
       </div>
-      
+
       <!-- Hamburger menu for mobile navigation toggle -->
       <div class="hamburger" aria-expanded="false" role="button" aria-label="Toggle navigation">
         <i class="fas fa-bars"></i>
@@ -331,111 +333,144 @@
             </a>
             <ul class="dropdown-menu">
               <li class="dropdown-item">
-                <a href="Construction.html?category=Construction&subcategory=Civil+Work" class="dropdown-link" aria-expanded="false">
+                <a href="Construction.html?category=Construction&subcategory=Civil+Work" class="dropdown-link"
+                  aria-expanded="false">
                   Civil Work <i class="fas fa-chevron-right sub-arrow"></i>
                 </a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=cement">Cement</a></li>
-                  <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=sand">Sand</a></li>
-                  <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=brick">Brick</a></li>
-                  <li><a href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=reinforcement">Reinforcement</a></li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=cement">Cement</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=sand">Sand</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=brick">Brick</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=reinforcement">Reinforcement</a>
+                  </li>
                 </ul>
               </li>
               <li class="dropdown-item">
-                <a href="Construction.html?category=Construction&subcategory=interior" class="dropdown-link" aria-expanded="false">
+                <a href="Construction.html?category=Construction&subcategory=interior" class="dropdown-link"
+                  aria-expanded="false">
                   Interior <i class="fas fa-chevron-right sub-arrow"></i>
                 </a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="Construction.html?category=Construction&subcategory=interior&subsubcategory=tiles">Tiles</a></li>
-                  <li><a href="Construction.html?category=Construction&subcategory=interior&subsubcategory=wood">Wood</a></li>
-                  <li><a href="Construction.html?category=Construction&subcategory=interior&subsubcategory=hardware+fitting">Hardware fittings</a></li>
-                  <li><a href="Construction.html?category=Construction&subcategory=interior&subsubcategory=Electrical+Accessories">Electrical accessories</a></li>
-                  <li><a href="Construction.html?category=Construction&subcategory=interior&subsubcategory=Mirror">Mirror</a></li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=interior&subsubcategory=tiles">Tiles</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=interior&subsubcategory=wood">Wood</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=interior&subsubcategory=hardware+fitting">Hardware
+                      fittings</a></li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=interior&subsubcategory=Electrical+Accessories">Electrical
+                      accessories</a></li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=interior&subsubcategory=Mirror">Mirror</a>
+                  </li>
                 </ul>
               </li>
               <li class="dropdown-item">
                 <a href="Construction.html?category=Construction&subcategory=paint" class="dropdown-link">Paint</a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="Construction.html?category=Construction&subcategory=paint&subsubcategory=berger">Berger</a></li>
-                  <li><a href="Construction.html?category=Construction&subcategory=paint&subsubcategory=sayerlac">Sayerlac</a></li>
-                  <li><a href="Construction.html?category=Construction&subcategory=paint&subsubcategory=Asian+Paints">Asian Paints</a></li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=paint&subsubcategory=berger">Berger</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=paint&subsubcategory=sayerlac">Sayerlac</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=paint&subsubcategory=Asian+Paints">Asian
+                      Paints</a></li>
                 </ul>
               </li>
-              
+
               <li class="dropdown-item">
-                <a href="Construction.html?category=Construction&subcategory=sanitary" class="dropdown-link">Sanitary</a>
+                <a href="Construction.html?category=Construction&subcategory=sanitary"
+                  class="dropdown-link">Sanitary</a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="Construction.html?category=Construction&subcategory=sanitary&subsubcategory=Asian+Paints">Sanitary fittings</a></li>
-                  <li><a href="Construction.html?category=Construction&subcategory=paint&subsubcategory=Asian+Paints">Sanitary fixtures </a></li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=sanitary&subsubcategory=Asian+Paints">Sanitary
+                      fittings</a></li>
+                  <li><a
+                      href="Construction.html?category=Construction&subcategory=paint&subsubcategory=Asian+Paints">Sanitary
+                      fixtures </a></li>
                 </ul>
               </li>
             </ul>
           </li>
           <!-- Home Appliances category with nested dropdowns -->
           <li class="nav-item">
-            <a href="HomeAppliances.html" class="nav-link" aria-expanded="false">
+            <a href="Construction.html?category=home Appliances" class="nav-link" aria-expanded="false">
               Home Appliances <i class="fas fa-chevron-down nav-arrow"></i>
             </a>
             <ul class="dropdown-menu">
               <li class="dropdown-item">
-                <a href="HomeAppliances.html?category=kitchen" class="dropdown-link" aria-expanded="false">
+                <a href="Construction.html?category=home Appliances&subcategory=Electronic Appliances" class="dropdown-link" aria-expanded="false">
                   Electronic appliances <i class="fas fa-chevron-right sub-arrow"></i>
                 </a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="Construction.html?category=tiles">Ac</a></li>
-                  <li><a href="Construction.html?category=wood">Fan</a></li>
-                  <li><a href="Construction.html?category=wood">Lights</a></li>
-                  <li><a href="Construction.html?category=wood">Refrigerator </a></li>
+                  <li><a href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=AC">Ac</a></li>
+                  <li><a href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=FAN">Fan</a></li>
+                  <li><a href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=lights">Lights</a></li>
+                  <li><a href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=refrigerator">Refrigerator </a></li>
                 </ul>
               </li>
-              
+
             </ul>
           </li>
           <!-- Furniture category with nested dropdowns -->
           <li class="nav-item">
-            <a href="Furnitures.html" class="nav-link" aria-expanded="false">
+            <a href="Construction.html?category=Furniture" class="nav-link" aria-expanded="false">
               Furniture <i class="fas fa-chevron-down nav-arrow"></i>
             </a>
             <ul class="dropdown-menu">
               <li class="dropdown-item">
-                <a href="Furnitures.html?category=living-room" class="dropdown-link" aria-expanded="false">
+                <a href="Construction.html?category=Furniture&subcategory=living room" class="dropdown-link" aria-expanded="false">
                   Living Room <i class="fas fa-chevron-right sub-arrow"></i>
                 </a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="Furnitures.html?category=sofa">Sofa</a></li>
-                  <li><a href="Furnitures.html?category=armchair">Armchair</a></li>
-                  <li><a href="Furnitures.html?category=coffee-table">Coffee Table</a></li>
+                  <li><a href="Construction.html?category=Furniture&subcategory=living room&subsubcategory=sofa">Sofa</a></li>
+                  <li><a href="Construction.html?category=Furniture&subcategory=living room&subsubcategory=armchair">Armchair</a></li>
+                  <li><a href="Construction.html?category=Furniture&subcategory=living room&subsubcategory=coffee table">Coffee Table</a></li>
                 </ul>
               </li>
               <li class="dropdown-item">
-                <a href="Furnitures.html?category=bedroom" class="dropdown-link" aria-expanded="false">
+                <a href="Construction.html?category=Furniture&subcategory=bedroom" class="dropdown-link" aria-expanded="false">
                   Bedroom <i class="fas fa-chevron-right sub-arrow"></i>
                 </a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="Furnitures.html?category=bed">Bed</a></li>
-                  <li><a href="Furnitures.html?category=wardrobe">Wardrobe</a></li>
-                  <li><a href="Furnitures.html?category=dresser">Dresser</a></li>
+                  <li><a href="Construction.html?category=Furniture&subcategory=bedroom&subsubcategory=bed">Bed</a></li>
+                  <li><a href="Construction.html?category=Furniture&subcategory=bedroom&subsubcategory=wardrobe">Wardrobe</a></li>
+                  <li><a href="Construction.html?category=Furniture&subcategory=bedroom&subsubcategory=dresser">Dresser</a></li>
                 </ul>
               </li>
               <li class="dropdown-item">
-                <a href="Furnitures.html?category=dining" class="dropdown-link">Dining</a>
+                <a href="Construction.html?category=Furniture&subcategory=dining" class="dropdown-link">Dining</a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="Furnitures.html?category=bed">Dining Table</a></li>
-                  <li><a href="Furnitures.html?category=wardrobe">Dining Wagon</a></li>
-                  
+                  <li><a href="Construction.html?category=Furniture&subcategory=dining&subsubcategory=dining table">Dining Table</a></li>
+                  <li><a href="Construction.html?category=Furniture&subcategory=dining&subsubcategory=dining wagon">Dining Wagon</a></li>
+
                 </ul>
               </li>
             </ul>
           </li>
           <!-- Others category with dropdown -->
           <li class="nav-item">
-            <a href="Others.html" class="nav-link" aria-expanded="false">
+            <a href="Construction.html?category=others" class="nav-link" aria-expanded="false">
               Others <i class="fas fa-chevron-down nav-arrow"></i>
             </a>
             <ul class="dropdown-menu">
-              <li class="dropdown-item"><a href="Others.html?category=tools" class="dropdown-link">Tools</a></li>
-              <li class="dropdown-item"><a href="Others.html?category=safety" class="dropdown-link">Safety Equipment</a></li>
-              <li class="dropdown-item"><a href="Others.html?category=accessories" class="dropdown-link">Accessories</a></li>
+              <li class="dropdown-item"><a href="Construction.html?category=others&subcategory=tools" class="dropdown-link">Tools</a></li>
+              <li class="dropdown-item"><a href="Construction.html?category=others&subcategory=safety equipment" class="dropdown-link">Safety Equipment</a>
+              </li>
+              <li class="dropdown-item"><a href="Construction.html?category=others&subcategory=accessories" class="dropdown-link">Accessories</a>
+              </li>
             </ul>
           </li>
           <!-- Cart icon with dropdown (part of navigation) -->
@@ -458,6 +493,7 @@
       </nav>
     </div>
   </header>
+
 
   <a href="cart.html" class="back-button">← Back to Cart</a>
 
