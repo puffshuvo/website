@@ -100,11 +100,12 @@ function clearCart() {
   console.log('Cart cleared:', cartItems); // Debug
 }
 
-function downloadPDF() {
+async function downloadPDF() {
   // Require form data and payment before allowing download
   const name = document.getElementById("input-name")?.value.trim() || "";
   const phone = document.getElementById("input-phone")?.value.trim() || "";
   const address = document.getElementById("input-address")?.value.trim() || "";
+  const email = document.getElementById("input-email")?.value.trim() || ""; // Add email field if needed
   const paymentSelected = document.querySelector('input[name="payment"]:checked');
 
   if (!name || !phone || !address) {
@@ -121,6 +122,92 @@ function downloadPDF() {
     return;
   }
 
+  // Prepare order data
+  const orderData = {
+    customer_name: name,
+    customer_phone: phone,
+    customer_address: address,
+    customer_email: email,
+    pay_method: paymentSelected.value,
+    items: cartItems.map(item => ({
+      product_id: item.id || item.product_id,
+      quantity: item.quantity,
+      color: item.color || null,
+      size: item.size || null,
+      thickness: item.thickness || null
+    }))
+  };
+
+  try {
+    // Show loading indicator
+    const downloadBtn = document.querySelector(".download-btn");
+    const originalText = downloadBtn.textContent;
+    downloadBtn.textContent = "Saving order...";
+    downloadBtn.disabled = true;
+
+    // Save order to database
+    const response = await fetch('https://archimartbd.com/api/create_order', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData)
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || 'Failed to save order');
+    }
+
+    // Order saved successfully, now generate PDF
+    downloadBtn.textContent = "Generating PDF...";
+    
+    // Update receipt number with order ID if needed
+    const receiptHeader = document.querySelector(".receipt-header span:first-child");
+    if (result.order_id) {
+      receiptHeader.textContent = `Order #${result.order_id}`;
+    }
+
+    await generatePDFDocument();
+
+    // Success - clear cart after successful PDF generation
+    alert(`Order saved successfully! Order ID: ${result.order_id}`);
+    
+    // Clear localStorage
+    localStorage.removeItem('combinedSelection');
+    localStorage.removeItem('cartFormData');
+    localStorage.removeItem('cartState');
+    localStorage.removeItem('cartStateForCompare');
+    
+    // Reset form
+    document.getElementById("input-name").value = "";
+    document.getElementById("input-phone").value = "";
+    document.getElementById("input-address").value = "";
+    if (document.getElementById("input-email")) {
+      document.getElementById("input-email").value = "";
+    }
+    
+    // Clear payment selection
+    const paymentRadios = document.querySelectorAll('input[name="payment"]');
+    paymentRadios.forEach(r => r.checked = false);
+    
+    // Clear cart
+    clearCart();
+    
+  } catch (error) {
+    console.error("Error saving order:", error);
+    alert(`Failed to save order: ${error.message}\nPDF will not be generated.`);
+    
+    // Restore button
+    const downloadBtn = document.querySelector(".download-btn");
+    downloadBtn.textContent = originalText;
+    downloadBtn.disabled = false;
+  }
+}
+
+// Separate function to generate PDF
+async function generatePDFDocument() {
   const element = document.getElementById("receipt");
   const downloadBtn = document.querySelector(".download-btn");
   const items = document.querySelectorAll("#receipt-items li");
@@ -135,7 +222,7 @@ function downloadPDF() {
     item.classList.add("pdf-quantity-only");
   });
 
-  // hide clear cart button while generating PDF (optional)
+  // hide clear cart button while generating PDF
   if (clearCartBtn) clearCartBtn.style.display = "none";
 
   // Add copyright line
@@ -156,7 +243,8 @@ function downloadPDF() {
   const a4Width = 210;
   const a4Height = 297;
 
-  html2canvas(element, { scale: 2 }).then(canvas => {
+  try {
+    const canvas = await html2canvas(element, { scale: 2 });
     const imgData = canvas.toDataURL("image/png");
     const pdf = new jsPDF({
       orientation: "portrait",
@@ -183,6 +271,7 @@ function downloadPDF() {
     pdf.addImage(imgData, "PNG", xOffset, yOffset, imgWidth, imgHeight);
     pdf.save("archimart-receipt.pdf");
 
+  } finally {
     // Restore visibility of buttons, remove PDF-specific class, and show download button
     qtyButtons.forEach(button => {
       button.style.display = "flex";
@@ -191,24 +280,11 @@ function downloadPDF() {
       item.classList.remove("pdf-quantity-only");
     });
     downloadBtn.style.display = "block";
-    // Ensure Clear Cart button is visible after download
+    downloadBtn.textContent = "Download Receipt as PDF";
+    downloadBtn.disabled = false;
     if (clearCartBtn) clearCartBtn.style.display = "block";
-  }).catch(error => {
-    console.error("Error generating PDF:", error);
-    alert("Failed to generate PDF. Please try again.");
-    // Restore visibility even on error
-    qtyButtons.forEach(button => {
-      button.style.display = "flex";
-    });
-    items.forEach(item => {
-      item.classList.remove("pdf-quantity-only");
-    });
-    downloadBtn.style.display = "block";
-    // Ensure Clear Cart button is visible after failure as well
-    if (clearCartBtn) clearCartBtn.style.display = "block";
-  });
+  }
 }
-
 function updatePayableTo() {
   const nameInput = document.getElementById("input-name")?.value.trim() || "";
   const phoneInput = document.getElementById("input-phone")?.value.trim() || "";
