@@ -374,9 +374,13 @@ function getCurrentImages() {
     }
 
     // If still no images, use default product images
-    if (images.length === 0 && productData.images && productData.images.length > 0) {
+    if (images.length === 0 && productData.images) {
+    if (Array.isArray(productData.images) && productData.images.length > 0) {
         images = productData.images;
+    } else if (typeof productData.images === 'string') {
+        images = [productData.images]; // convert string to array
     }
+}
 
     // Final fallback
     if (images.length === 0) {
