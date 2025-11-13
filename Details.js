@@ -106,7 +106,7 @@ function loadProductData() {
                     document.getElementById('productTitle').textContent = productData.name || 'Unknown Product';
                     document.getElementById('productPrice').textContent = `৳${(productData.price || 0).toFixed(2)} ${productData.currency || 'BDT'}`;
                     document.getElementById('productDescription').textContent = productData.description || 'No description available.';
-                    
+
                     const recommendationText = productData.recomended_text || productData.recomended_title || 'This product is recommended for its quality and suitability for construction projects.';
                     document.getElementById('recommendationText').textContent = recommendationText;
 
@@ -128,6 +128,25 @@ function loadProductData() {
 
                     // Update breadcrumb
                     updateBreadcrumb();
+                    // Enable Add to Cart button after product loads
+                    const addToCartBtn = document.getElementById('addToCartBtn');
+                    if (addToCartBtn) {
+                        addToCartBtn.onclick = () => {
+                            const product = {
+                                id: productData.id,
+                                name: productData.name,
+                                price: parseFloat(productData.price || 0),
+                                image: productData.image || 'Image/placeholder.png',
+                                quantity: parseInt(document.getElementById('quantity').textContent) || 1,
+                            };
+
+                            // Call your existing addToCart function
+                            addToCart(product);
+
+                            alert(`${product.name} added to cart!`);
+                        };
+                    }
+
                 } catch (e) {
                     console.error('Error parsing JSON:', e);
                     document.getElementById('productTitle').textContent = 'Error Loading Product';
@@ -191,19 +210,19 @@ function populateSimilarProducts() {
     if (!similarGrid) return;
 
     similarGrid.innerHTML = '';
-    
+
     if (productData.similar_products && productData.similar_products.length > 0) {
         productData.similar_products.forEach(product => {
             const similarItem = document.createElement('a');
             similarItem.className = 'similar-item';
             similarItem.href = `Details.html?id=${product.id}`;
-            
+
             const productImage = product.images && product.images.length > 0 ? product.images[0] : 'Image/placeholder.png';
             const discount = product.discount || 0;
-            const priceContent = discount > 0 
+            const priceContent = discount > 0
                 ? `<div class="price strikethrough">৳${product.price.toFixed(2)}</div><div class="discount-price">৳${(product.price - discount).toFixed(2)} ${product.currency || 'BDT'}</div>`
                 : `<div class="price">৳${product.price.toFixed(2)} ${product.currency || 'BDT'}</div>`;
-            
+
             similarItem.innerHTML = `
                 <div class="similar-image">
                     <img src="${productImage}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">
@@ -233,7 +252,7 @@ function getColorCode(colorName) {
     const rgb = computedColor.match(/\d+/g);
     if (!rgb || rgb.length < 3) return '#CCCCCC';
 
-    return '#' + rgb.slice(0, 3).map(val => parseInt(val).toString(16).padStart(2,'0')).join('');
+    return '#' + rgb.slice(0, 3).map(val => parseInt(val).toString(16).padStart(2, '0')).join('');
 }
 
 // Populate filter circles
@@ -329,7 +348,7 @@ function getCurrentImages() {
     let images = [];
 
     // Priority: Color > Size > Thickness > Default Product Images
-    
+
     // Check color images
     if (selectedOptions.color && productData.colors) {
         const colorItem = productData.colors.find(c => c.color === selectedOptions.color);
@@ -370,20 +389,20 @@ function getCurrentImages() {
 function updateImages() {
     const mainImage = document.getElementById('mainImage');
     const imageDots = document.getElementById('imageDots');
-    
+
     if (!mainImage || !imageDots) {
         console.error('Image elements not found');
         return;
     }
 
     const images = getCurrentImages();
-    
+
     currentImageIndex = 0;
     mainImage.src = images[0];
 
     // Clear and repopulate dots
     imageDots.innerHTML = '';
-    
+
     if (images.length > 1) {
         images.forEach((img, index) => {
             const dot = document.createElement('div');
@@ -398,11 +417,11 @@ function changeImage(index) {
     currentImageIndex = index;
     const mainImage = document.getElementById('mainImage');
     const images = getCurrentImages();
-    
+
     if (mainImage && images[index]) {
         mainImage.src = images[index];
     }
-    
+
     const dots = document.querySelectorAll('.dot');
     dots.forEach((dot, i) => {
         dot.classList.toggle('active', i === index);
@@ -452,7 +471,7 @@ function updateStockStatus() {
 
     const addToCartBtn = document.querySelector('.btn-add-cart');
     const buyNowBtn = document.querySelector('.btn-buy-now');
-    
+
     let stockDisplay = document.getElementById('stockDisplay');
     if (!stockDisplay) {
         stockDisplay = document.createElement('div');
@@ -608,7 +627,7 @@ function addToCart() {
     }
 
     const images = getCurrentImages();
-    
+
     // Create unique cart ID for variant combinations
     const cartId = `${productData.id}_${selectedOptions.color || 'none'}_${selectedOptions.size || 'none'}_${selectedOptions.thickness || 'none'}`;
 
@@ -639,7 +658,7 @@ function addToCart() {
 
     // Check if exact variant already exists in cart
     const existingItemIndex = cart.findIndex(item => item.cartId === cartId);
-    
+
     if (existingItemIndex !== -1) {
         // Update quantity of existing item
         const newQuantity = cart[existingItemIndex].quantity + currentQuantity;
@@ -655,15 +674,15 @@ function addToCart() {
 
     try {
         localStorage.setItem('cartState', JSON.stringify(cart));
-        
+
         // Build variant description for alert
         let variantText = '';
         if (selectedOptions.color) variantText += ` (Color: ${selectedOptions.color})`;
         if (selectedOptions.size) variantText += ` (Size: ${selectedOptions.size})`;
         if (selectedOptions.thickness) variantText += ` (Thickness: ${selectedOptions.thickness})`;
-        
+
         alert(`Added ${currentQuantity} ${productData.name}${variantText} to cart at ৳${(totalPrice - totalDiscount).toFixed(2)} ${productData.currency || 'BDT'} each!`);
-        
+
         // Update cart count in navbar if function exists
         if (window.gallery && typeof window.gallery.updateCartCount === 'function') {
             window.gallery.updateCartCount();
@@ -704,7 +723,7 @@ function buyNow() {
 
 document.addEventListener('DOMContentLoaded', () => {
     loadProductData();
-    updateCartCountManually(); 
+    updateCartCountManually();
 });
 
 
