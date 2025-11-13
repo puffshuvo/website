@@ -422,49 +422,49 @@ document.addEventListener('DOMContentLoaded', () => {
       name: "Tiles",
       defaultImage: "cat/Ti.png",
       hoverImage: "cat/Tih.png",
-      link: "Construction.html?category=Interior&subcategory=Tiles"
+      link: "Construction.html?category=Construction&subcategory=interior&subsubcategory=tiles"
     },
     {
       name: "Paint",
       defaultImage: "cat/Paint.png",
       hoverImage: "cat/Painth.png",
-      link: "Construction.html?category=Paint"
+      link: "Construction.html?category=Construction&subcategory=paint"
     },
     {
       name: "Electrical Materials",
       defaultImage: "cat/Fan.png",
       hoverImage: "cat/Fanh.png",
-      link: "Construction.html?category=electrical"
+      link: "Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=FAN"
     },
     {
       name: "Wood & Board",
       defaultImage: "cat/Wood.png",
       hoverImage: "cat/woodh.png",
-      link: "Construction.html?category=Interior&subcategory=Wood"
+      link: "Construction.html?category=Construction&subcategory=interior&subsubcategory=wood"
     },
     {
       name: "Sanitary Fixtures",
       defaultImage: "cat/Basin.png",
       hoverImage: "cat/Basinh.png",
-      link: "Construction.html?category=sanitary"
+      link: "Construction.html?category=Construction&subcategory=sanitary&subsubcategory=sanitary fixtures"
     },
     {
       name: "Sanitary Fittings",
       defaultImage: "cat/Sanitary.png",
       hoverImage: "cat/Sanitaryh.png",
-      link: "Construction.html?category=sanitary"
+      link: "Construction.html?category=Construction&subcategory=sanitary&subsubcategory=sanitary fittings"
     },
     {
       name: "Glass & Aluminum",
       defaultImage: "cat/glass.png",
       hoverImage: "cat/glassh.png",
-      link: "Construction.html?category=Interior&subcategory=Glass"
+      link: "Construction.html?category=Construction&subcategory=interior&subsubcategory=Mirror"
     },
     {
       name: "Furniture",
       defaultImage: "cat/furniture.png",
       hoverImage: "cat/furnitureh.png",
-      link: "Construction.html?category=Furniture"
+      link: "Construction.html?category=Furniture&subcategory=living room&subsubcategory=sofa"
     },
   {
       name: "Cement",
