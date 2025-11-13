@@ -68,6 +68,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Enhanced navigation link handling - ONLY for mobile
     if (navLinksWrapper) {
+      // On touch devices we want the FIRST touch to open the category and a SECOND
+      // touch to actually follow the link. We'll implement this using pointerdown
+      // (with a touch fallback) and a small flag on the target so click handling
+      // can distinguish "opened-by-touch" from an intentional navigation.
+
+      // Open on first touch (pointerdown preferred)
+      navLinksWrapper.addEventListener('pointerdown', (e) => {
+        if (window.innerWidth > 768) return;
+
+        // Only handle touch pointers here
+        if (e.pointerType !== 'touch') return;
+
+        const target = e.target.closest('.nav-link, .dropdown-link');
+        if (!target) return;
+
+        const dropdown = target.nextElementSibling;
+        const hasDropdown = dropdown && (dropdown.classList.contains('dropdown-menu') ||
+                                         dropdown.classList.contains('sub-dropdown-menu'));
+
+        if (hasDropdown) {
+          // If dropdown is not active, open it and mark that we opened it via touch
+          if (!dropdown.classList.contains('active')) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleDropdown(target, dropdown);
+            // mark so the upcoming click will not navigate immediately
+            try { target.dataset.touchOpened = 'true'; } catch (err) { /* ignore */ }
+          }
+          // If it was already open, let the click proceed (possible navigation)
+        }
+      }, { passive: true });
+
+      // Fallback for browsers that don't support pointer events
+      navLinksWrapper.addEventListener('touchstart', (e) => {
+        if (window.innerWidth > 768) return;
+        const target = e.target.closest('.nav-link, .dropdown-link');
+        if (!target) return;
+        const dropdown = target.nextElementSibling;
+        const hasDropdown = dropdown && (dropdown.classList.contains('dropdown-menu') ||
+                                         dropdown.classList.contains('sub-dropdown-menu'));
+        if (hasDropdown && !dropdown.classList.contains('active')) {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleDropdown(target, dropdown);
+          try { target.dataset.touchOpened = 'true'; } catch (err) { /* ignore */ }
+        }
+      }, { passive: false });
+
+      // Click handling: on mobile we toggle dropdowns but allow a second click to navigate.
       navLinksWrapper.addEventListener('click', (e) => {
         // Skip if desktop
         if (window.innerWidth > 768) return;
@@ -76,15 +125,33 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!target) return;
 
         const dropdown = target.nextElementSibling;
-        
-        if (dropdown && (dropdown.classList.contains('dropdown-menu') || 
-                        dropdown.classList.contains('sub-dropdown-menu'))) {
-          e.preventDefault();
-          e.stopPropagation();
-          
-          toggleDropdown(target, dropdown);
-        } else if (target.href && !dropdown) {
-          // Navigate to link only if no dropdown exists
+        const hasDropdown = dropdown && (dropdown.classList.contains('dropdown-menu') ||
+                                         dropdown.classList.contains('sub-dropdown-menu'));
+
+        if (hasDropdown) {
+          const wasOpenedByTouch = target.dataset && target.dataset.touchOpened === 'true';
+          const isActive = dropdown.classList.contains('active');
+
+          // If it was just opened by pointer/touch, prevent navigation on this click
+          if (wasOpenedByTouch) {
+            e.preventDefault();
+            e.stopPropagation();
+            // remove the marker so the next tap will navigate
+            try { delete target.dataset.touchOpened; } catch (err) { target.removeAttribute('data-touch-opened'); }
+            return;
+          }
+
+          // If dropdown is not active, open it (prevent navigation)
+          if (!isActive) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleDropdown(target, dropdown);
+            return;
+          }
+
+          // If active and not opened-by-touch, allow the click to follow the link (if any)
+        } else if (target.href) {
+          // Only navigate if there's no dropdown
           window.location.href = target.href;
         }
       });
@@ -92,15 +159,15 @@ document.addEventListener('DOMContentLoaded', () => {
       // Enhanced keyboard navigation for mobile
       navLinksWrapper.addEventListener('keydown', (e) => {
         if (window.innerWidth > 768) return;
-        
+
         if (e.key === 'Enter' || e.key === ' ') {
           const target = e.target.closest('.nav-link, .dropdown-link');
           if (!target) return;
-          
+
           e.preventDefault();
           const dropdown = target.nextElementSibling;
-          
-          if (dropdown && (dropdown.classList.contains('dropdown-menu') || 
+
+          if (dropdown && (dropdown.classList.contains('dropdown-menu') ||
                           dropdown.classList.contains('sub-dropdown-menu'))) {
             toggleDropdown(target, dropdown);
           } else if (target.href && !dropdown) {
