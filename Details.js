@@ -369,24 +369,18 @@ function getCurrentImages() {
         }
     }
 
-    // Fallback to default product images
     if (images.length === 0 && productData.images && productData.images.length > 0) {
         images = productData.images;
     }
 
-    // Final fallback
-    if (images.length === 0) {
-        images = ['Image/placeholder.png'];
-    }
-
-    // Ensure full URLs
-    images = images.map(img => {
-        if (img.startsWith('http')) return img;
-        return `Image/${img}`;
+    // Only keep valid URLs, do NOT add placeholder
+    images = images.filter(img => img && img.trim() !== '').map(img => {
+        return img.startsWith('http') ? img : img;
     });
 
     return images;
 }
+
 
 
 function updateImages() {
@@ -589,25 +583,16 @@ function decreaseQuantity() {
 }
 
 function addToCart(productData) {
-    if (!productData) {
-        alert('Error: Product data not loaded. Please try again.');
-        return;
-    }
+    if (!productData) return alert('Product data not loaded.');
 
     const maxStock = getMaxStock();
-    if (maxStock === 0) {
-        alert('This product is out of stock.');
-        return;
-    }
-
-    if (currentQuantity > maxStock) {
-        alert(`Cannot add to cart. Only ${maxStock} units available.`);
-        return;
-    }
+    if (maxStock === 0) return alert('This product is out of stock.');
+    if (currentQuantity > maxStock) return alert(`Only ${maxStock} units available.`);
 
     let totalPrice = productData.price || 0;
     let totalDiscount = productData.discount || 0;
 
+    // Override price with variant price if exists
     if (selectedOptions.color && productData.colors) {
         const colorItem = productData.colors.find(c => c.color === selectedOptions.color);
         if (colorItem && colorItem.price > 0) totalPrice = colorItem.price;
@@ -622,22 +607,17 @@ function addToCart(productData) {
     }
 
     const images = getCurrentImages();
-    const mainImage = images[0] 
+    const mainImage = images.length > 0 ? images[0] : ''; // ✅ empty string if no image
 
-    // Create unique cart ID for variant combinations
-    const cartId = `${productData.id}_${selectedOptions.color || 'none'}_${selectedOptions.size || 'none'}_${selectedOptions.thickness || 'none'}`;
+    const cartId = `${productData.id}_${selectedOptions.color||'none'}_${selectedOptions.size||'none'}_${selectedOptions.thickness||'none'}`;
 
     const cartItem = {
         id: productData.id,
         cartId: cartId,
         name: productData.name,
         price: totalPrice - totalDiscount,
-        originalPrice: totalPrice,
         quantity: currentQuantity,
-        image: mainImage, // <-- use full URL or fallback
-        category: productData.category,
-        subcategory: productData.subcategory,
-        subsubcategory: productData.subsubcategory,
+        image: mainImage, // ✅ empty if no image
         selectedOptions: { ...selectedOptions },
         maxStock: maxStock
     };
@@ -647,30 +627,28 @@ function addToCart(productData) {
         const savedCart = localStorage.getItem('cartState');
         if (savedCart) cart = JSON.parse(savedCart);
     } catch (e) {
-        console.error('Error loading cart from localStorage:', e);
+        console.error('Cart parse error:', e);
     }
 
-    const existingItemIndex = cart.findIndex(item => item.cartId === cartId);
-    if (existingItemIndex !== -1) {
-        const newQuantity = cart[existingItemIndex].quantity + currentQuantity;
-        if (newQuantity > maxStock) {
-            alert(`Cannot add ${currentQuantity} more. Max stock is ${maxStock}.`);
-            return;
-        }
-        cart[existingItemIndex].quantity = newQuantity;
+    const existingIndex = cart.findIndex(item => item.cartId === cartId);
+    if (existingIndex !== -1) {
+        const newQty = cart[existingIndex].quantity + currentQuantity;
+        if (newQty > maxStock) return alert(`Only ${maxStock} units available.`);
+        cart[existingIndex].quantity = newQty;
     } else {
         cart.push(cartItem);
     }
 
     try {
         localStorage.setItem('cartState', JSON.stringify(cart));
-        alert(`Added ${currentQuantity} ${productData.name} to cart!`);
         updateCartCountManually();
+        alert(`Added ${currentQuantity} ${productData.name} to cart!`);
     } catch (e) {
         console.error('Error saving cart:', e);
         alert('Failed to add to cart.');
     }
 }
+
 
 // Helper function to manually update cart count
 function updateCartCountManually() {
