@@ -76,15 +76,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!target) return;
 
         const dropdown = target.nextElementSibling;
+        const hasDropdown = dropdown && (dropdown.classList.contains('dropdown-menu') || 
+                                         dropdown.classList.contains('sub-dropdown-menu'));
         
-        if (dropdown && (dropdown.classList.contains('dropdown-menu') || 
-                        dropdown.classList.contains('sub-dropdown-menu'))) {
+        // If there's a dropdown, always toggle it (don't navigate)
+        if (hasDropdown) {
           e.preventDefault();
           e.stopPropagation();
-          
           toggleDropdown(target, dropdown);
-        } else if (target.href && !dropdown) {
-          // Navigate to link only if no dropdown exists
+        } else if (target.href) {
+          // Only navigate if there's no dropdown
           window.location.href = target.href;
         }
       });
