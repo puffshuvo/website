@@ -136,7 +136,7 @@ function loadProductData() {
                                 id: productData.id,
                                 name: productData.name,
                                 price: parseFloat(productData.price || 0),
-                                image: productData.image || 'Image/placeholder.png',
+                                image: productData.images[0] || 'Image/placeholder.png',
                                 quantity: parseInt(document.getElementById('quantity').textContent) || 1,
                             };
 
