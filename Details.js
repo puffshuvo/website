@@ -622,7 +622,7 @@ function addToCart(productData) {
     }
 
     const images = getCurrentImages();
-    const mainImage = images[0] || 'Image/placeholder.png'; // Ensure valid image
+    const mainImage = images[0] 
 
     // Create unique cart ID for variant combinations
     const cartId = `${productData.id}_${selectedOptions.color || 'none'}_${selectedOptions.size || 'none'}_${selectedOptions.thickness || 'none'}`;
