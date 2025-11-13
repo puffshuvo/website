@@ -17,24 +17,30 @@
 
 
   <!-- 1. Preload critical CSS + first image -->
-<link rel="preload" href="critical.css" as="style">
-<link rel="preload" href="first-product.webp" as="image">
+  <link rel="preload" href="critical.css" as="style">
+  <link rel="preload" href="first-product.webp" as="image">
 
-<!-- 2. Defer non‑critical CSS -->
-<link rel="stylesheet" href="critical.css">
-<link rel="preload" href="Product.css" as="style" onload="this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="Product.css"></noscript>
+  <!-- 2. Defer non‑critical CSS -->
+  <link rel="stylesheet" href="critical.css">
+  <link rel="preload" href="Product.css" as="style" onload="this.rel='stylesheet'">
+  <noscript>
+    <link rel="stylesheet" href="Product.css">
+  </noscript>
 
-<!-- 3. Bundle & minified JS -->
-<script src="app.min.js" defer></script>
+  <!-- 3. Bundle & minified JS -->
+  <script src="app.min.js" defer></script>
 
-<!-- 4. Font swap -->
-<link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-<style>@font-face{font-display:swap;}</style>
+  <!-- 4. Font swap -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-display: swap;
+    }
+  </style>
 </head>
 
 <body style="background-color: #fff;">
-<header class="navbar">
+  <header class="navbar">
     <div class="navbar-content">
       <!-- Logo for branding -->
       <div class="logo">
@@ -143,14 +149,23 @@
             </a>
             <ul class="dropdown-menu">
               <li class="dropdown-item">
-                <a href="Construction.html?category=home Appliances&subcategory=Electronic Appliances" class="dropdown-link" aria-expanded="false">
+                <a href="Construction.html?category=home Appliances&subcategory=Electronic Appliances"
+                  class="dropdown-link" aria-expanded="false">
                   Electronic appliances <i class="fas fa-chevron-right sub-arrow"></i>
                 </a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=AC">Ac</a></li>
-                  <li><a href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=FAN">Fan</a></li>
-                  <li><a href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=lights">Lights</a></li>
-                  <li><a href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=refrigerator">Refrigerator </a></li>
+                  <li><a
+                      href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=AC">Ac</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=FAN">Fan</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=lights">Lights</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=home Appliances&subcategory=Electronic Appliances&subsubcategory=refrigerator">Refrigerator
+                    </a></li>
                 </ul>
               </li>
 
@@ -163,30 +178,46 @@
             </a>
             <ul class="dropdown-menu">
               <li class="dropdown-item">
-                <a href="Construction.html?category=Furniture&subcategory=living room" class="dropdown-link" aria-expanded="false">
+                <a href="Construction.html?category=Furniture&subcategory=living room" class="dropdown-link"
+                  aria-expanded="false">
                   Living Room <i class="fas fa-chevron-right sub-arrow"></i>
                 </a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="Construction.html?category=Furniture&subcategory=living room&subsubcategory=sofa">Sofa</a></li>
-                  <li><a href="Construction.html?category=Furniture&subcategory=living room&subsubcategory=armchair">Armchair</a></li>
-                  <li><a href="Construction.html?category=Furniture&subcategory=living room&subsubcategory=coffee table">Coffee Table</a></li>
+                  <li><a
+                      href="Construction.html?category=Furniture&subcategory=living room&subsubcategory=sofa">Sofa</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=Furniture&subcategory=living room&subsubcategory=armchair">Armchair</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=Furniture&subcategory=living room&subsubcategory=coffee table">Coffee
+                      Table</a></li>
                 </ul>
               </li>
               <li class="dropdown-item">
-                <a href="Construction.html?category=Furniture&subcategory=bedroom" class="dropdown-link" aria-expanded="false">
+                <a href="Construction.html?category=Furniture&subcategory=bedroom" class="dropdown-link"
+                  aria-expanded="false">
                   Bedroom <i class="fas fa-chevron-right sub-arrow"></i>
                 </a>
                 <ul class="sub-dropdown-menu">
                   <li><a href="Construction.html?category=Furniture&subcategory=bedroom&subsubcategory=bed">Bed</a></li>
-                  <li><a href="Construction.html?category=Furniture&subcategory=bedroom&subsubcategory=wardrobe">Wardrobe</a></li>
-                  <li><a href="Construction.html?category=Furniture&subcategory=bedroom&subsubcategory=dresser">Dresser</a></li>
+                  <li><a
+                      href="Construction.html?category=Furniture&subcategory=bedroom&subsubcategory=wardrobe">Wardrobe</a>
+                  </li>
+                  <li><a
+                      href="Construction.html?category=Furniture&subcategory=bedroom&subsubcategory=dresser">Dresser</a>
+                  </li>
                 </ul>
               </li>
               <li class="dropdown-item">
                 <a href="Construction.html?category=Furniture&subcategory=dining" class="dropdown-link">Dining</a>
                 <ul class="sub-dropdown-menu">
-                  <li><a href="Construction.html?category=Furniture&subcategory=dining&subsubcategory=dining table">Dining Table</a></li>
-                  <li><a href="Construction.html?category=Furniture&subcategory=dining&subsubcategory=dining wagon">Dining Wagon</a></li>
+                  <li><a
+                      href="Construction.html?category=Furniture&subcategory=dining&subsubcategory=dining table">Dining
+                      Table</a></li>
+                  <li><a
+                      href="Construction.html?category=Furniture&subcategory=dining&subsubcategory=dining wagon">Dining
+                      Wagon</a></li>
 
                 </ul>
               </li>
@@ -198,10 +229,13 @@
               Others <i class="fas fa-chevron-down nav-arrow"></i>
             </a>
             <ul class="dropdown-menu">
-              <li class="dropdown-item"><a href="Construction.html?category=others&subcategory=tools" class="dropdown-link">Tools</a></li>
-              <li class="dropdown-item"><a href="Construction.html?category=others&subcategory=safety equipment" class="dropdown-link">Safety Equipment</a>
+              <li class="dropdown-item"><a href="Construction.html?category=others&subcategory=tools"
+                  class="dropdown-link">Tools</a></li>
+              <li class="dropdown-item"><a href="Construction.html?category=others&subcategory=safety equipment"
+                  class="dropdown-link">Safety Equipment</a>
               </li>
-              <li class="dropdown-item"><a href="Construction.html?category=others&subcategory=accessories" class="dropdown-link">Accessories</a>
+              <li class="dropdown-item"><a href="Construction.html?category=others&subcategory=accessories"
+                  class="dropdown-link">Accessories</a>
               </li>
             </ul>
           </li>
@@ -228,7 +262,7 @@
 
 
   <div class="container">
- 
+
 
     <div class="sidebar">
       <div class="filter-section price-range">
@@ -243,7 +277,7 @@
       </div>
 
 
-      
+
 
       <div class="filter-section search-sort">
         <p>Search & Sort</p>
@@ -276,41 +310,55 @@
         <p>Categories</p>
         <ul class="category-list">
           <li class="category-item active" data-category="all">All Products</li>
-          <li class="category-item" data-category="Construction">Construction Materials</li>
+          
+          <!-- Construction -->
+          <li class="category-item" data-category="Construction">Construction</li>
           <li class="category-item subcategory" data-category="Civil Work">Civil Work</li>
           <li class="category-item sub-subcategory" data-category="cement">Cement</li>
-          <li class="category-item sub-subcategory" data-category="Sand">Sand</li>
-          <li class="category-item sub-subcategory" data-category="Brick">Brick</li>
-          <li class="category-item sub-subcategory" data-category="Reinforcement">Reinforcement</li>
-          <li class="category-item subcategory" data-category="interior">Interior Materials</li>
-          <li class="category-item sub-subcategory" data-category="Tiles">Tiles</li>
-          <li class="category-item sub-subcategory" data-category="Wood">Wood</li>
-          <li class="category-item sub-subcategory" data-category="FAccessories">Furniture Accessories</li>
-          <li class="category-item sub-subcategory" data-category="DAccessories">Door Accessories</li>
-          <li class="category-item sub-subcategory" data-category="MHardware">Misc Hardware</li>
-          <li class="category-item sub-subcategory" data-category="Lock">Lock</li>
+          <li class="category-item sub-subcategory" data-category="sand">Sand</li>
+          <li class="category-item sub-subcategory" data-category="brick">Brick</li>
+          <li class="category-item sub-subcategory" data-category="reinforcement">Reinforcement</li>
+          <li class="category-item subcategory" data-category="interior">Interior</li>
+          <li class="category-item sub-subcategory" data-category="tiles">Tiles</li>
+          <li class="category-item sub-subcategory" data-category="wood">Wood</li>
+          <li class="category-item sub-subcategory" data-category="hardware fitting">Hardware fittings</li>
+          <li class="category-item sub-subcategory" data-category="Electrical Accessories">Electrical accessories</li>
           <li class="category-item sub-subcategory" data-category="Mirror">Mirror</li>
-          <li class="category-item subcategory" data-category="Paint">Paint</li>
-          <li class="category-item sub-subcategory" data-category="Waterproofing">Waterproofing</li>
-          <li class="category-item sub-subcategory" data-category="Interior">Interior</li>
-          <li class="category-item sub-subcategory" data-category="Exterior">Exterior</li>
-          <li class="category-item sub-subcategory" data-category="Enamel">Enamel Paints</li>
-          <li class="category-item sub-subcategory" data-category="WoodCoating">Wood Coating</li>
-          <li class="category-item subcategory" data-category="electronics">Electronics</li>
-          <li class="category-item sub-subcategory" data-category="MK">MK Switch</li>
-          <li class="category-item sub-subcategory" data-category="Universal">Universal Socket</li>
-          <li class="category-item sub-subcategory" data-category="Gang">Gang Box</li>
-          <li class="category-item sub-subcategory" data-category="PVCConduit">PVC Conduit</li>
-          <li class="category-item sub-subcategory" data-category="Cable">Cable</li>
-          <li class="category-item sub-subcategory" data-category="FanBox">Fan Box</li>
-          <li class="category-item sub-subcategory" data-category="LightBox">Light Box</li>
-          <li class="category-item sub-subcategory" data-category="PVCBand">PVC Band</li>
-          <li class="category-item sub-subcategory" data-category="Holder">Holder</li>
-          <li class="category-item sub-subcategory" data-category="OtherEssentialItems">Other Essential Items</li>
-          <li class="category-item subcategory" data-category="Sanitary">Sanitary</li>
-          <li class="category-item sub-subcategory" data-category="Fittings">Fittings</li>
-          <li class="category-item sub-subcategory" data-category="Fixture">Fixture</li>
-          <li class="category-item sub-subcategory" data-category="Pump">Pump</li>
+          <li class="category-item subcategory" data-category="paint">Paint</li>
+          <li class="category-item sub-subcategory" data-category="berger">Berger</li>
+          <li class="category-item sub-subcategory" data-category="sayerlac">Sayerlac</li>
+          <li class="category-item sub-subcategory" data-category="Asian Paints">Asian Paints</li>
+          <li class="category-item subcategory" data-category="sanitary">Sanitary</li>
+          <li class="category-item sub-subcategory" data-category="Sanitary fittings">Sanitary fittings</li>
+          <li class="category-item sub-subcategory" data-category="Sanitary fixtures">Sanitary fixtures</li>
+          
+          <!-- Home Appliances -->
+          <li class="category-item" data-category="home Appliances">Home Appliances</li>
+          <li class="category-item subcategory" data-category="Electronic Appliances">Electronic appliances</li>
+          <li class="category-item sub-subcategory" data-category="AC">Ac</li>
+          <li class="category-item sub-subcategory" data-category="FAN">Fan</li>
+          <li class="category-item sub-subcategory" data-category="lights">Lights</li>
+          <li class="category-item sub-subcategory" data-category="refrigerator">Refrigerator</li>
+          
+          <!-- Furniture -->
+          <li class="category-item" data-category="Furniture">Furniture</li>
+          <li class="category-item subcategory" data-category="living room">Living Room</li>
+          <li class="category-item sub-subcategory" data-category="sofa">Sofa</li>
+          <li class="category-item sub-subcategory" data-category="armchair">Armchair</li>
+          <li class="category-item sub-subcategory" data-category="coffee table">Coffee Table</li>
+          <li class="category-item subcategory" data-category="bedroom">Bedroom</li>
+          <li class="category-item sub-subcategory" data-category="bed">Bed</li>
+          <li class="category-item sub-subcategory" data-category="wardrobe">Wardrobe</li>
+          <li class="category-item sub-subcategory" data-category="dresser">Dresser</li>
+          <li class="category-item subcategory" data-category="dining">Dining</li>
+          <li class="category-item sub-subcategory" data-category="dining table">Dining Table</li>
+          <li class="category-item sub-subcategory" data-category="dining wagon">Dining Wagon</li>
+          
+          <!-- Others -->
+          <li class="category-item" data-category="others">Others</li>
+          <li class="category-item subcategory" data-category="tools">Tools</li>
+          <li class="category-item subcategory" data-category="safety equipment">Safety Equipment</li>
+          <li class="category-item subcategory" data-category="accessories">Accessories</li>
         </ul>
       </div>
     </div>
@@ -345,7 +393,7 @@
     </div>
   </div>
 
-<!-- ==================== MOBILE FILTER BUTTON ==================== -->
+  <!-- ==================== MOBILE FILTER BUTTON ==================== -->
   <div class="filter-toggle-wrapper">
     <button class="filter-toggle" onclick="toggleDrawer()">
       <i class="fas fa-filter"></i> Filters
@@ -397,7 +445,7 @@
             <li class="category-item" data-category="Construction">Construction Materials</li>
             <li class="category-item subcategory" data-category="Civil Work">Civil Work</li>
             <li class="category-item sub-subcategory" data-category="cement">Cement</li>
-             <li class="category-item sub-subcategory" data-category="cement">Cement</li>
+            <li class="category-item sub-subcategory" data-category="cement">Cement</li>
             <!-- copy all categories -->
           </ul>
         </div>
