@@ -89,6 +89,9 @@ body {
     .breadcrumb-list li:not(:last-child)::after {
         margin: 0 6px;
     }
+    .container {
+    margin-top: 2rem;
+}
 }
 
 .container {
@@ -97,6 +100,7 @@ body {
     background-color: #ffffff;
     min-height: 100vh;
     padding: 20px;
+    margin-top: 10rem;
 }
 
 .product-section {
