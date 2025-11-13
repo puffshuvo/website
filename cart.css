@@ -18,6 +18,12 @@ body {
   margin: 0 auto;
   gap: 30px;
   padding: 20px;
+  margin-top: 10rem;
+}
+@media (max-width: 768px) {
+    .container {
+    margin-top: 2.5rem !important;
+}
 }
 
 /* Receipt Section - Modern Card Design */
