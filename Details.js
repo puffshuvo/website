@@ -585,7 +585,7 @@ function decreaseQuantity() {
     }
 }
 
-function addToCart() {
+function addToCart(productData) {
     if (!productData) {
         alert('Error: Product data not loaded. Please try again.');
         return;
