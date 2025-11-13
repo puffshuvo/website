@@ -301,62 +301,68 @@ class ProductGallery {
         this.debug('✅ Displayed products', this.filteredProducts.length);
     }
 
-    // === ENHANCED: Product Card with Variants ===
-    createProductCard(product) {
-        const basePrice = parseFloat(product.price) || 0;
-        const discount = parseFloat(product.discount) || 0;
-        const finalPrice = basePrice - discount;
-        
-        const formattedPrice = finalPrice > 0 ? `৳${finalPrice.toLocaleString()}` : 'Price on request';
-        const hasDiscount = discount > 0;
-        
-        // Get first available image
-        let imageUrl = 'Image/placeholder.jpg';
-        if (product.images && product.images.length > 0) {
-            imageUrl = product.images[0];
-        } else if (product.colors && product.colors.length > 0 && product.colors[0].images && product.colors[0].images.length > 0) {
-            imageUrl = product.colors[0].images[0];
-        } else if (product.sizes && product.sizes.length > 0 && product.sizes[0].images && product.sizes[0].images.length > 0) {
-            imageUrl = product.sizes[0].images[0];
-        }
-        
-        const availability = product.inStock ? 'In Stock' : 'Out of Stock';
-        const stockClass = product.inStock ? 'in-stock' : 'out-stock';
-        
-        // Show variant count if applicable
-        let variantInfo = '';
-        if (product.hasColors) {
-            variantInfo += `<span class="variant-badge"><i class="fas fa-palette"></i> ${product.colors.length} colors</span>`;
-        }
-        if (product.hasSizes) {
-            variantInfo += `<span class="variant-badge"><i class="fas fa-ruler"></i> ${product.sizes.length} sizes</span>`;
-        }
-        
-        return `
-            <div class="product-card" data-product-id="${product.id}">
-                <div class="product-image">
-                    <img src="${imageUrl}" alt="${product.name}" 
+// === ENHANCED: Product Card – permanent buttons + specs ===
+createProductCard(product) {
+    const basePrice   = parseFloat(product.price) || 0;
+    const discount    = parseFloat(product.discount) || 0;
+    const finalPrice  = basePrice - discount;
+
+    const formattedPrice = finalPrice > 0 ? `৳${finalPrice.toLocaleString()}` : 'Price on request';
+    const hasDiscount    = discount > 0;
+
+    // ---------- IMAGE ----------
+    let imageUrl = 'Image/placeholder.jpg';
+    if (product.images && product.images.length) imageUrl = product.images[0];
+    else if (product.colors?.[0]?.images?.[0]) imageUrl = product.colors[0].images[0];
+    else if (product.sizes?.[0]?.images?.[0])  imageUrl = product.sizes[0].images[0];
+
+    // ---------- VARIANT BADGE ----------
+    let variantInfo = '';
+    if (product.hasColors) variantInfo += `<span class="variant-badge"><i class="fas fa-palette"></i> ${product.colors.length} colors</span>`;
+    if (product.hasSizes)  variantInfo += `<span class="variant-badge"><i class="fas fa-ruler"></i> ${product.sizes.length} sizes</span>`;
+
+    // ---------- 2-3 SPEC TAGS ----------
+    const specsHtml = this.renderSpecifications(product.specifications || {});
+
+    return `
+        <div class="product-card" data-product-id="${product.id}">
+            <div class="product-image">
+                <a href="Details.html?id=${product.id}">
+                    <img src="${imageUrl}" alt="${product.name}"
                          onerror="if(!this.dataset.tried){this.dataset.tried='1';this.src='Image/placeholder.jpg';}else{this.onerror=null;}">
-                    ${hasDiscount ? `<div class="discount-badge">-${Math.round((discount/basePrice)*100)}%</div>` : ''}
-                    <div class="product-overlay">
-                        <button class="btn-add-cart" onclick="event.stopPropagation();window.gallery.${product.hasColors || product.hasSizes ? 'showVariantSelector' : 'addToCart'}('${product.id}')" 
-                                ${!product.inStock ? 'disabled' : ''}>
-                            <i class="fas fa-shopping-cart"></i> ${product.hasColors || product.hasSizes ? 'Select Options' : 'Add to Cart'}
-                        </button>
-                    </div>
+                </a>
+                ${hasDiscount ? `<div class="discount-badge">-${Math.round((discount/basePrice)*100)}%</div>` : ''}
+            </div>
+
+            <div class="product-info">
+                <h3 class="product-name"><a href="Details.html?id=${product.id}">${product.name}</a></h3>
+                <p class="product-category">${product.category || ''}${product.subcategory ? ' > ' + product.subcategory : ''}${product.subsubcategory ? ' > ' + product.subsubcategory : ''}</p>
+
+                ${variantInfo ? `<div class="variant-info">${variantInfo}</div>` : ''}
+                ${specsHtml}
+
+                <div class="product-price">
+                    ${hasDiscount ? `<span class="original-price">৳${basePrice.toLocaleString()}</span>` : ''}
+                    ${formattedPrice}
                 </div>
-                <div class="product-info">
-                    <h3 class="product-name">${product.name}</h3>
-                    <p class="product-category">${product.category || ''}${product.subcategory ? ' > ' + product.subcategory : ''}${product.subsubcategory ? ' > ' + product.subsubcategory : ''}</p>
-                    ${variantInfo ? `<div class="variant-info">${variantInfo}</div>` : ''}
-                    <div class="product-price">
-                        ${hasDiscount ? `<span class="original-price">৳${basePrice.toLocaleString()}</span>` : ''}
-                        ${formattedPrice}
-                    </div>
+
+                <!-- PERMANENT BUTTONS -->
+                <div class="product-actions">
+                    <button class="btn btn-primary add-to-cart"
+                            onclick="event.stopPropagation();window.gallery.${product.hasColors||product.hasSizes?'showVariantSelector':'addToCart'}('${product.id}')"
+                            ${!product.inStock ? 'disabled' : ''}>
+                        <i class="fas fa-shopping-cart"></i>
+                        ${product.hasColors||product.hasSizes ? 'Select Options' : 'Add to Cart'}
+                    </button>
+                    <a href="Details.html?id=${product.id}" class="btn btn-secondary" onclick="event.stopPropagation();">
+                        <i class="fas fa-eye"></i> View Details
+                    </a>
                 </div>
             </div>
-        `;
-    }
+        </div>
+    `;
+}
+
 
     // === RESTORED: Render Specifications ===
     renderSpecifications(specs) {
