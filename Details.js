@@ -676,8 +676,60 @@ function buyNow() {
     }, 500);
 }
 
+function renderCartItems() {
+    const cartList = document.getElementById('cartList'); // <ul id="cartList">
+    if (!cartList) return;
+
+    let cart = [];
+    try {
+        cart = JSON.parse(localStorage.getItem('cartState') || '[]');
+    } catch (e) {
+        console.error('Error parsing cartState:', e);
+    }
+
+    cartList.innerHTML = '';
+
+    cart.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'cart-item';
+
+        // Only render image if it exists
+        const imgHTML = item.image && item.image.trim() !== '' 
+            ? `<img src="${item.image}" alt="${item.name}" class="cart-item-image">`
+            : '';
+
+        li.innerHTML = `
+            ${imgHTML}
+            <div class="cart-item-details">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-quantity">Qty: ${item.quantity}</div>
+                <div class="cart-item-price">৳${item.price.toFixed(2)}</div>
+            </div>
+            <button class="cart-item-remove" data-id="${item.cartId}">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        cartList.appendChild(li);
+    });
+
+    // Add remove functionality
+    const removeButtons = cartList.querySelectorAll('.cart-item-remove');
+    removeButtons.forEach(btn => {
+        btn.addEventListener('click', e => {
+            const cartId = btn.dataset.id;
+            cart = cart.filter(item => item.cartId !== cartId);
+            localStorage.setItem('cartState', JSON.stringify(cart));
+            renderCartItems();
+            updateCartCountManually();
+        });
+    });
+}
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     loadProductData();
+     renderCartItems();
     updateCartCountManually();
 });
 
