@@ -390,17 +390,17 @@ class ProductGallery {
     setupEventListeners() {
         this.debug('setupEventListeners() start');
 
-        // Hamburger menu toggle
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('.nav-links-wrapper');
-        if (hamburger && navLinks) {
-            hamburger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                navLinks.classList.toggle('active');
-                hamburger.setAttribute('aria-expanded', navLinks.classList.contains('active'));
-                this.debug('Hamburger clicked - toggled nav-links-wrapper');
-            });
-        }
+        // // Hamburger menu toggle
+        // const hamburger = document.querySelector('.hamburger');
+        // const navLinks = document.querySelector('.nav-links-wrapper');
+        // if (hamburger && navLinks) {
+        //     hamburger.addEventListener('click', (e) => {
+        //         e.stopPropagation();
+        //         navLinks.classList.toggle('active');
+        //         hamburger.setAttribute('aria-expanded', navLinks.classList.contains('active'));
+        //         this.debug('Hamburger clicked - toggled nav-links-wrapper');
+        //     });
+        // } 
 
         // Cart dropdown interactions
         this.setupCartListeners();
