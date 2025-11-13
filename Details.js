@@ -143,7 +143,7 @@ function loadProductData() {
                             // Call your existing addToCart function
                             addToCart(product);
 
-                            alert(`${product.name} added to cart!`);
+                            
                         };
                     }
 
