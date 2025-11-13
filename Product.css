@@ -74,6 +74,7 @@ body {
 @media (max-width: 768px) {
     .breadcrumb {
         padding: 0.75rem 0;
+        margin-top: 3rem;
     }
     .breadcrumb-list {
         font-size: 0.85rem; /* Smaller font for mobile */
@@ -97,7 +98,7 @@ body {
 .container {
     max-width: 1900px;
     margin: 0 auto;
-    padding: 2rem 1.5rem;
+    padding: 10rem 1.5rem;
     display: flex;
     gap: 2rem;
     min-height: 100vh;
