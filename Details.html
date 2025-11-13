@@ -277,16 +277,7 @@
         <p class="recommendation-text" id="recommendationText">Loading recommendation...</p>
 
         <div class="action-buttons">
-          <button class="btn btn-add-cart" onclick="addToCart({
-            id: 101,
-            name: 'Cement 50kg',
-            price: 720,
-            image: 'Image/cement.png',
-            quantity: 1
-          })">
-            Add to Cart
-          </button>
-
+          <button class="btn btn-add-cart" id="addToCartBtn">Add to Cart</button>
           <button class="btn btn-buy-now" onclick="buyNow()">Buy Now</button>
           <div class="quantity-selector">
             <button class="quantity-btn" onclick="decreaseQuantity()">-</button>
@@ -370,7 +361,7 @@
   </footer>
 
   <script src="Details.js" defer></script>
- 
+
 
 </body>
 

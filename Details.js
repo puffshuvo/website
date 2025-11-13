@@ -106,7 +106,7 @@ function loadProductData() {
                     document.getElementById('productTitle').textContent = productData.name || 'Unknown Product';
                     document.getElementById('productPrice').textContent = `৳${(productData.price || 0).toFixed(2)} ${productData.currency || 'BDT'}`;
                     document.getElementById('productDescription').textContent = productData.description || 'No description available.';
-                    
+
                     const recommendationText = productData.recomended_text || productData.recomended_title || 'This product is recommended for its quality and suitability for construction projects.';
                     document.getElementById('recommendationText').textContent = recommendationText;
 
@@ -128,6 +128,25 @@ function loadProductData() {
 
                     // Update breadcrumb
                     updateBreadcrumb();
+                    // Enable Add to Cart button after product loads
+                    const addToCartBtn = document.getElementById('addToCartBtn');
+                    if (addToCartBtn) {
+                        addToCartBtn.onclick = () => {
+                            const product = {
+                                id: productData.id,
+                                name: productData.name,
+                                price: parseFloat(productData.price || 0),
+                                image: productData.images[0] || 'Image/placeholder.png',
+                                quantity: parseInt(document.getElementById('quantity').textContent) || 1,
+                            };
+
+                            // Call your existing addToCart function
+                            addToCart(product);
+
+                            alert(`${product.name} added to cart!`);
+                        };
+                    }
+
                 } catch (e) {
                     console.error('Error parsing JSON:', e);
                     document.getElementById('productTitle').textContent = 'Error Loading Product';
@@ -191,19 +210,19 @@ function populateSimilarProducts() {
     if (!similarGrid) return;
 
     similarGrid.innerHTML = '';
-    
+
     if (productData.similar_products && productData.similar_products.length > 0) {
         productData.similar_products.forEach(product => {
             const similarItem = document.createElement('a');
             similarItem.className = 'similar-item';
             similarItem.href = `Details.html?id=${product.id}`;
-            
+
             const productImage = product.images && product.images.length > 0 ? product.images[0] : 'Image/placeholder.png';
             const discount = product.discount || 0;
-            const priceContent = discount > 0 
+            const priceContent = discount > 0
                 ? `<div class="price strikethrough">৳${product.price.toFixed(2)}</div><div class="discount-price">৳${(product.price - discount).toFixed(2)} ${product.currency || 'BDT'}</div>`
                 : `<div class="price">৳${product.price.toFixed(2)} ${product.currency || 'BDT'}</div>`;
-            
+
             similarItem.innerHTML = `
                 <div class="similar-image">
                     <img src="${productImage}" alt="${product.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 50%;">
@@ -233,7 +252,7 @@ function getColorCode(colorName) {
     const rgb = computedColor.match(/\d+/g);
     if (!rgb || rgb.length < 3) return '#CCCCCC';
 
-    return '#' + rgb.slice(0, 3).map(val => parseInt(val).toString(16).padStart(2,'0')).join('');
+    return '#' + rgb.slice(0, 3).map(val => parseInt(val).toString(16).padStart(2, '0')).join('');
 }
 
 // Populate filter circles
@@ -329,8 +348,6 @@ function getCurrentImages() {
     let images = [];
 
     // Priority: Color > Size > Thickness > Default Product Images
-    
-    // Check color images
     if (selectedOptions.color && productData.colors) {
         const colorItem = productData.colors.find(c => c.color === selectedOptions.color);
         if (colorItem && colorItem.images && colorItem.images.length > 0) {
@@ -338,7 +355,6 @@ function getCurrentImages() {
         }
     }
 
-    // If no color images, check size images
     if (images.length === 0 && selectedOptions.size && productData.sizes) {
         const sizeItem = productData.sizes.find(s => s.size === selectedOptions.size);
         if (sizeItem && sizeItem.images && sizeItem.images.length > 0) {
@@ -346,7 +362,6 @@ function getCurrentImages() {
         }
     }
 
-    // If no size images, check thickness images
     if (images.length === 0 && selectedOptions.thickness && productData.thicknesses) {
         const thicknessItem = productData.thicknesses.find(t => t.thickness === selectedOptions.thickness);
         if (thicknessItem && thicknessItem.images && thicknessItem.images.length > 0) {
@@ -354,36 +369,37 @@ function getCurrentImages() {
         }
     }
 
-    // If still no images, use default product images
     if (images.length === 0 && productData.images && productData.images.length > 0) {
         images = productData.images;
     }
 
-    // Final fallback
-    if (images.length === 0) {
-        images = ['Image/placeholder.png'];
-    }
+    // Only keep valid URLs, do NOT add placeholder
+    images = images.filter(img => img && img.trim() !== '').map(img => {
+        return img.startsWith('http') ? img : img;
+    });
 
     return images;
 }
 
+
+
 function updateImages() {
     const mainImage = document.getElementById('mainImage');
     const imageDots = document.getElementById('imageDots');
-    
+
     if (!mainImage || !imageDots) {
         console.error('Image elements not found');
         return;
     }
 
     const images = getCurrentImages();
-    
+
     currentImageIndex = 0;
     mainImage.src = images[0];
 
     // Clear and repopulate dots
     imageDots.innerHTML = '';
-    
+
     if (images.length > 1) {
         images.forEach((img, index) => {
             const dot = document.createElement('div');
@@ -398,11 +414,11 @@ function changeImage(index) {
     currentImageIndex = index;
     const mainImage = document.getElementById('mainImage');
     const images = getCurrentImages();
-    
+
     if (mainImage && images[index]) {
         mainImage.src = images[index];
     }
-    
+
     const dots = document.querySelectorAll('.dot');
     dots.forEach((dot, i) => {
         dot.classList.toggle('active', i === index);
@@ -452,7 +468,7 @@ function updateStockStatus() {
 
     const addToCartBtn = document.querySelector('.btn-add-cart');
     const buyNowBtn = document.querySelector('.btn-buy-now');
-    
+
     let stockDisplay = document.getElementById('stockDisplay');
     if (!stockDisplay) {
         stockDisplay = document.createElement('div');
@@ -566,63 +582,42 @@ function decreaseQuantity() {
     }
 }
 
-function addToCart() {
-    if (!productData) {
-        alert('Error: Product data not loaded. Please try again.');
-        return;
-    }
+function addToCart(productData) {
+    if (!productData) return alert('Product data not loaded.');
 
     const maxStock = getMaxStock();
-    if (maxStock === 0) {
-        alert('This product is out of stock.');
-        return;
-    }
-
-    if (currentQuantity > maxStock) {
-        alert(`Cannot add to cart. Only ${maxStock} units available.`);
-        return;
-    }
+    if (maxStock === 0) return alert('This product is out of stock.');
+    if (currentQuantity > maxStock) return alert(`Only ${maxStock} units available.`);
 
     let totalPrice = productData.price || 0;
     let totalDiscount = productData.discount || 0;
 
+    // Override price with variant price if exists
     if (selectedOptions.color && productData.colors) {
         const colorItem = productData.colors.find(c => c.color === selectedOptions.color);
-        if (colorItem && colorItem.price > 0) {
-            totalPrice = colorItem.price; // Use variant price directly, not add to base
-        }
+        if (colorItem && colorItem.price > 0) totalPrice = colorItem.price;
     }
-
     if (selectedOptions.size && productData.sizes) {
         const sizeItem = productData.sizes.find(s => s.size === selectedOptions.size);
-        if (sizeItem && sizeItem.price > 0) {
-            totalPrice = sizeItem.price; // Use variant price directly
-        }
+        if (sizeItem && sizeItem.price > 0) totalPrice = sizeItem.price;
     }
-
     if (selectedOptions.thickness && productData.thicknesses) {
         const thicknessItem = productData.thicknesses.find(t => t.thickness === selectedOptions.thickness);
-        if (thicknessItem && thicknessItem.price > 0) {
-            totalPrice = thicknessItem.price; // Use variant price directly
-        }
+        if (thicknessItem && thicknessItem.price > 0) totalPrice = thicknessItem.price;
     }
 
     const images = getCurrentImages();
-    
-    // Create unique cart ID for variant combinations
-    const cartId = `${productData.id}_${selectedOptions.color || 'none'}_${selectedOptions.size || 'none'}_${selectedOptions.thickness || 'none'}`;
+    const mainImage = images.length > 0 ? images[0] : ''; // ✅ empty string if no image
+
+    const cartId = `${productData.id}_${selectedOptions.color||'none'}_${selectedOptions.size||'none'}_${selectedOptions.thickness||'none'}`;
 
     const cartItem = {
         id: productData.id,
         cartId: cartId,
         name: productData.name,
         price: totalPrice - totalDiscount,
-        originalPrice: totalPrice,
         quantity: currentQuantity,
-        image: images[0],
-        category: productData.category,
-        subcategory: productData.subcategory,
-        subsubcategory: productData.subsubcategory,
+        image: mainImage, // ✅ empty if no image
         selectedOptions: { ...selectedOptions },
         maxStock: maxStock
     };
@@ -630,51 +625,30 @@ function addToCart() {
     let cart = [];
     try {
         const savedCart = localStorage.getItem('cartState');
-        if (savedCart) {
-            cart = JSON.parse(savedCart);
-        }
+        if (savedCart) cart = JSON.parse(savedCart);
     } catch (e) {
-        console.error('Error loading cart from localStorage:', e);
+        console.error('Cart parse error:', e);
     }
 
-    // Check if exact variant already exists in cart
-    const existingItemIndex = cart.findIndex(item => item.cartId === cartId);
-    
-    if (existingItemIndex !== -1) {
-        // Update quantity of existing item
-        const newQuantity = cart[existingItemIndex].quantity + currentQuantity;
-        if (newQuantity > maxStock) {
-            alert(`Cannot add ${currentQuantity} more. Maximum stock is ${maxStock}. You already have ${cart[existingItemIndex].quantity} in cart.`);
-            return;
-        }
-        cart[existingItemIndex].quantity = newQuantity;
+    const existingIndex = cart.findIndex(item => item.cartId === cartId);
+    if (existingIndex !== -1) {
+        const newQty = cart[existingIndex].quantity + currentQuantity;
+        if (newQty > maxStock) return alert(`Only ${maxStock} units available.`);
+        cart[existingIndex].quantity = newQty;
     } else {
-        // Add new item
         cart.push(cartItem);
     }
 
     try {
         localStorage.setItem('cartState', JSON.stringify(cart));
-        
-        // Build variant description for alert
-        let variantText = '';
-        if (selectedOptions.color) variantText += ` (Color: ${selectedOptions.color})`;
-        if (selectedOptions.size) variantText += ` (Size: ${selectedOptions.size})`;
-        if (selectedOptions.thickness) variantText += ` (Thickness: ${selectedOptions.thickness})`;
-        
-        alert(`Added ${currentQuantity} ${productData.name}${variantText} to cart at ৳${(totalPrice - totalDiscount).toFixed(2)} ${productData.currency || 'BDT'} each!`);
-        
-        // Update cart count in navbar if function exists
-        if (window.gallery && typeof window.gallery.updateCartCount === 'function') {
-            window.gallery.updateCartCount();
-        } else {
-            updateCartCountManually();
-        }
+        updateCartCountManually();
+        alert(`Added ${currentQuantity} ${productData.name} to cart!`);
     } catch (e) {
-        console.error('Error saving cart to localStorage:', e);
-        alert('Failed to add to cart. Please try again.');
+        console.error('Error saving cart:', e);
+        alert('Failed to add to cart.');
     }
 }
+
 
 // Helper function to manually update cart count
 function updateCartCountManually() {
@@ -702,9 +676,61 @@ function buyNow() {
     }, 500);
 }
 
+function renderCartItems() {
+    const cartList = document.getElementById('cartList'); // <ul id="cartList">
+    if (!cartList) return;
+
+    let cart = [];
+    try {
+        cart = JSON.parse(localStorage.getItem('cartState') || '[]');
+    } catch (e) {
+        console.error('Error parsing cartState:', e);
+    }
+
+    cartList.innerHTML = '';
+
+    cart.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'cart-item';
+
+        // Only render image if it exists
+        const imgHTML = item.image && item.image.trim() !== '' 
+            ? `<img src="${item.image}" alt="${item.name}" class="cart-item-image">`
+            : '';
+
+        li.innerHTML = `
+            ${imgHTML}
+            <div class="cart-item-details">
+                <div class="cart-item-name">${item.name}</div>
+                <div class="cart-item-quantity">Qty: ${item.quantity}</div>
+                <div class="cart-item-price">৳${item.price.toFixed(2)}</div>
+            </div>
+            <button class="cart-item-remove" data-id="${item.cartId}">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+        cartList.appendChild(li);
+    });
+
+    // Add remove functionality
+    const removeButtons = cartList.querySelectorAll('.cart-item-remove');
+    removeButtons.forEach(btn => {
+        btn.addEventListener('click', e => {
+            const cartId = btn.dataset.id;
+            cart = cart.filter(item => item.cartId !== cartId);
+            localStorage.setItem('cartState', JSON.stringify(cart));
+            renderCartItems();
+            updateCartCountManually();
+        });
+    });
+}
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     loadProductData();
-    updateCartCountManually(); 
+     renderCartItems();
+    updateCartCountManually();
 });
 
 
