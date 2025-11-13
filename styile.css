@@ -899,7 +899,7 @@ footer {
   top: 0;
   left: 0;
   width: 100%;
-  height: 120vh;
+  height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(4px);
   opacity: 0;
@@ -951,11 +951,11 @@ footer {
   .nav-links-wrapper {
     position: fixed;
     /* ensure mobile panel begins below the fixed navbar */
-    top: var(--navbar-height);
+  
     left: -100%;
     width: -85%;
     max-width: 480px;
-    height: calc(150vh - var(--navbar-height));
+    height: 100vh;
     background: linear-gradient(180deg, #331f08 0%, #2a1906 100%);
     padding: calc(var(--navbar-height) + 8px) 0 40px;
     overflow-y: auto;
@@ -973,6 +973,10 @@ footer {
   .nav-links-wrapper::-webkit-scrollbar {
     width: 6px;
   }
+  .nav-links-wrapper {
+  margin-top: 0rem;
+ 
+}
 
   .nav-links-wrapper::-webkit-scrollbar-track {
     background: rgba(247, 227, 186, 0.05);
