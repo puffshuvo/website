@@ -310,7 +310,7 @@
         <p>Categories</p>
         <ul class="category-list">
           <li class="category-item active" data-category="all">All Products</li>
-          
+
           <!-- Construction -->
           <li class="category-item" data-category="Construction">Construction</li>
           <li class="category-item subcategory" data-category="Civil Work">Civil Work</li>
@@ -331,7 +331,7 @@
           <li class="category-item subcategory" data-category="sanitary">Sanitary</li>
           <li class="category-item sub-subcategory" data-category="Sanitary fittings">Sanitary fittings</li>
           <li class="category-item sub-subcategory" data-category="Sanitary fixtures">Sanitary fixtures</li>
-          
+
           <!-- Home Appliances -->
           <li class="category-item" data-category="home Appliances">Home Appliances</li>
           <li class="category-item subcategory" data-category="Electronic Appliances">Electronic appliances</li>
@@ -339,7 +339,7 @@
           <li class="category-item sub-subcategory" data-category="FAN">Fan</li>
           <li class="category-item sub-subcategory" data-category="lights">Lights</li>
           <li class="category-item sub-subcategory" data-category="refrigerator">Refrigerator</li>
-          
+
           <!-- Furniture -->
           <li class="category-item" data-category="Furniture">Furniture</li>
           <li class="category-item subcategory" data-category="living room">Living Room</li>
@@ -353,7 +353,7 @@
           <li class="category-item subcategory" data-category="dining">Dining</li>
           <li class="category-item sub-subcategory" data-category="dining table">Dining Table</li>
           <li class="category-item sub-subcategory" data-category="dining wagon">Dining Wagon</li>
-          
+
           <!-- Others -->
           <li class="category-item" data-category="others">Others</li>
           <li class="category-item subcategory" data-category="tools">Tools</li>
@@ -516,6 +516,35 @@
       </form>
     </div>
   </footer>
+
+
+  <script>
+    (function () {
+      // Get category from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const categoryParam = urlParams.get('category');
+
+      if (categoryParam) {
+        // Normalize category name
+        const normalizedCategory = categoryParam.toLowerCase().trim().replace(/\+/g, ' ');
+
+        // Get all category items in sidebar
+        const categoryItems = document.querySelectorAll('.category-list .category-item');
+
+        categoryItems.forEach(item => {
+          const itemCategory = item.getAttribute('data-category').toLowerCase().trim();
+
+          // Show only matching category, hide others
+          if (itemCategory === normalizedCategory || itemCategory === 'all') {
+            item.style.display = 'list-item';
+          } else {
+            item.style.display = 'none';
+          }
+        });
+      }
+    })();
+  </script>
+
 
 </body>
 
