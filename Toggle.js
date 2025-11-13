@@ -419,40 +419,16 @@ document.addEventListener('DOMContentLoaded', () => {
   // Materials grid initialization
   const materials = [
     {
-      name: "Cement",
-      defaultImage: "cat/Cement.png",
-      hoverImage: "cat/Cementh.png",
-      link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=cement"
-    },
-    {
-      name: "Sand",
-      defaultImage: "cat/Sand.png",
-      hoverImage: "cat/Sandh.png",
-      link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=sand"
-    },
-    {
-      name: "Brick",
-      defaultImage: "cat/Brick.png",
-      hoverImage: "cat/Brickh.png",
-      link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=brick"
-    },
-    {
-      name: "Reinforcement",
-      defaultImage: "cat/Rainforcement.png",
-      hoverImage: "cat/Rainforcementh.png",
-      link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=reinforcement"
+      name: "Tiles",
+      defaultImage: "cat/Ti.png",
+      hoverImage: "cat/Tih.png",
+      link: "Construction.html?category=Interior&subcategory=Tiles"
     },
     {
       name: "Paint",
       defaultImage: "cat/Paint.png",
       hoverImage: "cat/Painth.png",
       link: "Construction.html?category=Paint"
-    },
-    {
-      name: "Tiles",
-      defaultImage: "cat/Ti.png",
-      hoverImage: "cat/Tih.png",
-      link: "Construction.html?category=Interior&subcategory=Tiles"
     },
     {
       name: "Electrical Materials",
@@ -489,7 +465,34 @@ document.addEventListener('DOMContentLoaded', () => {
       defaultImage: "cat/furniture.png",
       hoverImage: "cat/furnitureh.png",
       link: "Construction.html?category=Furniture"
+    },
+  {
+      name: "Cement",
+      defaultImage: "cat/Cement.png",
+      hoverImage: "cat/Cementh.png",
+      link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=cement"
+    },
+    {
+      name: "Sand",
+      defaultImage: "cat/Sand.png",
+      hoverImage: "cat/Sandh.png",
+      link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=sand"
+    },
+    {
+      name: "Brick",
+      defaultImage: "cat/Brick.png",
+      hoverImage: "cat/Brickh.png",
+      link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=brick"
+    },
+    {
+      name: "Reinforcement",
+      defaultImage: "cat/Rainforcement.png",
+      hoverImage: "cat/Rainforcementh.png",
+      link: "Construction.html?category=Construction&subcategory=Civil+Work&subsubcategory=reinforcement"
     }
+    
+   
+    
   ];
 
   function createMaterialCard(material) {

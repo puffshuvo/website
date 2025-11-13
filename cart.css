@@ -370,13 +370,13 @@ body {
 
 .alt-btnl:hover,
 .alt-btn:hover {
-  background: #331f08;
-  color: white;
+  background: #f8f8f8;
+  color: rgb(145, 145, 145);
 }
 
 .compare-btn {
-  background: #f0f7f3;
-  color: white;
+  background: #ffee8e;
+  color: rgb(27, 0, 0);
   display: none;
 }
 

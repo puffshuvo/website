@@ -70,6 +70,7 @@
       flex: 1;
       padding: 30px;
       background: #f4f0e8;
+      margin-top: 3rem;
     }
 
     .product-section:first-child {
@@ -298,6 +299,485 @@
       font-size: 14px;
       vertical-align: middle;
     }
+    /* ============================================
+   RESPONSIVE MEDIA QUERIES
+   ============================================ */
+
+/* Large Tablets and Small Desktops (1024px and below) */
+@media (max-width: 1024px) {
+  .container {
+    max-width: 95%;
+    margin: 20px auto;
+  }
+
+  .header {
+    font-size: 18px;
+    padding: 18px;
+  }
+
+  .product-section {
+    padding: 25px;
+  }
+
+  .section-title {
+    font-size: 17px;
+    margin-bottom: 20px;
+  }
+
+  .table-header th {
+    padding: 12px 8px;
+    font-size: 13px;
+  }
+
+  .product-row td {
+    padding: 12px 8px;
+    font-size: 13px;
+  }
+
+  .instructions {
+    margin: 15px;
+    padding: 18px;
+    font-size: 13px;
+  }
+}
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+  body {
+    padding-top: 0;
+  }
+
+  /* Back Button Adjustments */
+  .back-button {
+    position: relative;
+    margin: 15px;
+    padding: 10px 18px;
+    font-size: 13px;
+    display: inline-block;
+  }
+
+  /* Container and Header */
+  .container {
+    margin: 10px;
+    border-radius: 10px;
+  }
+
+  .header {
+    font-size: 16px;
+    padding: 15px;
+    line-height: 1.4;
+  }
+
+  /* Make Comparison Container Stack Vertically */
+  .comparison-container {
+    flex-direction: column;
+  }
+
+  .product-section {
+    padding: 20px 15px;
+    margin-top: 0;
+  }
+
+  .product-section:first-child {
+    border-right: none;
+    border-bottom: 2px solid #d4a574;
+    padding-bottom: 25px;
+  }
+
+  .section-title {
+    font-size: 16px;
+    margin-bottom: 18px;
+  }
+
+  /* Table Adjustments */
+  .product-table {
+    font-size: 12px;
+  }
+
+  .table-header th {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+
+  .product-row td {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+
+  /* Quantity Controls */
+  .qty-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+
+  /* Button Adjustments */
+  .choice-button,
+  .combined-button {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  /* Combined Section */
+  .combined-section {
+    padding: 20px 15px;
+  }
+
+  .total-section {
+    padding: 15px;
+    margin-top: 15px;
+  }
+
+  .total-row {
+    font-size: 14px;
+    padding: 8px 0;
+  }
+
+  /* Instructions */
+  .instructions {
+    margin: 15px 10px;
+    padding: 15px;
+    font-size: 12px;
+  }
+
+  .instructions ul {
+    margin-left: 15px;
+  }
+}
+
+/* Mobile Devices (576px and below) */
+@media (max-width: 576px) {
+  /* Back Button */
+  .back-button {
+    margin: 10px;
+    padding: 8px 15px;
+    font-size: 12px;
+    width: calc(100% - 20px);
+    text-align: center;
+  }
+
+  /* Container */
+  .container {
+    margin: 5px;
+    border-radius: 8px;
+  }
+
+  .header {
+    font-size: 14px;
+    padding: 12px 10px;
+  }
+
+  /* Product Sections */
+  .product-section {
+    padding: 15px 10px;
+  }
+
+  .section-title {
+    font-size: 15px;
+    margin-bottom: 15px;
+  }
+
+  /* Table - Make it Scrollable Horizontally */
+  .product-table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 11px;
+  }
+
+  .product-table thead,
+  .product-table tbody,
+  .product-table tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+  }
+
+  .table-header th {
+    padding: 8px 4px;
+    font-size: 11px;
+    white-space: nowrap;
+  }
+
+  .product-row td {
+    padding: 8px 4px;
+    font-size: 11px;
+    word-wrap: break-word;
+  }
+
+  /* Adjust Column Widths for Mobile */
+  .product-table th:nth-child(1),
+  .product-table td:nth-child(1) {
+    width: 30%;
+  }
+
+  .product-table th:nth-child(2),
+  .product-table td:nth-child(2) {
+    width: 20%;
+  }
+
+  .product-table th:nth-child(3),
+  .product-table td:nth-child(3) {
+    width: 25%;
+  }
+
+  .product-table th:nth-child(4),
+  .product-table td:nth-child(4) {
+    width: 15%;
+  }
+
+  .product-table th:nth-child(5),
+  .product-table td:nth-child(5) {
+    width: 10%;
+  }
+
+  /* Quantity Controls */
+  .qty-btn {
+    width: 18px;
+    height: 18px;
+    font-size: 11px;
+  }
+
+  /* Checkbox */
+  .select-checkbox {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Buttons */
+  .choice-button,
+  .combined-button {
+    padding: 10px;
+    font-size: 12px;
+    margin-top: 12px;
+  }
+
+  /* Total Section */
+  .total-section {
+    padding: 12px;
+    margin-top: 12px;
+  }
+
+  .total-row {
+    font-size: 13px;
+    padding: 6px 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  /* Combined Section */
+  .combined-section {
+    padding: 15px 10px;
+  }
+
+  .combined-section p {
+    font-size: 12px;
+    margin-bottom: 15px;
+  }
+
+  /* Instructions */
+  .instructions {
+    margin: 10px 5px;
+    padding: 12px;
+    font-size: 11px;
+  }
+
+  .instructions ul {
+    margin-left: 12px;
+  }
+
+  .instructions li {
+    margin: 4px 0;
+    line-height: 1.5;
+  }
+
+  /* Background Pattern */
+  body::before {
+    background-size: 400px 300px;
+    opacity: 0.2;
+  }
+}
+
+/* Extra Small Mobile Devices (400px and below) */
+@media (max-width: 400px) {
+  .header {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .section-title {
+    font-size: 14px;
+  }
+
+  .product-table {
+    font-size: 10px;
+  }
+
+  .table-header th,
+  .product-row td {
+    padding: 6px 3px;
+    font-size: 10px;
+  }
+
+  .qty-btn {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+  }
+
+  .select-checkbox {
+    width: 14px;
+    height: 14px;
+  }
+
+  .choice-button,
+  .combined-button {
+    font-size: 11px;
+    padding: 8px;
+  }
+
+  .total-row {
+    font-size: 12px;
+  }
+
+  .instructions {
+    font-size: 10px;
+    padding: 10px;
+  }
+
+  .back-button {
+    font-size: 11px;
+    padding: 7px 12px;
+  }
+}
+
+/* Landscape Mode for Mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .comparison-container {
+    flex-direction: row;
+  }
+
+  .product-section:first-child {
+    border-right: 2px solid #d4a574;
+    border-bottom: none;
+  }
+
+  .product-section {
+    padding: 15px 10px;
+  }
+
+  .header {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .instructions {
+    margin: 10px;
+    padding: 12px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .back-button,
+  .hamburger,
+  .navbar,
+  footer,
+  .choice-button,
+  .combined-button {
+    display: none !important;
+  }
+
+  .container {
+    box-shadow: none;
+    max-width: 100%;
+  }
+
+  body::before {
+    display: none;
+  }
+
+  .product-row:hover {
+    background: transparent;
+  }
+}
+
+/* High Resolution Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .product-table,
+  .total-section,
+  .instructions {
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .choice-button,
+  .combined-button,
+  .qty-btn,
+  .back-button {
+    min-height: 44px;
+    touch-action: manipulation;
+  }
+
+  .select-checkbox {
+    min-width: 20px;
+    min-height: 20px;
+  }
+
+  .product-row {
+    cursor: default;
+  }
+
+  /* Larger tap targets for mobile */
+  .qty-btn {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Dark Mode Support (Optional) */
+@media (prefers-color-scheme: dark) {
+  
+  body {
+    background: #1a1a1a;
+    color: #e0e0e0;
+  }
+
+  .container {
+    background: #2d2d2d;
+  }
+
+  .header {
+    background: #3d3d3d;
+    color: #d4a574;
+  }
+
+  .product-table {
+    background: #252525;
+  }
+
+  .table-header {
+    background: #8B4513;
+  }
+
+  .product-row:hover {
+    background: #333;
+  }
+  
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+    
   </style>
 </head>
 
