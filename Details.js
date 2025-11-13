@@ -348,8 +348,6 @@ function getCurrentImages() {
     let images = [];
 
     // Priority: Color > Size > Thickness > Default Product Images
-
-    // Check color images
     if (selectedOptions.color && productData.colors) {
         const colorItem = productData.colors.find(c => c.color === selectedOptions.color);
         if (colorItem && colorItem.images && colorItem.images.length > 0) {
@@ -357,7 +355,6 @@ function getCurrentImages() {
         }
     }
 
-    // If no color images, check size images
     if (images.length === 0 && selectedOptions.size && productData.sizes) {
         const sizeItem = productData.sizes.find(s => s.size === selectedOptions.size);
         if (sizeItem && sizeItem.images && sizeItem.images.length > 0) {
@@ -365,7 +362,6 @@ function getCurrentImages() {
         }
     }
 
-    // If no size images, check thickness images
     if (images.length === 0 && selectedOptions.thickness && productData.thicknesses) {
         const thicknessItem = productData.thicknesses.find(t => t.thickness === selectedOptions.thickness);
         if (thicknessItem && thicknessItem.images && thicknessItem.images.length > 0) {
@@ -373,22 +369,25 @@ function getCurrentImages() {
         }
     }
 
-    // If still no images, use default product images
-    if (images.length === 0 && productData.images) {
-    if (Array.isArray(productData.images) && productData.images.length > 0) {
+    // Fallback to default product images
+    if (images.length === 0 && productData.images && productData.images.length > 0) {
         images = productData.images;
-    } else if (typeof productData.images === 'string') {
-        images = [productData.images]; // convert string to array
     }
-}
 
     // Final fallback
     if (images.length === 0) {
         images = ['Image/placeholder.png'];
     }
 
+    // Ensure full URLs
+    images = images.map(img => {
+        if (img.startsWith('http')) return img;
+        return `Image/${img}`;
+    });
+
     return images;
 }
+
 
 function updateImages() {
     const mainImage = document.getElementById('mainImage');
@@ -611,26 +610,19 @@ function addToCart(productData) {
 
     if (selectedOptions.color && productData.colors) {
         const colorItem = productData.colors.find(c => c.color === selectedOptions.color);
-        if (colorItem && colorItem.price > 0) {
-            totalPrice = colorItem.price; // Use variant price directly, not add to base
-        }
+        if (colorItem && colorItem.price > 0) totalPrice = colorItem.price;
     }
-
     if (selectedOptions.size && productData.sizes) {
         const sizeItem = productData.sizes.find(s => s.size === selectedOptions.size);
-        if (sizeItem && sizeItem.price > 0) {
-            totalPrice = sizeItem.price; // Use variant price directly
-        }
+        if (sizeItem && sizeItem.price > 0) totalPrice = sizeItem.price;
     }
-
     if (selectedOptions.thickness && productData.thicknesses) {
         const thicknessItem = productData.thicknesses.find(t => t.thickness === selectedOptions.thickness);
-        if (thicknessItem && thicknessItem.price > 0) {
-            totalPrice = thicknessItem.price; // Use variant price directly
-        }
+        if (thicknessItem && thicknessItem.price > 0) totalPrice = thicknessItem.price;
     }
 
     const images = getCurrentImages();
+    const mainImage = images[0] || 'Image/placeholder.png'; // Ensure valid image
 
     // Create unique cart ID for variant combinations
     const cartId = `${productData.id}_${selectedOptions.color || 'none'}_${selectedOptions.size || 'none'}_${selectedOptions.thickness || 'none'}`;
@@ -642,7 +634,7 @@ function addToCart(productData) {
         price: totalPrice - totalDiscount,
         originalPrice: totalPrice,
         quantity: currentQuantity,
-        image: images[0],
+        image: mainImage, // <-- use full URL or fallback
         category: productData.category,
         subcategory: productData.subcategory,
         subsubcategory: productData.subsubcategory,
@@ -653,49 +645,30 @@ function addToCart(productData) {
     let cart = [];
     try {
         const savedCart = localStorage.getItem('cartState');
-        if (savedCart) {
-            cart = JSON.parse(savedCart);
-        }
+        if (savedCart) cart = JSON.parse(savedCart);
     } catch (e) {
         console.error('Error loading cart from localStorage:', e);
     }
 
-    // Check if exact variant already exists in cart
     const existingItemIndex = cart.findIndex(item => item.cartId === cartId);
-
     if (existingItemIndex !== -1) {
-        // Update quantity of existing item
         const newQuantity = cart[existingItemIndex].quantity + currentQuantity;
         if (newQuantity > maxStock) {
-            alert(`Cannot add ${currentQuantity} more. Maximum stock is ${maxStock}. You already have ${cart[existingItemIndex].quantity} in cart.`);
+            alert(`Cannot add ${currentQuantity} more. Max stock is ${maxStock}.`);
             return;
         }
         cart[existingItemIndex].quantity = newQuantity;
     } else {
-        // Add new item
         cart.push(cartItem);
     }
 
     try {
         localStorage.setItem('cartState', JSON.stringify(cart));
-
-        // Build variant description for alert
-        let variantText = '';
-        if (selectedOptions.color) variantText += ` (Color: ${selectedOptions.color})`;
-        if (selectedOptions.size) variantText += ` (Size: ${selectedOptions.size})`;
-        if (selectedOptions.thickness) variantText += ` (Thickness: ${selectedOptions.thickness})`;
-
-        alert(`Added ${currentQuantity} ${productData.name}${variantText} to cart at ৳${(totalPrice - totalDiscount).toFixed(2)} ${productData.currency || 'BDT'} each!`);
-
-        // Update cart count in navbar if function exists
-        if (window.gallery && typeof window.gallery.updateCartCount === 'function') {
-            window.gallery.updateCartCount();
-        } else {
-            updateCartCountManually();
-        }
+        alert(`Added ${currentQuantity} ${productData.name} to cart!`);
+        updateCartCountManually();
     } catch (e) {
-        console.error('Error saving cart to localStorage:', e);
-        alert('Failed to add to cart. Please try again.');
+        console.error('Error saving cart:', e);
+        alert('Failed to add to cart.');
     }
 }
 
