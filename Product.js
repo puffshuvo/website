@@ -1448,3 +1448,86 @@ if (!document.getElementById('variant-styles')) {
     `;
     document.head.appendChild(styleEl);
 }
+
+
+function toggleSidebarDrawer() {
+  document.querySelector('.sidebar-drawer').classList.toggle('open');
+}
+// close drawer when clicking outside
+document.querySelector('.sidebar-drawer').addEventListener('click', e => {
+  if (e.target === e.currentTarget) toggleSidebarDrawer();
+});
+
+
+
+// Mobile drawer toggle
+function toggleDrawer() {
+  document.getElementById('mobileDrawer').classList.toggle('open');
+}
+
+// Close when clicking outside
+document.getElementById('mobileDrawer').addEventListener('click', function(e) {
+  if (e.target === this) toggleDrawer();
+});
+
+// Close with ESC
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') toggleDrawer();
+});
+
+// Sync mobile filters with desktop
+document.addEventListener('DOMContentLoaded', () => {
+  const desktopPrice = document.getElementById('priceRange');
+  const mobilePrice = document.getElementById('priceRangeMobile');
+  const desktopSearch = document.getElementById('searchInput');
+  const mobileSearch = document.getElementById('searchInputMobile');
+  const desktopSort = document.getElementById('sortBy');
+  const mobileSort = document.getElementById('sortByMobile');
+
+  // Sync price
+  if (desktopPrice && mobilePrice) {
+    desktopPrice.addEventListener('input', () => {
+      mobilePrice.value = desktopPrice.value;
+      document.getElementById('maxPriceMobile').textContent = '৳' + desktopPrice.value;
+    });
+    mobilePrice.addEventListener('input', () => {
+      desktopPrice.value = mobilePrice.value;
+      document.getElementById('maxPrice').textContent = '৳' + mobilePrice.value;
+    });
+  }
+
+  // Sync search & sort
+  if (desktopSearch) desktopSearch.addEventListener('input', () => mobileSearch.value = desktopSearch.value);
+  if (mobileSearch) mobileSearch.addEventListener('input', () => desktopSearch.value = mobileSearch.value);
+  if (desktopSort) desktopSort.addEventListener('change', () => mobileSort.value = desktopSort.value);
+  if (mobileSort) mobileSort.addEventListener('change', () => desktopSort.value = mobileSort.value);
+});
+
+// Close mobile sidebar-drawer when a sidebar item is selected (mobile only)
+document.addEventListener('click', function (e) {
+    // only act on small screens where drawer is used
+    if (!window.matchMedia('(max-width: 767px)').matches) return;
+
+    const drawer = document.querySelector('.sidebar-drawer');
+    if (!drawer || !drawer.classList.contains('open')) return;
+
+    // selectors that should close the drawer when clicked
+    const closeSelectors = [
+        '.sidebar a',
+        '.category-item',
+        '.subcategory',
+        '.sub-subcategory',
+        '.spec-options label',
+        '.sidebar input[type="checkbox"]',
+        '.sidebar input[type="radio"]'
+    ];
+
+    let node = e.target;
+    while (node && node !== document) {
+        if (node.matches && closeSelectors.some(sel => node.matches(sel))) {
+            drawer.classList.remove('open');
+            break;
+        }
+        node = node.parentNode;
+    }
+});
