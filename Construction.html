@@ -519,6 +519,7 @@
 
 
   <script>
+    // Check URL parameter and filter sidebar categories with subcategories
     (function () {
       // Get category from URL
       const urlParams = new URLSearchParams(window.location.search);
@@ -531,13 +532,36 @@
         // Get all category items in sidebar
         const categoryItems = document.querySelectorAll('.category-list .category-item');
 
+        let showChildren = false;
+
         categoryItems.forEach(item => {
           const itemCategory = item.getAttribute('data-category').toLowerCase().trim();
+          const isMainCategory = !item.classList.contains('subcategory') && !item.classList.contains('sub-subcategory');
+          const isSubcategory = item.classList.contains('subcategory');
+          const isSubSubcategory = item.classList.contains('sub-subcategory');
 
-          // Show only matching category, hide others
-          if (itemCategory === normalizedCategory || itemCategory === 'all') {
+          // Always show "All Products"
+          if (itemCategory === 'all') {
             item.style.display = 'list-item';
-          } else {
+            return;
+          }
+
+          // If this is the matching main category
+          if (isMainCategory && itemCategory === normalizedCategory) {
+            item.style.display = 'list-item';
+            showChildren = true; // Start showing its children
+          }
+          // If this is another main category
+          else if (isMainCategory && itemCategory !== normalizedCategory) {
+            item.style.display = 'none';
+            showChildren = false; // Stop showing children
+          }
+          // If we should show children (subcategories and sub-subcategories)
+          else if (showChildren && (isSubcategory || isSubSubcategory)) {
+            item.style.display = 'list-item';
+          }
+          // Hide everything else
+          else {
             item.style.display = 'none';
           }
         });
