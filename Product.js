@@ -338,6 +338,8 @@ createProductCard(product) {
                 <h3 class="product-name"><a href="Details.html?id=${product.id}">${product.name}</a></h3>
                 <p class="product-category">${product.category || ''}${product.subcategory ? ' > ' + product.subcategory : ''}${product.subsubcategory ? ' > ' + product.subsubcategory : ''}</p>
 
+                ${product.description ? `<p class="product-description">${product.description.length > 120 ? product.description.slice(0,120) + '...' : product.description}</p>` : ''}
+
                 ${variantInfo ? `<div class="variant-info">${variantInfo}</div>` : ''}
                 ${specsHtml}
 
