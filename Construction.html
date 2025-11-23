@@ -47,15 +47,13 @@
       margin: 0;
     }
     /* Make the main container grow so footer stays at the bottom */
-    /* Allow container to grow but remove externally-set min-height which caused layout issues */
-    .container { flex: 1 0 auto; min-height: auto !important; padding-bottom: 3.5rem; }
+    .container { flex: 1 0 auto; }
 
     /* Ensure footer doesn't overlap content */
     footer {
       flex-shrink: 0;
       clear: both;
-      position: relative; /* ensure normal flow and stacking */
-      z-index: 1;         /* keep footer below overlays like modals if needed */
+      position: static;
     }
 
     /* Add a bit of bottom padding so product grid items don't butt up against the footer */
@@ -590,28 +588,6 @@
           }
         });
       }
-    })();
-  </script>
-
-  <!-- Ensure container leaves room for footer (handles dynamic footer height) -->
-  <script>
-    (function adjustFooterSpace(){
-      const container = document.querySelector('.container');
-      const footer = document.querySelector('footer');
-      if (!container || !footer) return;
-      function update() {
-        // leave a small gap (24px) in addition to footer height
-        const h = footer.offsetHeight || 0;
-        container.style.paddingBottom = (h + 24) + 'px';
-      }
-      // run on load and resize
-      window.addEventListener('load', update);
-      window.addEventListener('resize', update);
-      // images or async content may change footer height — observe mutations
-      const mo = new MutationObserver(update);
-      mo.observe(footer, { childList: true, subtree: true, characterData: true });
-      // initial call
-      update();
     })();
   </script>
 
