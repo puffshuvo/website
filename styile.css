@@ -752,12 +752,12 @@ body {
 /* ========================================================================== */
 
 footer {
+  position: relative;
   padding: 40px;
   background-color: #2e1b04;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
-  margin: 0;
 }
 
 .footer-left { flex: 1; min-width: 320px; }
