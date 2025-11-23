@@ -37,6 +37,28 @@
       font-display: swap;
     }
   </style>
+  <style>
+    /* Ensure footer sits after main content and avoid overlap */
+    html, body { height: 100%; }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+    }
+    /* Make the main container grow so footer stays at the bottom */
+    .container { flex: 1 0 auto; }
+
+    /* Ensure footer doesn't overlap content */
+    footer {
+      flex-shrink: 0;
+      clear: both;
+      position: static;
+    }
+
+    /* Add a bit of bottom padding so product grid items don't butt up against the footer */
+    .main-content, .product-grid { padding-bottom: 2.5rem; }
+  </style>
 </head>
 
 <body style="background-color: #fff;">
