@@ -43,21 +43,19 @@
     body {
       display: flex;
       flex-direction: column;
-      /* min-height: 100vh; */
+      min-height: 100vh;
       margin: 0;
     }
     /* Make the main container grow so footer stays at the bottom */
-   /* Allow container to grow but remove externally-set min-height which caused layout issues.
-     Use a CSS variable for footer height and apply it with !important so external styles can't override it. */
-   .container { flex: 1 0 auto; min-height: auto !important; padding-bottom: calc(var(--footer-height, 0px) + 24px) !important; }
+    /* Allow container to grow but remove externally-set min-height which caused layout issues */
+    .container { flex: 1 0 auto; min-height: auto !important; padding-bottom: 3.5rem; }
 
     /* Ensure footer doesn't overlap content */
     footer {
       flex-shrink: 0;
       clear: both;
-      position: relative !important; /* ensure normal flow and stacking */
-      z-index: 10005 !important;      /* raise footer above product cards that were rendering on top */
-      pointer-events: auto;
+      position: relative; /* ensure normal flow and stacking */
+      z-index: 1;         /* keep footer below overlays like modals if needed */
     }
 
     /* Add a bit of bottom padding so product grid items don't butt up against the footer */
@@ -598,21 +596,20 @@
   <!-- Ensure container leaves room for footer (handles dynamic footer height) -->
   <script>
     (function adjustFooterSpace(){
+      const container = document.querySelector('.container');
       const footer = document.querySelector('footer');
-      if (!footer) return;
-      // set a CSS variable on :root so the stylesheet can use it and !important won't be beaten
+      if (!container || !footer) return;
       function update() {
+        // leave a small gap (24px) in addition to footer height
         const h = footer.offsetHeight || 0;
-        document.documentElement.style.setProperty('--footer-height', h + 'px');
+        container.style.paddingBottom = (h + 24) + 'px';
       }
       // run on load and resize
       window.addEventListener('load', update);
       window.addEventListener('resize', update);
-      // Observe footer changes (dynamic content) and images loading inside footer
+      // images or async content may change footer height — observe mutations
       const mo = new MutationObserver(update);
       mo.observe(footer, { childList: true, subtree: true, characterData: true });
-      // Also update after a short delay to catch async image loads
-      window.setTimeout(update, 500);
       // initial call
       update();
     })();
