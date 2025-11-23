@@ -43,7 +43,7 @@
     body {
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      /* min-height: 100vh; */
       margin: 0;
     }
     /* Make the main container grow so footer stays at the bottom */
@@ -55,8 +55,9 @@
     footer {
       flex-shrink: 0;
       clear: both;
-      position: relative; /* ensure normal flow and stacking */
-      z-index: 1;         /* keep footer below overlays like modals if needed */
+      position: relative !important; /* ensure normal flow and stacking */
+      z-index: 10005 !important;      /* raise footer above product cards that were rendering on top */
+      pointer-events: auto;
     }
 
     /* Add a bit of bottom padding so product grid items don't butt up against the footer */
