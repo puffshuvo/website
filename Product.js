@@ -25,6 +25,11 @@ class ProductGallery {
         };
         this.apiBase = 'https://archimartbd.com/api/product.json';
         this.cart = JSON.parse(localStorage.getItem('cartState')) || [];
+        // Pagination / infinite scroll state
+        this.perPage = 12;
+        this.currentPage = 0;
+        this.hasMore = true;
+        this.isLoading = false;
         this.debugEnabled = true;
         this.cartHideTimeout = null;
 
@@ -47,8 +52,10 @@ class ProductGallery {
     async init() {
         this.debug('init() called with currentFilters', this.currentFilters);
         try {
+            this.resetPagination();
             await this.loadProducts();
             this.setupEventListeners();
+            this.setupInfiniteScroll();
             this.updateDisplay();
             this.updateBreadcrumb();
             this.updateCartCount();
@@ -60,21 +67,32 @@ class ProductGallery {
         }
     }
 
-    // === ENHANCED: Product Loading with Variant Support ===
-    async loadProducts(category = null, subcategory = null, subsubcategory = null) {
-        this.debug('loadProducts() called', { category, subcategory, subsubcategory });
-        this.showLoading(true);
-        this.products = [];
-        this.filteredProducts = [];
-        this.currentFilters.specifications = {};
+    // === ENHANCED: Product Loading with Variant & Pagination Support ===
+    async loadProducts(category = null, subcategory = null, subsubcategory = null, page = 1) {
+        this.debug('loadProducts() called', { category, subcategory, subsubcategory, page });
+        if (this.isLoading) {
+            this.debug('loadProducts(): already loading, aborting new request');
+            return;
+        }
+        this.isLoading = true;
+        if (page === 1) this.showLoading(true);
+
+        // Reset lists when loading first page
+        if (page === 1) {
+            this.products = [];
+            this.filteredProducts = [];
+            this.currentFilters.specifications = {};
+        }
 
         try {
-            // RESTORED: Original URL building logic with category filters
             let url = this.apiBase;
             const params = new URLSearchParams();
             if (category && category !== 'all') params.append('category', category);
             if (subcategory && subcategory !== 'all') params.append('subcategory', subcategory);
             if (subsubcategory && subsubcategory !== 'all') params.append('subsubcategory', subsubcategory);
+            // pagination params
+            params.append('page', page);
+            params.append('per_page', this.perPage);
             if (params.toString()) url += '?' + params.toString();
 
             this.debug('🔄 Fetching products from URL', url);
@@ -85,27 +103,37 @@ class ProductGallery {
             }
 
             const data = await response.json();
-            // Handle new API structure with products array
-            this.products = Array.isArray(data) ? data : (data.products || []);
-            
-            // Process each product to add variant metadata
-            this.products = this.products.map(product => this.processProductVariants(product));
-            
-            this.filteredProducts = [...this.products];
-            
-            if (this.products.length === 0) {
-                this.debug('🚫 No products found for', { category, subcategory, subsubcategory });
+            const returned = Array.isArray(data) ? data : (data.products || []);
+            const processed = returned.map(product => this.processProductVariants(product));
+
+            if (page === 1) {
+                this.products = processed;
             } else {
-                this.debug('✅ Loaded products', { count: this.products.length });
+                this.products = this.products.concat(processed);
             }
 
-            this.updateSpecificationFilters();
+            // update pagination flags
+            this.currentPage = data.current_page || page;
+            if (typeof data.num_pages !== 'undefined') {
+                this.hasMore = this.currentPage < data.num_pages;
+            } else {
+                this.hasMore = processed.length >= this.perPage;
+            }
+
+            if (this.products.length === 0) {
+                this.debug('🚫 No products found for', { category, subcategory, subsubcategory, page });
+            } else {
+                this.debug('✅ Loaded products', { total: this.products.length, page, added: processed.length });
+            }
+
+            if (page === 1) this.updateSpecificationFilters();
             this.applyFilters();
         } catch (error) {
             this.error('❌ Error loading products:', error);
             this.showError(`No products found for "${category || 'All'}"`);
         } finally {
-            this.showLoading(false);
+            this.isLoading = false;
+            if (page === 1) this.showLoading(false);
         }
     }
 
