@@ -496,6 +496,47 @@ createProductCard(product) {
         this.debug('setupEventListeners() done');
     }
 
+    // === NEW: Reset pagination state ===
+    resetPagination() {
+        this.perPage = this.perPage || 12;
+        this.currentPage = 0;
+        this.hasMore = true;
+        this.isLoading = false;
+        this.products = [];
+        this.filteredProducts = [];
+    }
+
+    // === NEW: Setup Infinite Scroll ===
+    setupInfiniteScroll() {
+        const onScroll = () => {
+            if (!this.hasMore || this.isLoading) return;
+            const threshold = 300; // px from bottom
+            const scrolledToBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - threshold);
+            if (scrolledToBottom) {
+                this.loadNextPage();
+            }
+        };
+
+        // debounce the scroll handler slightly
+        const debounced = this.debounce(onScroll, 200);
+        window.addEventListener('scroll', debounced);
+        // keep a reference in case we want to remove it later
+        this._infiniteScrollHandler = debounced;
+    }
+
+    // === NEW: Load next page ===
+    loadNextPage() {
+        if (this.isLoading) return;
+        if (!this.hasMore) return;
+        const nextPage = (this.currentPage || 0) + 1;
+        this.debug('loadNextPage() loading page', nextPage);
+        // use current filter values
+        this.loadProducts(this.currentFilters.category === 'all' ? null : this.currentFilters.category,
+                           this.currentFilters.subcategory,
+                           this.currentFilters.subsubcategory,
+                           nextPage);
+    }
+
     // === RESTORED: Setup Cart Listeners ===
     setupCartListeners() {
         const cartIcon = document.querySelector('.cart-icon');
@@ -553,17 +594,21 @@ createProductCard(product) {
 
         if (isMainCategory) {
             this.currentFilters = { ...this.currentFilters, category, subcategory: null, subsubcategory: null };
+            this.resetPagination();
             this.loadProducts(category);
         } else if (isSubcategory) {
             const parentCategory = this.findParentCategory(item);
             this.currentFilters = { ...this.currentFilters, category: parentCategory, subcategory: category, subsubcategory: null };
+            this.resetPagination();
             this.loadProducts(parentCategory, category);
         } else if (isSubSubcategory) {
             const { mainCategory, subCategory } = this.findFullCategoryHierarchy(item);
             this.currentFilters = { ...this.currentFilters, category: mainCategory, subcategory: subCategory, subsubcategory: category };
+            this.resetPagination();
             this.loadProducts(mainCategory, subCategory, category);
         } else {
             this.currentFilters = { ...this.currentFilters, category: 'all', subcategory: null, subsubcategory: null };
+            this.resetPagination();
             this.loadProducts();
         }
 
@@ -937,6 +982,7 @@ createProductCard(product) {
             this.currentFilters.category = category || 'all';
             this.currentFilters.subcategory = subcategory || null;
             this.currentFilters.subsubcategory = subsubcategory || null;
+            this.resetPagination();
             this.loadProducts(category, subcategory, subsubcategory);
             const activeCategory = subsubcategory || subcategory || category;
             const categoryElement = document.querySelector(`[data-category="${activeCategory}"]`);
