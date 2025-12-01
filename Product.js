@@ -128,6 +128,11 @@ class ProductGallery {
 
             if (page === 1) this.updateSpecificationFilters();
             this.applyFilters();
+            this.debug('loadProducts pagination state', { currentPage: this.currentPage, hasMore: this.hasMore, pageLoaded: page });
+            // ensure observer/sentinel re-created after first page loads (useful after reset)
+            if (page === 1) {
+                try { this.setupInfiniteScroll(); } catch (e) { this.debug('setupInfiniteScroll failed', e); }
+            }
         } catch (error) {
             this.error('❌ Error loading products:', error);
             this.showError(`No products found for "${category || 'All'}"`);
@@ -504,24 +509,57 @@ createProductCard(product) {
         this.isLoading = false;
         this.products = [];
         this.filteredProducts = [];
+        // disconnect any existing observer & remove sentinel
+        try {
+            if (this._infiniteObserver) {
+                this._infiniteObserver.disconnect();
+                this._infiniteObserver = null;
+            }
+            const existing = document.getElementById('infinite-sentinel');
+            if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+        } catch (e) {
+            this.debug('resetPagination: error cleaning observer/sentinel', e);
+        }
     }
 
-    // === NEW: Setup Infinite Scroll ===
+    // === NEW: Setup Infinite Scroll using IntersectionObserver ===
     setupInfiniteScroll() {
-        const onScroll = () => {
-            if (!this.hasMore || this.isLoading) return;
-            const threshold = 300; // px from bottom
-            const scrolledToBottom = (window.innerHeight + window.scrollY) >= (document.body.offsetHeight - threshold);
-            if (scrolledToBottom) {
-                this.loadNextPage();
-            }
+        // create sentinel element at the end of the product grid
+        const productGrid = document.getElementById('productGrid');
+        if (!productGrid) {
+            this.warn('setupInfiniteScroll: productGrid not found');
+            return;
+        }
+
+        // remove existing sentinel if present
+        const existing = document.getElementById('infinite-sentinel');
+        if (existing && existing.parentNode) existing.parentNode.removeChild(existing);
+
+        const sentinel = document.createElement('div');
+        sentinel.id = 'infinite-sentinel';
+        sentinel.style.width = '100%';
+        sentinel.style.height = '1px';
+        sentinel.style.margin = '1px 0';
+        // append after the grid
+        productGrid.insertAdjacentElement('afterend', sentinel);
+
+        const options = {
+            root: null,
+            rootMargin: '400px',
+            threshold: 0
         };
 
-        // debounce the scroll handler slightly
-        const debounced = this.debounce(onScroll, 200);
-        window.addEventListener('scroll', debounced);
-        // keep a reference in case we want to remove it later
-        this._infiniteScrollHandler = debounced;
+        this._infiniteObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    this.debug('infinite-sentinel intersecting, attempting to load next page', { hasMore: this.hasMore, isLoading: this.isLoading, currentPage: this.currentPage });
+                    if (!this.hasMore || this.isLoading) return;
+                    this.loadNextPage();
+                }
+            });
+        }, options);
+
+        this._infiniteObserver.observe(sentinel);
     }
 
     // === NEW: Load next page ===
