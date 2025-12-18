@@ -57,12 +57,23 @@ body {
 }
 
 .shop-name {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 30px;
-  color: #1a202c;
-  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
 }
+
+.shop-name img {
+  width: 150px;
+  height: 80px;
+  object-fit: contain;
+  background: transparent;
+  display: block;
+}
+
+
+
+
 
 .receipt-header {
   display: flex;
@@ -396,6 +407,15 @@ body {
   .receipt {
     width: 100%;
     padding: 30px 20px;
+  }
+
+  .shop-name img {
+    width: 56px;
+    height: 56px;
+  }
+
+  .shop-name .shop-title {
+    font-size: 20px;
   }
 
   .order-form {
