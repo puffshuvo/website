@@ -113,12 +113,12 @@ async function downloadPDF() {
   const receiptNumberElement = document.querySelector(".receipt-header span:first-child");
   const invoice = receiptNumberElement ? (receiptNumberElement.textContent.trim() || "") : "";
   const totalElement = document.querySelector("#receipt-total span:last-child");
-
+  var total_amount = 0;
   if (totalElement) {
     const amount = parseFloat(
       totalElement.textContent.replace(/[^\d.]/g, "")
     ) || 0;
-
+    total_amount +=amount;
     console.log(amount);
   }
   if (!name || !phone || !address) {
