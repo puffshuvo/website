@@ -112,20 +112,15 @@ async function downloadPDF() {
   const paymentSelected = document.querySelector('input[name="payment"]:checked');
   const receiptNumberElement = document.querySelector(".receipt-header span:first-child");
   const invoice = receiptNumberElement ? (receiptNumberElement.textContent.trim() || "") : "";
-  const totalElement = document
-    .getElementById("receipt-total")
-    ?.querySelector("span:last-child");
-
-  let firstToken = 0;
+  const totalElement = document.querySelector("#receipt-total span:last-child");
 
   if (totalElement) {
-    const totalText = (totalElement.textContent || "").trim();
+    const amount = parseFloat(
+      totalElement.textContent.replace(/[^\d.]/g, "")
+    ) || 0;
 
-    // Extract numeric part safely
-    firstToken = parseFloat(totalText.split(" ")[0]) || 0;
+    console.log(amount);
   }
-
-  console.log(firstToken); // 0
   if (!name || !phone || !address) {
     alert("Please fill Name, Phone and Delivery Address before downloading the receipt.");
     return;
@@ -148,7 +143,7 @@ async function downloadPDF() {
     customer_email: email,
     pay_method: paymentSelected.value,
     invoice_number: invoice,
-    total: firstToken,
+    total: amount,
     items: cartItems.map(item => ({
       product_id: item.id || item.product_id,
       quantity: item.quantity,
