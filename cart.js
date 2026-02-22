@@ -143,7 +143,7 @@ async function downloadPDF() {
     customer_email: email,
     pay_method: paymentSelected.value,
     invoice_number: invoice,
-    total: amount,
+    total: total_amount,
     items: cartItems.map(item => ({
       product_id: item.id || item.product_id,
       quantity: item.quantity,
